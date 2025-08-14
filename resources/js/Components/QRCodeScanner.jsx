@@ -4,7 +4,7 @@ import { Html5QrcodeScanner } from 'html5-qrcode';
 const QRCodeScanner = ({
   onScan,
   fps = 10,
-  qrbox = 150,
+  qrbox = 200,
   containerId = 'reader',
 }) => {
   const scannerRef = useRef(null);
@@ -56,7 +56,7 @@ const QRCodeScanner = ({
     return () => { cleanup(); };
   }, [containerId, fps, qrbox, onScan]);
 
-  return <div id={containerId} style={{ width: '500px' }} />;
+  return <div id={containerId} style={{ width: '400px' }} />;
 };
 
 export default QRCodeScanner;
