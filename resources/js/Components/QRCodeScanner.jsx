@@ -1,17 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 
-/**
- * Leichter, fehlertoleranter Wrapper um html5-qrcode.
- * - sendet nur deduplizierte Ergebnisse (innerhalb der Session)
- * - optionaler Auto-Stop nach dem ersten erfolgreichen Scan
- * - räumt beim Unmount auf
- */
 const QRCodeScanner = ({
   onScan,
   fps = 10,
   qrbox = 250,
-  autoStop = false,          // auf true setzen, wenn nach dem ersten Treffer gestoppt werden soll
   containerId = 'reader',
 }) => {
   const scannerRef = useRef(null);
@@ -19,7 +12,6 @@ const QRCodeScanner = ({
   const lastEmitRef = useRef(0);
 
   useEffect(() => {
-    // Falls der Container schon mal initialisiert wurde, vorher aufräumen
     const cleanup = async () => {
       try {
         if (scannerRef.current) {
@@ -29,26 +21,23 @@ const QRCodeScanner = ({
       scannerRef.current = null;
     };
 
-    const start = async () => {
+    const startScanner = async () => {
       await cleanup();
 
       const scanner = new Html5QrcodeScanner(
         containerId,
-        {
-          fps,
-          qrbox,
-          rememberLastUsedCamera: true,
-        },
+        { fps, qrbox, rememberLastUsedCamera: true },
         false
       );
 
       scanner.render(
-        async (decodedText/*, decodedResult*/) => {
-          // Throttle: max. 1 Emit pro Sekunde
+        (decodedText) => {
           const now = Date.now();
+
+          // Throttle: max. 1 Meldung pro Sekunde
           if (now - lastEmitRef.current < 1000) return;
 
-          // Deduplizierung (nur neue Werte)
+          // Deduplizieren innerhalb einer Session
           if (seenRef.current.has(decodedText)) return;
           seenRef.current.add(decodedText);
           lastEmitRef.current = now;
@@ -56,23 +45,16 @@ const QRCodeScanner = ({
           try {
             onScan?.(decodedText);
           } catch {}
-
-            // optional: nach erstem Treffer stoppen
-          if (autoStop) {
-            try { await scanner.clear(); } catch {}
-          }
         },
-        // Fehler-Callback: leise – keine Massenausgaben in der Konsole
-        () => {}
+        () => {} // Fehler ignorieren, um Konsolen-Spam zu vermeiden
       );
 
       scannerRef.current = scanner;
     };
 
-    start();
-
+    startScanner();
     return () => { cleanup(); };
-  }, [containerId, fps, qrbox, autoStop, onScan]);
+  }, [containerId, fps, qrbox, onScan]);
 
   return <div id={containerId} style={{ width: '500px' }} />;
 };
