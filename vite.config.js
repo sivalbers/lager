@@ -13,7 +13,7 @@ export default defineConfig({
             host: 'lager.local',
         },
         watch: {
-            usePolling: true,
+            //usePolling: true,
             interval: 250,                // 250–500 ms je nach System
             awaitWriteFinish: {
                 stabilityThreshold: 200,
