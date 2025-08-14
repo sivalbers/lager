@@ -4,7 +4,7 @@ import { Html5QrcodeScanner } from 'html5-qrcode';
 const QRCodeScanner = ({
   onScan,
   fps = 10,
-  qrbox = 250,
+  qrbox = 150,
   containerId = 'reader',
 }) => {
   const scannerRef = useRef(null);

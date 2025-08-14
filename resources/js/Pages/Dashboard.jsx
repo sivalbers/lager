@@ -29,7 +29,7 @@ export default function Dashboard() {
             <div className="p-6 text-gray-900">
               <h1 className="text-lg mb-3">Dashboard mit QR-Scanner</h1>
 
-              <QRCodeScanner onScan={handleScan} autoStop={false} />
+              <QRCodeScanner onScan={handleScan} />
 
               <div className="mt-4">
                 {/* statt Breeze-TextInput verwenden wir ein simples, robustes <textarea> */}
