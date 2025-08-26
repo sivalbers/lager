@@ -7,8 +7,27 @@ use Livewire\Attributes\On;
 
 class ScanArtikel extends Component
 {
-    
+
     public $inputData = [];
+
+    public function mount(){
+        $this->inputData[] =  [
+                'Artikel'  => '200333',
+                'Lagerort' => '0098',
+                'Menge'    => 1,
+            ];
+        $this->inputData[] =  [
+                'Artikel'  => '200335',
+                'Lagerort' => '0099',
+                'Menge'    => 10,
+            ];
+
+        $this->inputData[] =  [
+                'Artikel'  => '200323',
+                'Lagerort' => '0097',
+                'Menge'    => 1,
+            ];
+    }
 
 
     #[On('qrcode-scanned')]
