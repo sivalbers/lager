@@ -10,29 +10,29 @@ class ScanArtikel extends Component
     protected $listeners = ['qrcode-scanned' => 'handleScan'];
     public $inputData = [];
 
-    public function handleScan($data = null)
-    {
-        if (!$data || !isset($data['code'])) {
-            return;
-        }
-
-        $decoded = json_decode($data['code'], true);
-
-        if (is_array($decoded)) {
-            $this->inputData[] = [
-                'Artikel'  => $decoded['artikel'] ?? '',
-                'Lagerort' => $decoded['lagerort'] ?? '',
-                'Menge'    => 1,
-            ];
-        } else {
-            // Fallback: wenn QR-Code kein JSON ist → ganzen String als Artikel speichern
-            $this->inputData[] = [
-                'Artikel'  => $data['code'],
-                'Lagerort' => '',
-                'Menge'    => 1,
-            ];
-        }
+public function handleScan($data = null)
+{
+    if (!$data || !isset($data['code'])) {
+        return;
     }
+
+    $decoded = json_decode($data['code'], true);
+
+    if (is_array($decoded)) {
+        $this->inputData[] = [
+            'Artikel'  => $decoded['artikel'] ?? '',
+            'Lagerort' => $decoded['lagerort'] ?? '',
+            'Menge'    => 1,
+        ];
+    } else {
+        $this->inputData[] = [
+            'Artikel'  => $data['code'],
+            'Lagerort' => '',
+            'Menge'    => 1,
+        ];
+    }
+}
+
 
     public function render()
     {
