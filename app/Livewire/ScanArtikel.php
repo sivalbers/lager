@@ -6,34 +6,34 @@ use Livewire\Component;
 
 class ScanArtikel extends Component
 {
-
     protected $listeners = ['qrcode-scanned' => 'handleScan'];
     public $inputData = [];
 
-public function handleScan($data = null)
-{
-    if (!$data || !isset($data['code'])) {
-        return;
-    }
+    public function handleScan($data = null)
+    {
+        if (!$data || !isset($data['code'])) {
+            return;
+        }
 
-    // Versuchen, JSON zu decodieren
-    $decoded = json_decode($data['code'], true);
+        $decoded = json_decode($data['code'], true);
 
-    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-        $this->inputData[] = [
-            'Artikel'  => $decoded['artikel'] ?? '',
-            'Lagerort' => $decoded['lagerort'] ?? '',
-            'Menge'    => $decoded['menge'] ?? 1,
-        ];
-    } else {
-        // Wenn kein JSON → als Rohwert speichern
-        $this->inputData[] = [
-            'Artikel'  => $data['code'],
-            'Lagerort' => '',
-            'Menge'    => 1,
-        ];
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            $this->inputData[] = [
+                'Artikel'  => $decoded['artikel'] ?? '',
+                'Lagerort' => $decoded['lagerort'] ?? '',
+                'Menge'    => $decoded['menge'] ?? 1,
+            ];
+        } else {
+            // Nur als Rohtext speichern
+            $this->inputData[] = [
+                'Artikel'  => $data['code'],
+                'Lagerort' => '',
+                'Menge'    => 1,
+            ];
+        }
+
+        \Log::info('Scan verarbeitet', $this->inputData);
     }
-}
 
 
     public function render()

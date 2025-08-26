@@ -39,27 +39,10 @@
 @push('scripts')
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
-document.addEventListener("livewire:navigated", () => {
-    // sicherstellen, dass das DIV existiert
-    const reader = document.getElementById("reader");
-    if (!reader) {
-        console.error("Scanner-Element #reader nicht gefunden!");
-        return;
-    }
+let html5QrCode;
 
-    const html5QrCode = new Html5Qrcode("reader");
-
-function onScanSuccess(decodedText) {
-    console.log("QR erkannt:", decodedText);
-    Livewire.dispatch('qrcode-scanned', { code: decodedText });
-
-    // Scanner anhalten, damit nicht endlos derselbe Code erkannt wird
-    html5QrCode.stop().then(() => {
-        console.log("Scanner gestoppt");
-        // Falls du gleich wieder scannen willst:
-        // setTimeout(() => startScanner(), 2000);
-    }).catch(err => console.error("Stop-Fehler:", err));
-}
+function startScanner() {
+    html5QrCode = new Html5Qrcode("reader");
 
     Html5Qrcode.getCameras().then(devices => {
         if (devices && devices.length) {
@@ -69,10 +52,20 @@ function onScanSuccess(decodedText) {
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 onScanSuccess
             ).catch(err => console.error("Start-Fehler:", err));
-        } else {
-            console.error("Keine Kamera gefunden");
         }
     }).catch(err => console.error("Kamera-Fehler:", err));
-});
+}
+
+function onScanSuccess(decodedText) {
+    console.log("QR erkannt:", decodedText);
+    Livewire.dispatch('qrcode-scanned', { code: decodedText });
+
+    html5QrCode.stop().then(() => {
+        console.log("Scanner gestoppt");
+        setTimeout(() => startScanner(), 2000); // nach 2 Sekunden wieder starten
+    });
+}
+
+document.addEventListener("livewire:navigated", startScanner);
 </script>
 @endpush
