@@ -39,21 +39,29 @@
 @push('scripts')
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("livewire:navigated", () => {
+    // sicherstellen, dass das DIV existiert
+    const reader = document.getElementById("reader");
+    if (!reader) {
+        console.error("Scanner-Element #reader nicht gefunden!");
+        return;
+    }
+
     const html5QrCode = new Html5Qrcode("reader");
 
     function onScanSuccess(decodedText) {
-        console.log("QR erkannt:", decodedText); // Debug-Ausgabe
+        console.log("QR erkannt:", decodedText);
         Livewire.dispatch('qrcode-scanned', { code: decodedText });
     }
 
     Html5Qrcode.getCameras().then(devices => {
         if (devices && devices.length) {
+            let cameraId = devices[0].id;
             html5QrCode.start(
-                devices[0].id,
+                cameraId,
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 onScanSuccess
-            );
+            ).catch(err => console.error("Start-Fehler:", err));
         } else {
             console.error("Keine Kamera gefunden");
         }
