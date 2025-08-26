@@ -16,15 +16,17 @@ public function handleScan($data = null)
         return;
     }
 
+    // Versuchen, JSON zu decodieren
     $decoded = json_decode($data['code'], true);
 
-    if (is_array($decoded)) {
+    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
         $this->inputData[] = [
             'Artikel'  => $decoded['artikel'] ?? '',
             'Lagerort' => $decoded['lagerort'] ?? '',
-            'Menge'    => 1,
+            'Menge'    => $decoded['menge'] ?? 1,
         ];
     } else {
+        // Wenn kein JSON → als Rohwert speichern
         $this->inputData[] = [
             'Artikel'  => $data['code'],
             'Lagerort' => '',

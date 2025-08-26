@@ -49,10 +49,17 @@ document.addEventListener("livewire:navigated", () => {
 
     const html5QrCode = new Html5Qrcode("reader");
 
-    function onScanSuccess(decodedText) {
-        console.log("QR erkannt:", decodedText);
-        Livewire.dispatch('qrcode-scanned', { code: decodedText });
-    }
+function onScanSuccess(decodedText) {
+    console.log("QR erkannt:", decodedText);
+    Livewire.dispatch('qrcode-scanned', { code: decodedText });
+
+    // Scanner anhalten, damit nicht endlos derselbe Code erkannt wird
+    html5QrCode.stop().then(() => {
+        console.log("Scanner gestoppt");
+        // Falls du gleich wieder scannen willst:
+        // setTimeout(() => startScanner(), 2000);
+    }).catch(err => console.error("Stop-Fehler:", err));
+}
 
     Html5Qrcode.getCameras().then(devices => {
         if (devices && devices.length) {
