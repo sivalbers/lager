@@ -1,4 +1,4 @@
-<div>
+<div class="w-5/6 m-auto">
     <h1>QR-Code Scanner</h1>
 
     <!-- Container für den Scanner -->

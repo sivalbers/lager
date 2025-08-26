@@ -1,10 +1,10 @@
-<div class="mx-4">
+<div class="w-5/6 m-auto">
     <div class="flex flex-row items-center justify-between w-full ">
         <div>
-            <h1 class="text-2xl font-bold mt-4 mb-6" >Bestand auflisten</h1>
+            <h1 class="text-2xl font-bold mt-4 mb-6">Bestand auflisten</h1>
         </div>
         <div>
-            <button wire:click="importOData" class="hover:underline" >Daten abrufen</button>
+            <button wire:click="importOData" class="hover:underline">Daten abrufen</button>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
             <div class="w-1/12">
                 <select wire:model.live="lagerort" class="select">
                     <option value="0">– alle Lagerorte –</option>
-                    @foreach($lagerorte as $ort)
+                    @foreach ($lagerorte as $ort)
                         <option value="{{ $ort->nr }}">{{ $ort->bezeichnung }} ({{ $ort->nr }})</option>
                     @endforeach
                 </select>
@@ -36,22 +36,28 @@
                     <div class="text-left w-3/12 ">Lagerort</div>
                     <div class="text-right w-1/12 ">Lager-Platz</div>
                     <div class="text-right w-1/12 ">Bestand</div>
+
                 </div>
                 @forelse($items as $p)
-                <div class="flex flex-row space-x-2 w-full">
-                    <div class="text-right w-1/12">{{ $p->artikelnr ?? '' }}</div>
-                    <div class="text-left w-3/12">{{ $p->artikel->bezeichnung ?? '' }}</div>
-                    <div class="text-left w-3/12">{{ $p->lagernr }} {{ $p->lagerort->bezeichnung ?? '' }}</div>
-                    <div class="text-right w-1/12">..</div>
-                    <div class="text-right w-1/12">{{ $p->bestand ?? '' }}</div>
-                </div>
+                    <div class="flex flex-row space-x-2 w-full">
+                        <div class="text-right w-1/12">{{ $p->artikelnr ?? '' }}</div>
+                        <div class="text-left w-3/12">{{ $p->artikel->bezeichnung ?? '' }}</div>
+                        <div class="text-left w-3/12">{{ $p->lagernr }} {{ $p->lagerort->bezeichnung ?? '' }}</div>
+                        <div class="text-right w-1/12">..</div>
+                        <div class="text-right w-1/12">{{ $p->bestand ?? '' }}</div>
+
+
+
+                    </div>
+
                 @empty
                     <div class="text-center">Keine Daten</div>
                 @endforelse
             </div>
         </div>
-        <div class="mt-4 py-4 mx-32 m-auto border-t border-gray-500">
-            {{ $items->links() }}
-        </div>
+    </div>
+    <div class="mt-4 py-4 mx-32 m-auto border-t border-gray-500">
+        {{ $items->links() }}
     </div>
 </div>
+

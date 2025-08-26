@@ -17,7 +17,7 @@ class ScanArtikel extends Component
 
     public function render()
     {
-        return view('livewire.scan-artikel');
+        return view('livewire.scan-artikel')->layout('layouts.app');
     }
 
 }

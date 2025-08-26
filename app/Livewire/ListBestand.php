@@ -52,7 +52,7 @@ class ListBestand extends Component
         return view('livewire.list-bestand', [
             'items'     => $items,
             'lagerorte' => $this->lagerorte,
-        ]);
+        ])->layout('layouts.app');
     }
 
     public function importOData(){

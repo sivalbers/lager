@@ -11,13 +11,13 @@ class ODataReadBestand
 
     public function __construct()
     {
-        \Log::info('__construct()');
+
         $this->odata = [
         'base_url' => env('ODATA_BASE_URL'),
         'username' => env('ODATA_USERNAME'),
         'password' => env('ODATA_PASSWORD'),
         ];
-        \Log::info($this->odata);
+
     }
 
     protected function request(): PendingRequest
