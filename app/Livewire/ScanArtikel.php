@@ -24,6 +24,13 @@ class ScanArtikel extends Component
                 'Lagerort' => $decoded['lagerort'] ?? '',
                 'Menge'    => 1,
             ];
+        } else {
+            // Fallback: wenn QR-Code kein JSON ist → ganzen String als Artikel speichern
+            $this->inputData[] = [
+                'Artikel'  => $data['code'],
+                'Lagerort' => '',
+                'Menge'    => 1,
+            ];
         }
     }
 

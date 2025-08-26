@@ -47,14 +47,29 @@
     @push('scripts')
         <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
         <script>
-            document.addEventListener("livewire:navigated", () => {
-                function onScanSuccess(decodedText) {
-                    Livewire.dispatch('qrcode-scanned', { code: decodedText });
-                }
+        document.addEventListener("livewire:navigated", () => {
+            const html5QrCode = new Html5Qrcode("reader");
 
-                new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 })
-                    .render(onScanSuccess);
-            });
+            function onScanSuccess(decodedText) {
+                // Wert an Livewire senden
+                Livewire.dispatch('qrcode-scanned', { code: decodedText });
+            }
+
+            Html5Qrcode.getCameras().then(devices => {
+                if (devices && devices.length) {
+                    let cameraId = devices[0].id;
+                    html5QrCode.start(
+                        cameraId,
+                        {
+                            fps: 10,
+                            qrbox: { width: 250, height: 250 }
+                        },
+                        onScanSuccess
+                    );
+                }
+            }).catch(err => console.error("Kamera-Fehler:", err));
+        });
         </script>
+
     @endpush
 </div>
