@@ -5,7 +5,7 @@ use App\Livewire\DebitorListen;
 use App\Livewire\EtikettenErstellen;
 use App\Livewire\ListBestand;
 use App\Livewire\ScanArtikel;
-use App\Livewire\LieferscheinVerarbeiten;
+
 use App\Http\Controllers\FileUploadController;
 
 
@@ -32,12 +32,6 @@ Route::get('etikettenerstellen', EtikettenErstellen::class)
 Route::get('debitoren', DebitorListen::class)
     ->middleware(['auth'])
     ->name('debitoren');
-
-Route::get('lieferschein', LieferscheinVerarbeiten::class)
-    ->middleware(['auth'])
-    ->name('lieferschein');
-
-
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
