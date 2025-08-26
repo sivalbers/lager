@@ -3,12 +3,15 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class ScanArtikel extends Component
 {
-    protected $listeners = ['qrcode-scanned' => 'handleScan'];
+    
     public $inputData = [];
 
+
+    #[On('qrcode-scanned')]
     public function handleScan($data = null)
     {
         if (!$data || !isset($data['code'])) {

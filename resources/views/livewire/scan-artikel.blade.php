@@ -58,11 +58,11 @@ function startScanner() {
 
 function onScanSuccess(decodedText) {
     console.log("QR erkannt:", decodedText);
-    Livewire.dispatch('qrcode-scanned', { code: decodedText });
+    Livewire.dispatch('qrcode-scanned', { code: decodedText }); // emit statt dispatch
 
     html5QrCode.stop().then(() => {
         console.log("Scanner gestoppt");
-        setTimeout(() => startScanner(), 2000); // nach 2 Sekunden wieder starten
+        setTimeout(() => startScanner(), 2000);
     });
 }
 
