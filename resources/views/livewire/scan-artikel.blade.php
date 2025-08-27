@@ -2,6 +2,10 @@
     <h1>QR-Code Scanner</h1>
 
     <!-- Scanner-Feld -->
+    <div class="py-6">
+    <select id="cameraSelection"></select>
+    </div>
+
     <div id="reader" style="width: 300px; height: 300px; border:1px solid #ccc;"></div>
 
     <form wire:submit.prevent="buchen" class="flex flex-col w-1/2">
@@ -45,15 +49,44 @@
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
 let html5QrCode;
+let currentCameraId = null;
+let cameraSelectInitialized = false;
 
 function startScanner() {
     html5QrCode = new Html5Qrcode("reader");
 
     Html5Qrcode.getCameras().then(devices => {
         if (devices && devices.length) {
-            let cameraId = devices[0].id;
+            const cameraSelect = document.getElementById('cameraSelection');
+
+            if (!cameraSelectInitialized) {
+                devices.forEach(device => {
+                    const option = document.createElement('option');
+                    option.value = device.id;
+                    option.text = device.label;
+                    cameraSelect.appendChild(option);
+                });
+
+                cameraSelect.addEventListener('change', async () => {
+                    const newCameraId = cameraSelect.value;
+
+                    if (html5QrCode && currentCameraId !== newCameraId) {
+                        await html5QrCode.stop();
+                        currentCameraId = newCameraId;
+                        html5QrCode.start(
+                            currentCameraId,
+                            { fps: 10, qrbox: { width: 250, height: 250 } },
+                            onScanSuccess
+                        ).catch(err => console.error("Start-Fehler:", err));
+                    }
+                });
+
+                cameraSelectInitialized = true;
+            }
+
+            currentCameraId = devices[0].id;
             html5QrCode.start(
-                cameraId,
+                currentCameraId,
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 onScanSuccess
             ).catch(err => console.error("Start-Fehler:", err));
@@ -63,7 +96,7 @@ function startScanner() {
 
 function onScanSuccess(decodedText) {
     console.log("QR erkannt:", decodedText);
-    Livewire.dispatch('qrcode-scanned', { code: decodedText }); // emit statt dispatch
+    Livewire.dispatch('qrcode-scanned', { code: decodedText }); // Statt dispatch
 
     html5QrCode.stop().then(() => {
         console.log("Scanner gestoppt");
