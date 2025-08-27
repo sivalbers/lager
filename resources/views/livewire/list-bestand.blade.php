@@ -37,6 +37,7 @@
                     <div class="text-right w-1/12 ">Lager-Platz</div>
                     <div class="text-right w-1/12 ">Bestand</div>
 
+
                 </div>
                 @forelse($items as $p)
                     <div class="flex flex-row space-x-2 w-full">
@@ -44,7 +45,7 @@
                         <div class="text-left w-3/12">{{ $p->artikel->bezeichnung ?? '' }}</div>
                         <div class="text-left w-3/12">{{ $p->lagernr }} {{ $p->lagerort->bezeichnung ?? '' }}</div>
                         <div class="text-right w-1/12">..</div>
-                        <div class="text-right w-1/12">{{ $p->bestand ?? '' }}</div>
+                        <div class="text-right w-1/12">{{ number_format($p->bestand, 0, ',', '.') }} {{ $p->artikel->einheit }}</div>
 
 
 

@@ -9,6 +9,7 @@ class LagerdatenRepository
 {
     public function createLagerdaten($nr, $lagernr, $lagerplatz, $bestand){
         $lagerdaten = Lagerdaten::where('artikelnr', $nr)->where('lagernr', $lagernr)->where('lagerplatz', $lagerplatz)->first();
+
         if (!$lagerdaten){
             $lagerdaten = new Lagerdaten();
         }

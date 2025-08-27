@@ -11,14 +11,17 @@ class Lagerdaten extends Model
 
     protected $table = 'lagerdaten';
 
+    // Wichtig: Laravel erwartet normalerweise eine einzelne ID-Spalte
+    public $incrementing = false;
+    protected $primaryKey = null; // Deaktiviert standardmäßiges Primärschlüsselverhalten
+    protected $keyType = 'string'; // Falls deine Keys Strings sind, sonst 'int'
+
     protected $fillable = [
         'artikelnr',
         'lagernr',
         'lagerplatz',
         'bestand'
     ];
-
-    public $incrementing = false; // Da kein "id"-Feld
 
     // Beziehungen
     public function artikel()

@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Storage;
 
 class LieferscheinController extends Controller
 {
+
+    // Wird aktuell nicht benötigt.
+
     public function verarbeiten(Request $request)
     {
         // 1. Datei-Upload (funktioniert bei dir schon, hier nur Beispiel)

@@ -4,12 +4,12 @@
         <div class="flex flex-col">
 
 
-            <div>Lieferschein hochladen:</div>
-            <div>
+            <div class="text-xl pt-4">Lieferschein hochladen:</div>
+            <div class="pb-6 border">
                 <input type="file" name="file" class="filepond" max_file_size="5mb" />
             </div>
 
-            <div>Json-Result</div>
+            <div class="pt-6">Ergebnis</div>
             <div>
 
                 <textarea id="jsonresult" wire:model="jsonResult" rows="10" cols="80" > </textarea>

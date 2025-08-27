@@ -39,7 +39,7 @@ new class extends Component
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('scanartikel')" :active="request()->routeIs('scanartikel')" wire:navigate>
-                        {{ __('Scan Artikel') }}
+                        {{ __('Artikel Zu-/abbuchen') }}
                     </x-nav-link>
                 </div>
 

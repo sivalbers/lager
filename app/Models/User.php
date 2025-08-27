@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -44,5 +45,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function debitor(): BelongsTo
+    {
+        return $this->belongsTo(Debitor::class, 'debitor');
+    }
+
+    /**
+     * Beziehung zu Abladestelle
+     */
+    public function abladestelle(): BelongsTo
+    {
+        return $this->belongsTo(Abladestelle::class, 'abladestellen_id');
     }
 }

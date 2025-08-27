@@ -12,6 +12,11 @@
             <div class="flex-1 text-right">Menge</div>
         </div>
 
+        <div class="flex text-xs text-gray-500 justify-end">
+            Negative Mengen werden abgebucht.
+
+        </div>
+
         @foreach($inputData as $index => $row)
             <div class="flex flex-row gap-4 mt-2">
                 <div class="flex-1">
