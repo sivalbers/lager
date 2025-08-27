@@ -84,7 +84,7 @@ function startScanner() {
                 cameraSelectInitialized = true;
             }
 
-            currentCameraId = devices[0].id;
+            // currentCameraId = devices[0].id;
             html5QrCode.start(
                 currentCameraId,
                 { fps: 10, qrbox: { width: 250, height: 250 } },
