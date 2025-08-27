@@ -84,7 +84,12 @@ function startScanner() {
                 cameraSelectInitialized = true;
             }
 
-            // currentCameraId = devices[0].id;
+            // Kamera auswählen: entweder bereits gewählt oder erste
+            if (!currentCameraId) {
+                currentCameraId = devices[0].id;
+                cameraSelect.value = currentCameraId;
+            }
+
             html5QrCode.start(
                 currentCameraId,
                 { fps: 10, qrbox: { width: 250, height: 250 } },
@@ -96,14 +101,15 @@ function startScanner() {
 
 function onScanSuccess(decodedText) {
     console.log("QR erkannt:", decodedText);
-    Livewire.dispatch('qrcode-scanned', { code: decodedText }); // Statt dispatch
+    Livewire.emit('qrcode-scanned', { code: decodedText });
 
     html5QrCode.stop().then(() => {
         console.log("Scanner gestoppt");
-        setTimeout(() => startScanner(), 2000);
+        setTimeout(() => startScanner(), 2000); // Neustart mit gleicher Kamera
     });
 }
 
 document.addEventListener("livewire:navigated", startScanner);
 </script>
 @endpush
+
