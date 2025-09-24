@@ -52,7 +52,7 @@ public function handleScan(string $code = null): void
     }
 
     \Log::info('Scan verarbeitet', $this->inputData);
-    $this->dispatchBrowserEvent('scan-processed');
+    $this->dispatch('scan-processed');
     \Log::info('Ende handleScan');
 }
 
