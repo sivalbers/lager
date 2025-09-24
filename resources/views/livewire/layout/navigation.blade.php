@@ -46,13 +46,6 @@ new class extends Component
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('etikettenerstellen')" :active="request()->routeIs('etikettenerstellen')" wire:navigate>
-                        {{ __('Etiketten erstellen') }}
-                    </x-nav-link>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('debitoren')" :active="request()->routeIs('debitoren')" wire:navigate>
                         {{ __('Debitoren') }}
                     </x-nav-link>
@@ -64,7 +57,16 @@ new class extends Component
                         {{ __('Warenzugang') }}
                     </x-nav-link>
                 </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('etikettenerstellen')" :active="request()->routeIs('etikettenerstellen')" wire:navigate>
+                        {{ __('Etiketten erstellen') }}
+                    </x-nav-link>
+                </div>
             </div>
+
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">

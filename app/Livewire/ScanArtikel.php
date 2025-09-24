@@ -55,6 +55,7 @@ class ScanArtikel extends Component
         }
 
         \Log::info('Scan verarbeitet', $this->inputData);
+        $this->dispatch('scan-processed');
     }
 
 
