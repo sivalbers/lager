@@ -33,6 +33,7 @@ class ScanArtikel extends Component
     #[On('qrcode-scanned')]
     public function handleScan($data = null)
     {
+        \Log::info('Anfang handleScan');
         if (!$data || !isset($data['code'])) {
             return;
         }
@@ -56,6 +57,7 @@ class ScanArtikel extends Component
 
         \Log::info('Scan verarbeitet', $this->inputData);
         $this->dispatch('scan-processed');
+        \Log::info('Ende handleScan');
     }
 
 
