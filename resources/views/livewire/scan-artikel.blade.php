@@ -31,7 +31,7 @@
                         class="w-full border rounded px-2 py-1">
                 </div>
                 <div class="flex-1">
-                    <input wire:model="inputData.{{ $index }}.Menge" type="number" min="1"
+                    <input wire:model="inputData.{{ $index }}.Menge" type="number" min="1" {{ (count($inputData)-1 == $index ) ? "autofocus" : "" }}
                         class="w-full border rounded px-2 py-1 text-right">
                 </div>
             </div>
