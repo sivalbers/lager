@@ -31,7 +31,7 @@ class ScanArtikel extends Component
 
 
 #[On('qrcode-scanned')]
-public function handleScan($code = null)
+public function handleScan(string $code = null): void
 {
     \Log::info('Anfang handleScan', ['code' => $code]);
 
