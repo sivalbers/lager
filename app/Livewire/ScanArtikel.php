@@ -31,28 +31,23 @@ class ScanArtikel extends Component
 
 
     #[On('qrcode-scanned')]
-    public function handleScan($data = null)
+    public function handleScan($payload)
     {
         \Log::info('Anfang handleScan');
-        if (!$data || !isset($data['code'])) {
-            \Log::info('Sofort wieder raus');
+        // $payload ist ein Array wie ['code' => '{"artikel":"...","lagerort":"..."}']
+        $decodedText = $payload['code'] ?? null;
+
+        if (!$decodedText) {
             return;
         }
 
-        $decoded = json_decode($data['code'], true);
+        $decoded = json_decode($decodedText, true);
 
         if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
             $this->inputData[] = [
                 'Artikel'  => $decoded['artikel'] ?? '',
                 'Lagerort' => $decoded['lagerort'] ?? '',
                 'Menge'    => $decoded['menge'] ?? 1,
-            ];
-        } else {
-            // Nur als Rohtext speichern
-            $this->inputData[] = [
-                'Artikel'  => $data['code'],
-                'Lagerort' => '',
-                'Menge'    => 1,
             ];
         }
 
