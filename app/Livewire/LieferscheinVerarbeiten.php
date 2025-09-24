@@ -183,7 +183,7 @@ class LieferscheinVerarbeiten extends Component
         // Zweite Ausgabe nur für Clipboard
         $clipboard = '';
         foreach ($out as $o) {
-            $clipboard .= $o['ArtikelNr'] . "\t" . $o['Lagerort'] . PHP_EOL;
+            $clipboard .= $o['ArtikelNr'] . ", " . $o['Lagerort'] . PHP_EOL;
         }
 
         // Beides zurückgeben (z. B. als Array)
