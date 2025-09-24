@@ -116,21 +116,22 @@ function onScanSuccess(decodedText) {
         setTimeout(() => startScanner(), 1500);
     });
 }
-
-
-// Optional: visuelles Feedback nach Scan
-document.addEventListener('scan-processed', () => {
-    console.log("In Scan-Processed!");
-    Livewire.hook('message.processed', () => {
-        const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
-        if (inputs.length > 0) {
-            const lastInput = inputs[inputs.length - 1];
-            lastInput.focus();
-            lastInput.select();
-        }
-        console.log("Scan in Livewire verarbeitet + Fokus gesetzt.");
-    });
+// 1. Global registrieren
+Livewire.hook('message.processed', () => {
+    const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
+    if (inputs.length > 0) {
+        const lastInput = inputs[inputs.length - 1];
+        lastInput.focus();
+        lastInput.select();
+        console.log("Fokus gesetzt auf letzte Menge!");
+    }
 });
+
+// 2. Optional: zusätzlich mitlauschen
+window.addEventListener('scan-processed', () => {
+    console.log("Browser-Event 'scan-processed' empfangen!");
+});
+
 
 document.addEventListener("livewire:navigated", startScanner);
 </script>
