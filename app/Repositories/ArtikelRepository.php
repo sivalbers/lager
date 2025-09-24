@@ -19,6 +19,14 @@ class ArtikelRepository
 
         $artikel->save();
     }
+
+    public function getArtikel($nr){
+        $artikel = Artikel::where('artikelnr', $nr)->first();
+        if ($artikel)
+            return $artikel;
+        else
+            return null;
+    }
 }
 
 

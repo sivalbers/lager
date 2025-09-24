@@ -1,51 +1,60 @@
-<div>
+<div class="w-3/6 m-auto mt-6">
 
-    <div class="w-10/12 m-auto">
+<!-- https://sieverding-sandbox.faveo365.com:9248/NSTSUBSCRIPTIONSODATA/ODatav4/Company('Sieverding%20Besitzunternehmen')/ShopLieferscheinArtikel?tenant=x7069851800471529774&$filter=DocumentNo%20eq%20'LS00070912'    <div class="w-10/12 m-auto"> -->
         <div class="flex flex-col">
 
+            <h1 class="text-2xl font-bold mb-4">Warenzugang buchen</h1>
 
-            <div class="text-xl pt-4">Lieferschein hochladen:</div>
-            <div class="pb-6 border">
-                <input type="file" name="file" class="filepond" max_file_size="5mb" />
+
+            <div class="flex flex-row items-center space-x-2">
+                <div class="">
+                    Lieferschein-Nr.: LS000 ...
+                </div>
+                <div class="">
+                    <input type="number" wire:model="lieferscheinNr" auto class="h-9 rounded">
+                </div>
+                <div class="">
+                    <x-bladewind::button type="button" wire:click="readLieferschein" class="border border-gray-500 bg-blue-500 text-white rounded-md">
+                        Lieferschein holen
+                    </x-bladewind::button>
+                </div>
             </div>
+            <div class="flex flex-row items-center space-x-2 text-gray-500">
+                Bitte die letzten fünf Ziffern
+            </div>
+
+
 
             <div class="pt-6">Ergebnis</div>
             <div>
 
-                <textarea id="jsonresult" wire:model="jsonResult" rows="10" cols="80" > </textarea>
+                <textarea id="jsonresult" wire:model="jsonResult" rows="15" cols="120" class="font-mono text-sm" > </textarea>
+            </div>
+
+            <div>
+                <div x-data="{ clip: @entangle('clipboardValue') }">
+                    <button
+                        type="button"
+                        @click="
+                            if (navigator.clipboard && window.isSecureContext) {
+                                navigator.clipboard.writeText(clip)
+                                .then(() => alert('Artikel + Lagerort kopiert!'))
+                                .catch(err => alert('Fehler beim Kopieren: ' + err));
+                            } else {
+                                alert('Clipboard API nicht verfügbar – HTTPS nötig');
+                            }
+                        "
+                        class="px-2 py-1 bg-blue-500 text-white rounded"
+                    >
+                        Nur Artikel + Lagerort kopieren
+                    </button>
+
+                    
+                </div>
             </div>
 
 
         </div>
-        <div>
-            <x-bladewind::button type="primary">
-                Absenden
-            </x-bladewind::button>
-        </div>
+
     </div>
 </div>
-
-@push('scripts')
-<script>
-    FilePond.create(document.querySelector('.filepond'), {
-        server: {
-            process: {
-                url: '/file-upload', // deine Route zum Controller
-                method: 'POST',
-                onload: (response) => {
-                    let json = JSON.parse(response);
-
-                    // Nur den JSON-Teil der Artikel nehmen
-                    let artikel = json.artikel ?? [];
-
-                    // Livewire-Variable setzen
-                    Livewire.dispatch('setJsonResult', { value: JSON.stringify(artikel, null, 2) });
-
-                    return json.id; // FilePond erwartet eine ID
-                }
-            },
-            revert: '/file-upload/revert'
-        }
-    });
-</script>
-@endpush

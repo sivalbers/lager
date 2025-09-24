@@ -47,7 +47,7 @@ class ListBestand extends Component
             $query->where('lagernr', $this->lagerort);
         }
 
-        $items = $query->orderBy('artikelnr')->paginate(30);
+        $items = $query->orderBy('artikelnr')->paginate(13);
 
         return view('livewire.list-bestand', [
             'items'     => $items,
