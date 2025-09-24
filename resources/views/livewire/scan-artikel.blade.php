@@ -123,7 +123,7 @@ document.addEventListener('scan-processed', () => {
 
         const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
         if (inputs.length > 0) {
-            const lastInput = inputs[inputs.length - 1];
+            const lastInput = inputs[inputs.length];
             lastInput.focus();
             lastInput.select();
         }
