@@ -1,4 +1,4 @@
-<div class="w-5/6 m-auto">
+<div class="w-[80vh] md:w-3/6  m-auto">
     <h1>QR-Code Scanner</h1>
 
     <!-- Scanner-Feld -->
@@ -8,7 +8,7 @@
 
     <div id="reader" style="width: 300px; height: 300px; border:1px solid #ccc;"></div>
 
-    <form wire:submit.prevent="buchen" class="flex flex-col w-1/2">
+    <form wire:submit.prevent="buchen" class="flex flex-col md:w-1/2 w-full">
 
         <div class="flex flex-row gap-4 font-bold mt-6">
             <div class="flex-1">Artikel</div>
