@@ -31,7 +31,7 @@
                         class="w-full border rounded px-2 py-1">
                 </div>
                 <div class="flex-1">
-                    <input wire:model="inputData.{{ $index }}.Menge" type="number" min="1" {{ (count($inputData)-1 == $index ) ? "autofocus" : "" }}
+                    <input wire:model="inputData.{{ $index }}.Menge" type="number" min="0"
                         class="w-full border rounded px-2 py-1 text-right">
                 </div>
             </div>
@@ -120,7 +120,7 @@ function onScanSuccess(decodedText) {
 
 // Optional: visuelles Feedback nach Scan
 document.addEventListener('scan-processed', () => {
-
+    console.log("In Scan-Processed!");
     Livewire.hook('message.processed', () => {
         const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
         if (inputs.length > 0) {
