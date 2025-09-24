@@ -121,14 +121,15 @@ function onScanSuccess(decodedText) {
 // Optional: visuelles Feedback nach Scan
 document.addEventListener('scan-processed', () => {
 
+    Livewire.hook('message.processed', () => {
         const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
         if (inputs.length > 0) {
-            const lastInput = inputs[inputs.length];
+            const lastInput = inputs[inputs.length - 1];
             lastInput.focus();
             lastInput.select();
         }
-
-    console.log("Scan in Livewire verarbeitet.");
+        console.log("Scan in Livewire verarbeitet + Fokus gesetzt.");
+    });
 });
 
 document.addEventListener("livewire:navigated", startScanner);
