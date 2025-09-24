@@ -35,6 +35,7 @@ class ScanArtikel extends Component
     {
         \Log::info('Anfang handleScan');
         if (!$data || !isset($data['code'])) {
+            \Log::info('Sofort wieder raus');
             return;
         }
 
