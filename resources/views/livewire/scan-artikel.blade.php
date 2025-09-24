@@ -6,7 +6,7 @@
     <select id="cameraSelection"></select>
     </div>
 
-    <div id="reader" style="width: 300px; height: 300px; border:1px solid #ccc;"></div>
+    <div id="reader" style="width: 300px; height: 200px; border:1px solid #ccc;"></div>
 
     <form wire:submit.prevent="buchen" class="flex flex-col md:w-1/2 w-full">
 
