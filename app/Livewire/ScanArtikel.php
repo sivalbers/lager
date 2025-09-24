@@ -31,11 +31,11 @@ class ScanArtikel extends Component
 
 
     #[On('qrcode-scanned')]
-    public function handleScan($payload)
+    public function handleScan($data)
     {
         \Log::info('Anfang handleScan');
         // $payload ist ein Array wie ['code' => '{"artikel":"...","lagerort":"..."}']
-        $decodedText = $payload['code'] ?? null;
+        $decodedText = $data['code'] ?? null;
 
         if (!$decodedText) {
             return;
