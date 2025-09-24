@@ -106,7 +106,8 @@ function startScanner() {
 
 function onScanSuccess(decodedText) {
     console.log("QR erkannt:", decodedText);
-    Livewire.dispatch('qrcode-scanned', { code: decodedText });
+    Livewire.dispatch('qrcode-scanned', decodedText);
+
 
     // Scanner kurz stoppen, um Doppel-Scans zu vermeiden
     html5QrCode.stop().then(() => {

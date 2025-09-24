@@ -30,31 +30,30 @@ class ScanArtikel extends Component
     }
 
 
-    #[On('qrcode-scanned')]
-    public function handleScan($data)
-    {
-        \Log::info('Anfang handleScan');
-        // $payload ist ein Array wie ['code' => '{"artikel":"...","lagerort":"..."}']
-        $decodedText = $data['code'] ?? null;
+#[On('qrcode-scanned')]
+public function handleScan($code = null)
+{
+    \Log::info('Anfang handleScan', ['code' => $code]);
 
-        if (!$decodedText) {
-            return;
-        }
-
-        $decoded = json_decode($decodedText, true);
-
-        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-            $this->inputData[] = [
-                'Artikel'  => $decoded['artikel'] ?? '',
-                'Lagerort' => $decoded['lagerort'] ?? '',
-                'Menge'    => $decoded['menge'] ?? 1,
-            ];
-        }
-
-        \Log::info('Scan verarbeitet', $this->inputData);
-        $this->dispatch('scan-processed');
-        \Log::info('Ende handleScan');
+    if (!$code) {
+        return;
     }
+
+    $decoded = json_decode($code, true);
+
+    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+        $this->inputData[] = [
+            'Artikel'  => $decoded['artikel'] ?? '',
+            'Lagerort' => $decoded['lagerort'] ?? '',
+            'Menge'    => $decoded['menge'] ?? 1,
+        ];
+    }
+
+    \Log::info('Scan verarbeitet', $this->inputData);
+    $this->dispatch('scan-processed');
+    \Log::info('Ende handleScan');
+}
+
 
 
     public function render()
