@@ -57,7 +57,7 @@ new class extends Component
                         {{ __('Warenzugang') }}
                     </x-nav-link>
                 </div>
-                
+
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('etikettenerstellen')" :active="request()->routeIs('etikettenerstellen')" wire:navigate>
@@ -121,7 +121,25 @@ new class extends Component
 
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('scanartikel')" :active="request()->routeIs('scanartikel')" wire:navigate>
-                {{ __('Scan Artikel') }}
+                {{ __('Artikel Zu-/abbuchen') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('debitoren')" :active="request()->routeIs('debitoren')" wire:navigate>
+                {{ __('Debitoren') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('lieferschein')" :active="request()->routeIs('lieferschein')" wire:navigate>
+                {{ __('Warenzugang') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('etikettenerstellen')" :active="request()->routeIs('etikettenerstellen')" wire:navigate>
+                {{ __('Etiketten erstellen') }}
             </x-responsive-nav-link>
         </div>
 

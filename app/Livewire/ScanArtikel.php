@@ -47,7 +47,7 @@ public function handleScan(string $code = null): void
         $this->inputData[] = [
             'Artikel'  => $decoded['artikel'] ?? '',
             'Lagerort' => $decoded['lagerort'] ?? '',
-            'Menge'    => $decoded['menge'] ?? 1,
+            'Menge'    => $decoded['menge'] ?? -1,
         ];
     }
 
