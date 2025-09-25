@@ -29,10 +29,10 @@
         </div>
 
         <div class="min-w-full">
-            <div class="flex flex-col w-full space-y-2">
-                <div class="flex flex-row space-x-2 w-full font-bold">
+            <div class="flex flex-col w-full">
+                <div class="flex flex-row space-x-2 w-full font-bold mb-2 border-b border-gray-500">
                     <div class="text-right w-1/12 ">Artikelnr.</div>
-                    <div class="text-left w-3/12 ">Bezeichnung</div>
+                    <div class="text-left w-6/12 ">Bezeichnung</div>
                     <div class="text-left w-3/12 ">Lagerort</div>
                     <div class="text-right w-1/12 ">Lager-Platz</div>
                     <div class="text-right w-1/12 ">Bestand</div>
@@ -40,15 +40,12 @@
 
                 </div>
                 @forelse($items as $p)
-                    <div class="flex flex-row space-x-2 w-full">
+                    <div class="flex flex-row space-x-2 w-full hover:bg-blue-200">
                         <div class="text-right w-1/12">{{ $p->artikelnr ?? '' }}</div>
-                        <div class="text-left w-3/12">{{ $p->artikel->bezeichnung ?? '' }}</div>
+                        <div class="text-left w-6/12">{{ $p->artikel->bezeichnung ?? '' }}</div>
                         <div class="text-left w-3/12">{{ $p->lagernr }} {{ $p->lagerort->bezeichnung ?? '' }}</div>
                         <div class="text-right w-1/12">..</div>
                         <div class="text-right w-1/12">{{ number_format($p->bestand, 0, ',', '.') }} {{ $p->artikel->einheit }}</div>
-
-
-
                     </div>
 
                 @empty

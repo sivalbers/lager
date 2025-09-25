@@ -1,9 +1,8 @@
-<div class="w-3/6 m-auto mt-6">
+<div class="w-5/6 m-auto">
 
 <!-- https://sieverding-sandbox.faveo365.com:9248/NSTSUBSCRIPTIONSODATA/ODatav4/Company('Sieverding%20Besitzunternehmen')/ShopLieferscheinArtikel?tenant=x7069851800471529774&$filter=DocumentNo%20eq%20'LS00070912'    <div class="w-10/12 m-auto"> -->
         <div class="flex flex-col">
-
-            <h1 class="text-2xl font-bold mb-4">Warenzugang buchen</h1>
+            <h1 class="text-2xl font-bold my-4">Warenzugang buchen</h1>
 
 
             <div class="flex flex-row items-center space-x-2">
@@ -28,7 +27,7 @@
             <div class="pt-6">Ergebnis</div>
             <div>
 
-                <textarea id="jsonresult" wire:model="jsonResult" rows="15" cols="120" class="font-mono text-sm" > </textarea>
+                <textarea id="jsonresult" wire:model="jsonResult" rows="15" class="font-mono text-sm w-full" > </textarea>
             </div>
 
             <div>
@@ -49,7 +48,7 @@
                         Nur Artikel + Lagerort kopieren
                     </button>
 
-                    
+
                 </div>
             </div>
 

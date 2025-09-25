@@ -11,12 +11,13 @@ class ScanArtikel extends Component
     public $inputData = [];
 
     public function mount(){
-        /*
+
         $this->inputData[] =  [
                 'Artikel'  => '200333',
                 'Lagerort' => '0098',
-                'Menge'    => 1,
+                'Menge'    => -1,
             ];
+        /*
         $this->inputData[] =  [
                 'Artikel'  => '200335',
                 'Lagerort' => '0099',

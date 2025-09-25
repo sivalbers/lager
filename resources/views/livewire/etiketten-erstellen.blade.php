@@ -1,5 +1,5 @@
 <div class="w-5/6 m-auto">
-    <h1 class="text-xl font-bold mb-4 print:hidden">Etiketten erzeugen</h1>
+    <h1 class="text-2xl font-bold my-4 print:hidden">Etiketten erstellen</h1>
 
     <!-- Eingabeformular -->
     <form wire:submit.prevent="createDataFromText" class="print:hidden mb-6">

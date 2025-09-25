@@ -1,14 +1,20 @@
-<div class="w-[80vh] md:w-3/6  m-auto">
-    <h1>QR-Code Scanner</h1>
+<div class="w-[80vh] md:w-5/6  m-auto">
+    <h1 class="text-2xl font-bold mt-4">Artikel zu-/abbuchen</h1>
 
     <!-- Scanner-Feld -->
     <div class="py-6">
-    <select id="cameraSelection"></select>
+        <div class="flex flex-row items-center space-x-4">
+            <div>
+                Kameraauswahl:
+            </div>
+            <div>
+                <select id="cameraSelection" class="h-6 rounded"></select>
+            </div>
     </div>
 
     <div id="reader" style="width: 200px; height: 200px; border:1px solid #ccc;"></div>
 
-    <form wire:submit.prevent="buchen" class="flex flex-col md:w-1/2 w-full">
+    <form wire:submit.prevent="buchen" class="flex flex-col w-full">
 
         <div class="flex flex-row gap-4 font-bold mt-6">
             <div class="flex-1">Artikel</div>
@@ -20,7 +26,7 @@
             Negative Mengen werden abgebucht.
         </div>
 
-        @foreach($inputData as $index => $row)
+        @foreach ($inputData as $index => $row)
             <div class="flex flex-row gap-4 mt-2">
                 <div class="flex-1">
                     <input wire:model="inputData.{{ $index }}.Artikel" type="text"
@@ -38,8 +44,7 @@
         @endforeach
 
         <div class="flex justify-end">
-            <button type="submit"
-                    class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+            <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
                 Buchen
             </button>
         </div>
@@ -51,87 +56,96 @@
 </div>
 
 @push('scripts')
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-<script>
-let html5QrCode;
-let currentCameraId = null;
-let cameraSelectInitialized = false;
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script>
+        let html5QrCode;
+        let currentCameraId = null;
+        let cameraSelectInitialized = false;
 
-function startScanner() {
-    html5QrCode = new Html5Qrcode("reader");
+        function startScanner() {
+            html5QrCode = new Html5Qrcode("reader");
 
-    Html5Qrcode.getCameras().then(devices => {
-        if (devices && devices.length) {
-            const cameraSelect = document.getElementById('cameraSelection');
+            Html5Qrcode.getCameras().then(devices => {
+                if (devices && devices.length) {
+                    const cameraSelect = document.getElementById('cameraSelection');
 
-            if (!cameraSelectInitialized) {
-                devices.forEach(device => {
-                    const option = document.createElement('option');
-                    option.value = device.id;
-                    option.text = device.label;
-                    cameraSelect.appendChild(option);
-                });
+                    if (!cameraSelectInitialized) {
+                        devices.forEach(device => {
+                            const option = document.createElement('option');
+                            option.value = device.id;
+                            option.text = device.label;
+                            cameraSelect.appendChild(option);
+                        });
 
-                cameraSelect.addEventListener('change', async () => {
-                    const newCameraId = cameraSelect.value;
+                        cameraSelect.addEventListener('change', async () => {
+                            const newCameraId = cameraSelect.value;
 
-                    if (html5QrCode && currentCameraId !== newCameraId) {
-                        await html5QrCode.stop();
-                        currentCameraId = newCameraId;
-                        html5QrCode.start(
-                            currentCameraId,
-                            { fps: 10, qrbox: { width: 250, height: 250 } },
-                            onScanSuccess
-                        ).catch(err => console.error("Start-Fehler:", err));
+                            if (html5QrCode && currentCameraId !== newCameraId) {
+                                await html5QrCode.stop();
+                                currentCameraId = newCameraId;
+                                html5QrCode.start(
+                                    currentCameraId, {
+                                        fps: 10,
+                                        qrbox: {
+                                            width: 250,
+                                            height: 250
+                                        }
+                                    },
+                                    onScanSuccess
+                                ).catch(err => console.error("Start-Fehler:", err));
+                            }
+                        });
+
+                        cameraSelectInitialized = true;
                     }
-                });
 
-                cameraSelectInitialized = true;
-            }
+                    // Kamera auswählen: entweder bereits gewählt oder erste
+                    if (!currentCameraId) {
+                        currentCameraId = devices[0].id;
+                        cameraSelect.value = currentCameraId;
+                    }
 
-            // Kamera auswählen: entweder bereits gewählt oder erste
-            if (!currentCameraId) {
-                currentCameraId = devices[0].id;
-                cameraSelect.value = currentCameraId;
-            }
-
-            html5QrCode.start(
-                currentCameraId,
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                onScanSuccess
-            ).catch(err => console.error("Start-Fehler:", err));
+                    html5QrCode.start(
+                        currentCameraId, {
+                            fps: 10,
+                            qrbox: {
+                                width: 250,
+                                height: 250
+                            }
+                        },
+                        onScanSuccess
+                    ).catch(err => console.error("Start-Fehler:", err));
+                }
+            }).catch(err => console.error("Kamera-Fehler:", err));
         }
-    }).catch(err => console.error("Kamera-Fehler:", err));
-}
 
-function onScanSuccess(decodedText) {
-    console.log("QR erkannt:", decodedText);
-    Livewire.dispatch('qrcode-scanned', [String(decodedText)]);
+        function onScanSuccess(decodedText) {
+            console.log("QR erkannt:", decodedText);
+            Livewire.dispatch('qrcode-scanned', [String(decodedText)]);
 
 
 
-    // Scanner kurz stoppen, um Doppel-Scans zu vermeiden
-    html5QrCode.stop().then(() => {
-        console.log("Scanner gestoppt");
-        setTimeout(() => startScanner(), 1500);
-    });
-}
-window.addEventListener('scan-processed', () => {
-    console.log("Browser-Event 'scan-processed' empfangen!");
-
-    // kleinen Timeout, damit DOM fertig ist
-    setTimeout(() => {
-        const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
-        if (inputs.length > 0) {
-            const lastInput = inputs[inputs.length - 1];
-            lastInput.focus();
-            lastInput.select();
-            console.log("Fokus gesetzt auf letzte Menge!");
+            // Scanner kurz stoppen, um Doppel-Scans zu vermeiden
+            html5QrCode.stop().then(() => {
+                console.log("Scanner gestoppt");
+                setTimeout(() => startScanner(), 1500);
+            });
         }
-    }, 50);
-});
+        window.addEventListener('scan-processed', () => {
+            console.log("Browser-Event 'scan-processed' empfangen!");
 
-document.addEventListener("livewire:navigated", startScanner);
-</script>
+            // kleinen Timeout, damit DOM fertig ist
+            setTimeout(() => {
+                const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
+                if (inputs.length > 0) {
+                    const lastInput = inputs[inputs.length - 1];
+                    lastInput.focus();
+                    lastInput.select();
+                    console.log("Fokus gesetzt auf letzte Menge!");
+                }
+            }, 50);
+        });
+
+        document.addEventListener("livewire:navigated", startScanner);
+    </script>
 @endpush
-

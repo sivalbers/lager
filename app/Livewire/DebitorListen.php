@@ -57,16 +57,21 @@ class DebitorListen extends Component
         return view('livewire.debitor-listen')->layout('layouts.app');
     }
 
-    public function editDebitor($doCreate){
+    public function editDebitor($doCreate, $debitornr = null){
         $this->isEditDebitor = !$doCreate;
         if ($doCreate){
             $this->edDebitor = new Debitor();
         }
         else {
-            $this->edDebitor = Debitor::with('abladestellen')->where('nr', 21001)->get();
+            $this->edDebitor = Debitor::with('abladestellen')->where('nr', $debitornr)->first();
+            $this->debitorNr            = $this->edDebitor->nr;
+            $this->debitorName          = $this->edDebitor->name;
+            $this->debitorNetzregion    = $this->edDebitor->netzregion;
+            
+
+
         }
         $this->showDebitor = true ;
-
 
     }
 
