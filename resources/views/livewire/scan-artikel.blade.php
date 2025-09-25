@@ -8,7 +8,7 @@
                 Kameraauswahl:
             </div>
             <div>
-                <select id="cameraSelection" class="h-6 rounded"></select>
+                <select id="cameraSelection" class="h-10 rounded"></select>
             </div>
     </div>
 
