@@ -21,6 +21,31 @@ new class extends Component
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
+
+            <div
+                x-data="{
+                    width: window.innerWidth,
+                    breakpoint() {
+                        if (this.width >= 1536) return '2XL';
+                        if (this.width >= 1280) return 'XL';
+                        if (this.width >= 1024) return 'LG';
+                        if (this.width >= 768)  return 'MD';
+                        if (this.width >= 640)  return 'SM';
+                        return 'Keine';
+                    }
+                }"
+                x-init="window.addEventListener('resize', () => width = window.innerWidth)"
+                class="block mx-2
+                    bg-lime-400
+                    sm:bg-red-200
+                    md:bg-orange-200
+                    lg:bg-green-200
+                    xl:bg-blue-200
+                    2xl:bg-pink-200">
+
+                <span x-text="breakpoint()" class="block text-center font-bold"></span>
+            </div>
+            
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
