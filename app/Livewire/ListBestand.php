@@ -15,6 +15,8 @@ class ListBestand extends Component
     public string $search = '';
     public ?int $lagerort = null;
 
+    public $screenWidth = "";
+
 
     public $lagerorte;
 
