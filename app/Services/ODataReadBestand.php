@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\PendingRequest;
+
 
 class ODataReadBestand
 {
@@ -13,10 +15,18 @@ class ODataReadBestand
     {
 
         $this->odata = [
-        'base_url' => env('ODATA_BASE_URL'),
-        'username' => env('ODATA_USERNAME'),
-        'password' => env('ODATA_PASSWORD'),
+        'base_url' => env('ODATA_BASE_URL', "https://sieverding-webshop.faveo365.com:9248/NSTSUBSCRIPTIONSODATA/ODatav4/Company('Sieverding%%20Besitzunternehmen')/%s?tenant=y7069851800471529774"),
+        'username' => env('ODATA_USERNAME', 'testuser'),
+        'password' => env('ODATA_PASSWORD', 'Sieverding22!'),
         ];
+/*
+        Log::info([
+            'base_url' => $this->odata['base_url'],
+            'username' => $this->odata['username'],
+            'password' => $this->odata['password']
+        ]);
+
+    */
 
     }
 
