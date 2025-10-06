@@ -18,7 +18,7 @@
         </div>
         <div class="text-center {{ $w[5] }}">
             <button wire:click="edit({{ $artikel->id }})" class="hover:underline">
-                <x-fluentui-info-12-o class="h-6" />
+                <x-fluentui-info-20-o class="h-6" />
             </button>
         </div>
     </div>
