@@ -22,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'debitor_nr',
+        'abladestelle_id',
+        'rechtegruppe_id'
     ];
 
     /**
@@ -34,29 +37,43 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function debitor()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Debitor::class, 'debitor_nr');
     }
 
-    public function debitor(): BelongsTo
+    public function abladestelle()
     {
-        return $this->belongsTo(Debitor::class, 'debitor');
+        return $this->belongsTo(Abladestelle::class, 'abladestelle_id');
     }
 
-    /**
-     * Beziehung zu Abladestelle
-     */
-    public function abladestelle(): BelongsTo
+    public function rechtegruppe()
     {
-        return $this->belongsTo(Abladestelle::class, 'abladestellen_id');
+        return $this->belongsTo(Rechtegruppe::class, 'rechtegruppe_id');
     }
+
+    public function protokolle()
+    {
+        return $this->hasMany(Protokoll::class, 'user_id');
+    }
+
+    public function berechtigungen()
+    {
+        return $this->hasManyThrough(
+            Berechtigung::class,
+            Recht::class,
+            'rechtegruppen_id',   // Fremdschlüssel in "recht"
+            'id',                 // Fremdschlüssel in "berechtigung"
+            'rechtegruppe_id',    // Lokaler Schlüssel in "users"
+            'berechtigung_id'     // Lokaler Schlüssel in "recht"
+        );
+    }
+
+    public function hasBerechtigung(string $bezeichnung): bool
+    {
+        return $this->berechtigungen->contains('bezeichnung', $bezeichnung);
+        
+    }
+
+
 }

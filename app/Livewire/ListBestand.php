@@ -2,11 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Models\Abladestelle;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 use Livewire\WithPagination;
 use App\Models\Lagerort;
-use App\Models\Lagerdaten;
+use App\Models\Artikelbestand;
 use App\Services\ArtikelImportService;
 
 class ListBestand extends Component
@@ -20,6 +23,9 @@ class ListBestand extends Component
 
     public $lagerorte;
 
+    public ?int $abladestelle = null;
+    public $abladestellen;
+
 
     public function mount()
     {
@@ -27,9 +33,13 @@ class ListBestand extends Component
     }
 
     private function load(){
-        \Log::info('in load()');
+        Log::info('in load()');
 
-        $this->lagerorte = Lagerort::orderBy('nr')->get();
+        $debitorNr = Auth::user()->debitor_nr;
+        $this->abladestellen = Abladestelle::where('debitor_nr', $debitorNr)->get();
+        $this->abladestelle = 0 ;
+
+        $this->lagerorte = Lagerort::orderBy('id')->get();
         $this->lagerort = 0;
 
     }
@@ -39,14 +49,18 @@ class ListBestand extends Component
 
     public function render()
     {
-        $query = \App\Models\Lagerdaten::with(['artikel','lagerort'])
+        $query = \App\Models\Artikelbestand::with(['artikel','lagerort'])
             ->where('bestand', '>', 0);
 
         if ($this->search !== '') {
             $query->where('artikelnr', 'like', "%{$this->search}%");
         }
+
+        if ($this->abladestelle) {
+            $query->where('abladestelle_id', $this->abladestelle);
+        }
         if ($this->lagerort) {
-            $query->where('lagernr', $this->lagerort);
+            $query->where('lagerort_id', $this->lagerort);
         }
 
         $items = $query->orderBy('artikelnr')->paginate(13);
@@ -58,7 +72,7 @@ class ListBestand extends Component
     }
 
     public function importOData(){
-        \Log::info('importOData()');
+        Log::info('importOData()');
 
         $artikelService = new ArtikelImportService();
         $artikelService->importArtikel();

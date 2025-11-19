@@ -19,70 +19,86 @@
             <h1 class="text-2xl font-bold mt-4 mb-6">Bestand auflisten</h1>
         </div>
         <div>
-            <button wire:click="importOData" class="hover:underline">Daten abrufen</button>
+            <!-- button wire:click="importOData" class="hover:underline">Daten abrufen</button -->
         </div>
     </div>
 
     <div class="space-y-4">
         <!-- Kopfzeile -->
         <div class="flex font-bold ">
-            <div class="flex-[2] pr-2">Artikelnr.</div>
-            <div class="flex-[10]">Lagerort</div>
+            <div class="flex-[2] basis-0 pr-2">Artikelnr.</div>
+            <div class="flex-[5] basis-0 pr-2">Abladestelle</div>
+            <div class="flex-[5] basis-0">Lagerort</div>
         </div>
 
         <!-- Eingabefelder -->
         <div class="flex mb-6 w-full">
-            <div class="flex-[2] pr-2">
+            <div class="flex-[2] base-0 pr-2">
                 <input type="text" wire:model.live.debounce.500ms="search" placeholder="Suchen…"
                     class="input w-full">
             </div>
-            <div class="flex-[10]">
-                <select wire:model.live="lagerort" class="select w-full">
+            <div class="flex-[5] base-0 pr-2">
+                <select wire:model.change="abladestelle" class="select w-full">
+                    <option value="0">– alle Abladestellen –</option>
+                    @foreach ($abladestellen as $stelle)
+                        <option value="{{ $stelle->id }}">{{ $stelle->name }} (Id: {{ $stelle->id }} )</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="flex-[5] base-0 ">
+                <select wire:model.change="lagerort" class="select w-full">
                     <option value="0">– alle Lagerorte –</option>
                     @foreach ($lagerorte as $ort)
-                        <option value="{{ $ort->nr }}">{{ $ort->bezeichnung }} ({{ $ort->nr }})</option>
+                        <option value="{{ $ort->id }}">{{ $ort->bezeichnung }} (Id: {{ $ort->id }}, Abladestelle: {{ $ort->abladestelle->name }})</option>
                     @endforeach
                 </select>
             </div>
         </div>
         @php
             $zweiZeilig = $screenWidth === '';
-
+/*
             if (!$zweiZeilig) { // also einzeilig
-                if ($lagerort > 0){
-                    $w = [ "w-2/12 bg-red-200", "w-7/12 bg-blue-200", "null bg-red-600", "w-1/12 bg-pink-200", "w-1/12 bg-lime-200", "w-1/12 bg-orange-200" ];
-                }
-                else {
-                    $w = [ "w-1/12 bg-red-200", "w-6/12 bg-blue-200", "w-2/12 bg-red-600", "w-1/12 bg-pink-200", "w-1/12 bg-lime-200", "w-1/12 bg-orange-200" ];
-                }
+                $w = [ "w-2/12 bg-red-200",
+                        "w-7/12 bg-blue-200",
+                        "w-5/12 bg-orange-200",
+                        ($lagerort > 0) ? "null bg-red-600" : "w-2/12 bg-red-600",
+                        "w-1/12 bg-pink-200",
+                        "w-1/12 bg-lime-200",
+                        "w-1/12 bg-orange-200" ];
+
             }
             else { // Artikel in zwei Zeilen
-                if ($lagerort > 0){ // Lagerort wird ausgeblendet
-                    $w = [ "w-4/12 bg-red-200", "w-full bg-blue-200", "null bg-red-600", "w-4/12 bg-pink-200", "w-4/12 bg-lime-200", "w-1/12 bg-orange-200" ];
-                }
-                else {
-                    $w = [ "w-3/12 bg-red-200", "w-full bg-blue-200", "w-4/12 bg-red-600", "w-2/12 bg-pink-200", "w-2/12 bg-lime-200", "w-1/12 bg-orange-200" ];
-                }
+                $w = [
+                    "w-4/12 bg-red-200",
+                    "w-full bg-blue-200",
+                    "w-5/12 bg-orange-200",
+                    ($lagerort > 0) ? "null bg-red-600" : "w-4/12 bg-red-600",
+                    "w-4/12 bg-pink-200",
+                    "w-4/12 bg-lime-200",
+                    "w-1/12 bg-orange-200" ];
             }
+*/
+            if (!$zweiZeilig) { // also einzeilig
+                $w = [ "w-2/12 ",
+                        "w-7/12 ",
+                        "w-5/12 ",
+                        ($lagerort > 0) ? "null " : "w-2/12 ",
+                        "w-1/12 ",
+                        "w-1/12 ",
+                        "w-1/12 " ];
 
-             if (!$zweiZeilig) {
-                if ($lagerort > 0){
-                    $w = [ "w-2/12", "w-7/12", "null", "w-1/12", "w-1/12", "w-1/12" ];
-                }
-                else {
-                    $w = [ "w-1/12", "w-6/12", "w-2/12", "w-1/12", "w-1/12", "w-1/12" ];
-                }
             }
             else { // Artikel in zwei Zeilen
-                if ($lagerort > 0){ // Lagerort wird ausgeblendet
-                    $w = [ "w-4/12", "w-full", "null", "w-4/12", "w-4/12", "w-1/12" ];
-                }
-                else {
-                    $w = [ "w-3/12", "w-full", "w-4/12", "w-2/12", "w-2/12", "w-1/12" ];
-                }
-
+                $w = [
+                    "w-4/12 ",
+                    "w-full ",
+                    "w-5/12 ",
+                    ($lagerort > 0) ? "null " : "w-4/12 ",
+                    "w-4/12 ",
+                    "w-4/12 ",
+                    "w-1/12 " ];
             }
-
         @endphp
         <div>
             @if ($zweiZeilig)
@@ -93,28 +109,30 @@
         </div>
         <div class="min-w-full">
             <div class="flex flex-col w-full">
-                @if (!$zweiZeilig)
+                @if (!$zweiZeilig) <!-- also Einzeilige Darstellung -->
                     <div class="flex flex-row space-x-2 w-full font-bold mb-2 border-b border-gray-500">
                         <div class="text-left {{ $w[0] }}">Artikelnr. </div>
-                        <div class="text-left {{ $w[1] }}">Bezeichnung</div>
+                        <div class="text-left {{ $w[1] }} sm:ml-2">Bezeichnung</div>
+                        <div class="text-left {{ $w[2] }}">Abladestelle</div>
                         @if ($lagerort == 0)
-                            <div class="text-left {{ $w[2]}} ">Lagerort</div>
+                            <div class="text-left {{ $w[3]}} ">Lagerort</div>
                         @endif
-                        <div class="text-right {{ $w[3] }} ">Lager-Platz</div>
-                        <div class="text-right {{ $w[4] }} ">Bestand</div>
-                        <div class="text-right {{ $w[5] }} ">&nbsp;</div>
+                        <div class="text-left {{ $w[4] }}  ">Lager-Platz</div>
+                        <div class="text-right {{ $w[5] }} ">Bestand</div>
+                        <div class="text-right {{ $w[6] }} ">&nbsp;</div>
                     </div>
                 @else
                     <div class="flex flex-row space-x-2 w-full font-bold ">
                         <div class="text-left {{ $w[0] }} ">Artikelnr. </div>
+                        <div class="text-left {{ $w[2] }}">Abladestelle</div>
                          @if ($lagerort == 0)
-                            <div class="text-left {{ $w[2]}} ">Lagerort</div>
+                            <div class="text-left {{ $w[3]}} ">Lagerort</div>
                         @endif
-                        <div class="text-right {{ $w[3] }} ">Lager-Platz</div>
-                        <div class="text-right {{ $w[4] }} ">Bestand</div>
-                        <div class="text-right {{ $w[5] }} ">&nbsp;</div>
+                        <div class="text-left {{ $w[4] }} ">Lager-Platz</div>
+                        <div class="text-right {{ $w[5] }} ">Bestand</div>
+                        <div class="text-right {{ $w[6] }} ">&nbsp;</div>
                     </div>
-                    <div class="{{ $w[1] }} mb-2 font-bold border-b border-gray-500">
+                    <div class="{{ $w[1] }} pl-2 mb-2 font-bold border-b border-gray-500">
                         Bezeichnung
                     </div>
 

@@ -4,25 +4,29 @@
 
         <div class="text-left {{ $w[0] }}">{{ $artikel->artikelnr }}</div>
 
+        <div class="text-left {{ $w[2] }}">
+            {{ $artikel->abladestelle->name }}
+        </div>
+
         @if ($lagerort == 0)
-            <div class="text-left {{ $w[2] }}">{{ $artikel->lagernr }}
+            <div class="text-left {{ $w[3] }}">{{ $artikel->lagernr }}
                 {{ $artikel->lagerort->bezeichnung ?? '' }}
             </div>
         @endif
-        <div class="text-left {{ $w[3] }}">
-            ..
+        <div class="text-left {{ $w[4] }}">
+            {{ $artikel->lagerplatz }}
         </div>
-        <div class="text-right {{ $w[4] }}">
+        <div class="text-right {{ $w[5] }}">
             {{ number_format($artikel->bestand, 0, ',', '.') }}
             {{ $artikel->artikel->einheit }}
         </div>
-        <div class="text-center {{ $w[5] }}">
+        <div class="text-center {{ $w[6] }}">
             <button wire:click="edit({{ $artikel->id }})" class="hover:underline">
                 <x-fluentui-info-20-o class="h-6" />
             </button>
         </div>
     </div>
-    <div class="flex flex-col {{ $w[1]}} pl-4">
+    <div class="flex flex-col {{ $w[1]}} pl-2">
         {{ $artikel->artikel->bezeichnung ?? '' }}
 
     </div>

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('artikel', function (Blueprint $table) {
-            $table->string('artikelnr', 20);
+            $table->string('artikelnr', 12);
             $table->primary('artikelnr'); // Primärschlüssel
             $table->string('bezeichnung', 255);
             $table->string('einheit', 10);

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('lagerorte', function (Blueprint $table) {
             $table->id('nr'); // => ist ein unsignedBigInteger
             $table->string('bezeichnung', 255);
+            $table->foreignId('abladestelle_id')->constrained('abladestellen');
             $table->timestamps();
         });
     }

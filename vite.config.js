@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,
     cors: true,                 // CORS aktivieren
     hmr: {
-      host: 'lager1.local',     // Hostname, unter dem dein Browser zugreift
+      host: 'lager2.local',     // Hostname, unter dem dein Browser zugreift
     },
   },
   plugins: [

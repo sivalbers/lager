@@ -17,8 +17,14 @@ class Debitor extends Model
         'netzregion',
     ];
 
+
     public function abladestellen()
     {
-        return $this->hasMany(Abladestelle::class, 'debitor_nr', 'nr');
+        return $this->hasMany(Abladestelle::class, 'debitor_nr');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'debitor_nr');
     }
 }

@@ -12,12 +12,28 @@ class Artikel extends Model
     protected $table = 'artikel';
 
     protected $primaryKey = 'artikelnr';
-    public $incrementing = false; // Kein Auto-Increment
-    protected $keyType = 'string'; // Primärschlüssel ist Text
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'artikelnr',
         'bezeichnung',
         'einheit',
+        'materialgruppe'
     ];
+
+    public function einrichtungen()
+    {
+        return $this->hasMany(Artikeleinrichtung::class, 'artikelnr', 'artikelnr');
+    }
+
+    public function bestaende()
+    {
+        return $this->hasMany(Artikelbestand::class, 'artikelnr', 'artikelnr');
+    }
+
+    public function protokolle()
+    {
+        return $this->hasMany(Protokoll::class, 'artikelnr', 'artikelnr');
+    }
 }

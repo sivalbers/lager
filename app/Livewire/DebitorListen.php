@@ -25,15 +25,19 @@ class DebitorListen extends Component
 
 
     public $abladestelleId;
-    public $abladestelleName1;
+    public $abladestelleName;
     public $abladestelleName2;
     public $abladestelleStrasse;
     public $abladestellePlz;
     public $abladestelleOrt;
-    public $abladestelleLagerort;
+    public $abladestelleKostenstelle;
+    public $abladestelleBestellrhythmus;
+
 
     public $lagerortNr;
+    public $lagerortAbladestelleId;
     public $lagerortBezeichnung;
+    public $lagerortAbladestelleName;
 
     public $debitoren;
 
@@ -42,8 +46,12 @@ class DebitorListen extends Component
     public $edAbladestelle;
     public $edLagerort;
 
+    public $berechtigung;
+
 
     public function mount(){
+        $this->berechtigung = session('berechtigung');
+
         $this->loadDebitoren();
 
     }
@@ -67,7 +75,7 @@ class DebitorListen extends Component
             $this->debitorNr            = $this->edDebitor->nr;
             $this->debitorName          = $this->edDebitor->name;
             $this->debitorNetzregion    = $this->edDebitor->netzregion;
-            
+
 
 
         }
@@ -75,21 +83,71 @@ class DebitorListen extends Component
 
     }
 
-    public function editAbladestelle($doCreate){
+    public function editAbladestelle($doCreate, $debitorNr, $Abladestelle_Id=null){
         $this->isEditAbladestelle = !$doCreate;
 
         if ($doCreate){
+            $this->clearAbladestelle();
             $this->edAbladestelle = new Abladestelle();
+            $this->debitorNr = $debitorNr;
+            $this->debitorName = Debitor::where('nr', $debitorNr)->first()->name;
+
+            if ($Abladestelle_Id){
+
+
+                $this->edAbladestelle = Abladestelle::where('id', $Abladestelle_Id)->first();
+                $this->abladestelleId         = null;
+                $this->abladestelleName       = $this->edAbladestelle->name;
+                $this->abladestelleName2      = $this->edAbladestelle->name2;
+                $this->abladestelleStrasse    = $this->edAbladestelle->strasse;
+                $this->abladestellePlz        = $this->edAbladestelle->plz;
+                $this->abladestelleOrt        = $this->edAbladestelle->ort;
+                $this->debitorNr              = $this->edAbladestelle->debitor_nr;
+
+                $this->abladestelleKostenstelle = $this->edAbladestelle->kostenstelle;
+                $this->abladestelleBestellrhythmus = $this->edAbladestelle->bestellrhythmus;
+
+            }
+
+
+        }
+        else {
+            $this->edAbladestelle = Abladestelle::where('id', $Abladestelle_Id)->first();
+            $this->abladestelleId         = $this->edAbladestelle->id;
+            $this->abladestelleName       = $this->edAbladestelle->name;
+            $this->abladestelleName2      = $this->edAbladestelle->name2;
+            $this->abladestelleStrasse    = $this->edAbladestelle->strasse;
+            $this->abladestellePlz        = $this->edAbladestelle->plz;
+            $this->abladestelleOrt        = $this->edAbladestelle->ort;
+            $this->debitorNr              = $this->edAbladestelle->debitor_nr;
+            $this->debitorName            = Debitor::where('nr', $this->debitorNr)->first()->name;
+            $this->abladestelleKostenstelle = $this->edAbladestelle->kostenstelle;
+            $this->abladestelleBestellrhythmus = $this->edAbladestelle->bestellrhythmus;
+
         }
         $this->showAbladestelle = true ;
     }
 
-    public function editLagerort($doCreate){
+    public function editLagerort($doCreate, $id)
+    {
         $this->isEditLagerort = !$doCreate;
-        if ($doCreate){
-            $this->edLagerort = new Lagerort();
+
+        if ($doCreate) {
+            $this->lagerortNr = null;
+            $this->lagerortBezeichnung = '';
+            $this->lagerortAbladestelleId = $id;
+
+            $this->lagerortAbladestelleName = Abladestelle::findOrFail($id)->name;
+        } else {
+            $lagerort = Lagerort::with('abladestelle')->findOrFail($id);
+
+            $this->lagerortNr = $lagerort->id;
+            $this->lagerortBezeichnung = $lagerort->bezeichnung;
+            $this->lagerortAbladestelleId = $lagerort->abladestelle_id;
+            $this->lagerortAbladestelleName = $lagerort->abladestelle?->name;
         }
-        $this->showLagerort = true ;
+
+        $this->showLagerort = true;
     }
 
 
@@ -97,54 +155,82 @@ class DebitorListen extends Component
     public function saveDebitor(){
         $this->showDebitor = false ;
         if ($this->isEditDebitor){
-            $this->edDebitor = Debitor::get('nr', $this->DebitorNr);
+            $this->edDebitor = Debitor::where('nr', $this->debitorNr)->first();
 
         }
         else
             {
-            $this->edDebitor->Nr = $this->DebitorNr;
+            $this->edDebitor = new Debitor();
+            $this->edDebitor->Nr = $this->debitorNr;
         }
-        $this->edDebitor->name = $this->DebitorName;
-        $this->edDebitor->netzregion = $this->DebitorNetzregion;
-        $this->edDebitor->abladestelle_id = $this->DebitorAbladestelle_id;
+        $this->edDebitor->name = $this->debitorName;
+        $this->edDebitor->netzregion = $this->debitorNetzregion;
         $this->edDebitor->save();
+
+        $this->loadDebitoren();
     }
 
     public function saveAbladestelle(){
         $this->showAbladestelle = false ;
 
-        if ($this->isEditAbladestelle){
-            $this->edAbladestelle = Abladestelle::get('id', $this->AbladestelleId);
+        if ($this->abladestelleId){
+            $this->edAbladestelle = Abladestelle::where('id', $this->abladestelleId)->first();
 
         }
-        else
-            {
-            $this->edAbladestelle->id = $this->AbladestelleId;
+        else {
+            $this->edAbladestelle = new Abladestelle();
         }
-        $this->edAbladestelle->name1 = $this->AbladestelleName1;
-        $this->edAbladestelle->name2 = $this->AbladestelleName2;
-        $this->edAbladestelle->strasse = $this->AbladestelleStrasse;
-        $this->edAbladestelle->plz = $this->AbladestellePlz;
-        $this->edAbladestelle->ort = $this->AbladestelleOrt;
-        $this->edAbladestelle->lagerort = $this->AbladestelleLagerort;
+        $this->edAbladestelle->name = $this->abladestelleName;
+        $this->edAbladestelle->name2 = $this->abladestelleName2;
+        $this->edAbladestelle->strasse = $this->abladestelleStrasse;
+        $this->edAbladestelle->plz = $this->abladestellePlz;
+        $this->edAbladestelle->ort = $this->abladestelleOrt;
+        $this->edAbladestelle->debitor_nr = $this->debitorNr;
+        $this->edAbladestelle->kostenstelle = $this->abladestelleKostenstelle;
+        $this->edAbladestelle->bestellrhythmus = $this->abladestelleBestellrhythmus;
+
         $this->edAbladestelle->save();
 
     }
 
-    public function saveLagerort(){
-        $this->showLagerort = false ;
+    public function saveLagerort()
+    {
+        $this->validate([
+            'lagerortBezeichnung' => 'required|string|max:255',
+            'lagerortAbladestelleId' => 'required|exists:abladestellen,id',
+        ]);
 
-        if ($this->isEditLagerort){
-            $this->edLagerort = Lagerort::get('nr', $this->lagerortNr);
+        if ($this->isEditLagerort && $this->lagerortNr) {
+            $lagerort = Lagerort::findOrFail($this->lagerortNr);
+        } else {
+            $lagerort = new Lagerort();
+            $lagerort->abladestelle_id = $this->lagerortAbladestelleId;
         }
-        else {
-            $this->edLagerort->nr = $this->lagerortNr;
-        }
 
-        $this->edLagerort->bezeichnung = $this->lagerortName;
+        $lagerort->bezeichnung = $this->lagerortBezeichnung;
+        $lagerort->save();
 
-        $this->edLagerort->save();
-
+        $this->showLagerort = false;
     }
+
+    private function clearAbladestelle(){
+        $this->abladestelleId         = null;
+        $this->abladestelleName       = null;
+        $this->abladestelleName2      = null;
+        $this->abladestelleStrasse    = null;
+        $this->abladestellePlz        = null;
+        $this->abladestelleOrt        = null;
+        $this->abladestelleKostenstelle = null;
+        $this->abladestelleBestellrhythmus = null;
+    }
+
+    public function updatedStrasse($value){
+     \Log::info(["updatedStrasse", $value]);
+    }
+    public function updated($propertyName, $value)
+{
+    \Log::info('Property updated: ' . $propertyName . ' = ' . $value);
+
+}
 
 }
