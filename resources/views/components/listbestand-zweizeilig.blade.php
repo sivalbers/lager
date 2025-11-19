@@ -22,7 +22,7 @@
         </div>
         <div class="text-center {{ $w[6] }}">
             <button wire:click="edit({{ $artikel->id }})" class="hover:underline">
-                <x-fluentui-info-20-o class="h-6" />
+                <x-heroicon-o-information-circle class="h-6" />
             </button>
         </div>
     </div>
