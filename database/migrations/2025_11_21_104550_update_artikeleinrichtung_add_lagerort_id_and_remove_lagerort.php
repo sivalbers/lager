@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::table('artikeleinrichtung', function (Blueprint $table) {
             $table->dropColumn('lagerort');
-            $table->unsignedBigInteger('lagerort_id')->nullable()->after('abladestelle_id'); // nach Bedarf positionieren
+            $table->gigInteger('lagerort_id')->nullable()->after('abladestelle_id'); // nach Bedarf positionieren
             $table->foreign('lagerort_id')->references('id')->on('lagerorte')->nullOnDelete();
         });
     }
