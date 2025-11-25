@@ -8,7 +8,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('artikeleinrichtung', function (Blueprint $table) {
-            $table->dropColumn('lagerort');
+
+            if (Schema::hasColumn('artikeleinrichtung', 'lagerort')) {
+                    $table->dropColumn('lagerort');
+            }
+
             $table->bigInteger('lagerort_id')->nullable()->after('abladestelle_id'); // nach Bedarf positionieren
             $table->foreign('lagerort_id')->references('id')->on('lagerorte')->nullOnDelete();
         });
