@@ -190,11 +190,9 @@ new class extends Component
 
                         @if(auth()->user()->hasBerechtigung('psp anzeigen'))
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <button wire:click="logout" class="w-full text-start">
-                                    <x-dropdown-link :href="route('psp')" wire:navigate>
-                                        {{ __('PSP-Elemente') }}
-                                    </x-dropdown-link>
-                                </button>
+                                <x-dropdown-link :href="route('psp')" wire:navigate>
+                                    {{ __('PSP-Elemente') }}
+                                </x-dropdown-link>
                             </div>
                         @endif
 
