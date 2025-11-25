@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->foreign('artikelnr')->references('artikelnr')->on('artikel');
             $table->foreign('abladestelle_id')->references('id')->on('abladestellen');
-            $table->foreign('lagerort_id')->references('nr')->on('lagerorte');
+            $table->foreign('lagerort_id')->references('id')->on('lagerorte');
         });
     }
 
