@@ -15,12 +15,13 @@ class Artikel extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = [
-        'artikelnr',
-        'bezeichnung',
-        'einheit',
-        'materialgruppe'
-    ];
+protected $fillable = [
+    'artikelnr',
+    'bezeichnung',
+    'einheit',
+    'materialgruppe',
+    'ekpreis', // <-- neu
+];
 
     public function einrichtungen()
     {

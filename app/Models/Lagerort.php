@@ -28,4 +28,9 @@ class Lagerort extends Model
     {
         return $this->abladestelle?->name;
     }
+
+    public function artikeleinrichtungen()
+    {
+        return $this->hasMany(Artikeleinrichtung::class, 'lagerort_id');
+    }
 }

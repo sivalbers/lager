@@ -62,10 +62,12 @@ new class extends Component
                     </a>
                 </div>
 
+
+
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('bestand')" :active="request()->routeIs('bestand')" wire:navigate>
-                        {{ __('Bestand') }}
+                        {{ __('Lagerbestand') }}
                     </x-nav-link>
                 </div>
 
@@ -73,24 +75,6 @@ new class extends Component
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('protokoll')" :active="request()->routeIs('protokoll')" wire:navigate>
                         {{ __('Buchungsprotokoll') }}
-                    </x-nav-link>
-                </div>
-                @endif
-
-                @if(auth()->user()->hasBerechtigung('artikel buchen'))
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('scanartikel')" :active="request()->routeIs('scanartikel')" wire:navigate>
-                        {{ __('Artikel Zu-/abbuchen') }}
-                    </x-nav-link>
-                </div>
-                @endif
-
-                @if(auth()->user()->hasBerechtigung('debitor anzeigen'))
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('debitoren')" :active="request()->routeIs('debitoren')" wire:navigate>
-                        {{ __('Debitoren') }}
                     </x-nav-link>
                 </div>
                 @endif
@@ -113,34 +97,111 @@ new class extends Component
                 </div>
                 @endif
 
-                <!-- Navigation Links -->
-                @if(auth()->user()->hasBerechtigung('psp anzeigen'))
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('psp')" :active="request()->routeIs('psp')" wire:navigate>
-                        {{ __('PSP-Elemente') }}
-                    </x-nav-link>
-                </div>
-                @endif
-
-                <!-- Navigation Links -->
-                @if(auth()->user()->hasBerechtigung('artikel anzeigen'))
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('artikel')" :active="request()->routeIs('artikel')" wire:navigate>
-                        {{ __('Artikel') }}
-                    </x-nav-link>
-                </div>
-                @endif
-
-                @if(auth()->user()->hasBerechtigung('mitarbeiter anzeigen'))
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('mitarbeiter')" :active="request()->routeIs('mitarbeiter')" wire:navigate>
-                        {{ __('Mitarbeiter') }}
-                    </x-nav-link>
-                </div>
-                @endif
-
             </div>
 
+            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <x-dropdown align="right" width="48">
+                    <x-slot name="trigger">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <div >
+                                Artikel buchen
+                            </div>
+
+                            <div class="ms-1">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+
+                        @if(auth()->user()->hasBerechtigung('artikel buchen'))
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-dropdown-link :href="route('artikel.entnahme')" wire:navigate>
+                                    {{ __('Entnahme') }}
+                                </x-dropdown-link>
+                            </div>
+                        @endif
+
+                        @if(auth()->user()->hasBerechtigung('artikel buchen'))
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-dropdown-link :href="route('artikel.rueckgabe')" wire:navigate>
+                                    {{ __('Rückgabe') }}
+                                </x-dropdown-link>
+                            </div>
+                        @endif
+
+                        @if(auth()->user()->hasBerechtigung('artikel buchen'))
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-dropdown-link :href="route('artikel.korrektur')" wire:navigate>
+                                    {{ __('Korrektur') }}
+                                </x-dropdown-link>
+                            </div>
+                        @endif
+                    </x-slot>
+                </x-dropdown>
+            </div>
+
+
+            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <x-dropdown align="right" width="48">
+                    <x-slot name="trigger">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <div >
+                                Stammdaten
+                            </div>
+
+                            <div class="ms-1">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+
+                        @if(auth()->user()->hasBerechtigung('debitor anzeigen'))
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-dropdown-link :href="route('debitoren')" wire:navigate>
+                                    {{ __('Debitoren') }}
+                                </x-dropdown-link>
+                            </div>
+                        @endif
+
+                        @if(auth()->user()->hasBerechtigung('artikel anzeigen'))
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-dropdown-link :href="route('artikel')" wire:navigate>
+                                    {{ __('Artikel') }}
+                                </x-dropdown-link>
+                            </div>
+                        @endif
+
+                        @if(auth()->user()->hasBerechtigung('mitarbeiter anzeigen'))
+
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-dropdown-link :href="route('mitarbeiter')" wire:navigate>
+                                    {{ __('Mitarbeiter') }}
+                                </x-dropdown-link>
+                            </div>
+                        @endif
+
+                        @if(auth()->user()->hasBerechtigung('psp anzeigen'))
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <button wire:click="logout" class="w-full text-start">
+                                    <x-dropdown-link :href="route('psp')" wire:navigate>
+                                        {{ __('PSP-Elemente') }}
+                                    </x-dropdown-link>
+                                </button>
+                            </div>
+                        @endif
+
+
+                    </x-slot>
+                </x-dropdown>
+            </div>
 
 
             <!-- Settings Dropdown -->
@@ -201,14 +262,6 @@ new class extends Component
         </div>
         @endif
 
-        @if(auth()->user()->hasBerechtigung('artikel buchen'))
-        <!-- Navigation Links -->
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('scanartikel')" :active="request()->routeIs('scanartikel')" wire:navigate>
-                {{ __('Artikel Zu-/abbuchen') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
 
         @if(auth()->user()->hasBerechtigung('debitor anzeigen'))
         <!-- Navigation Links -->

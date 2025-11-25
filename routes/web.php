@@ -4,12 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\DebitorListen;
 use App\Livewire\EtikettenErstellen;
 use App\Livewire\ListBestand;
-use App\Livewire\ScanArtikel;
+use App\Livewire\ArtikelBuchung;
 use App\Livewire\LieferscheinVerarbeiten;
 use App\Livewire\PspListen;
 use App\Livewire\ArtikelListen;
 use App\Livewire\UserVerwaltung;
 use App\Livewire\ProtokolleListen;
+use App\Livewire\EinkaufslisteVerwalten;
 
 use App\Http\Controllers\FileUploadController;
 
@@ -20,10 +21,20 @@ Route::get('bestand', ListBestand::class)
     ->middleware(['auth'])
     ->name('bestand');
 
+Route::get('artikel/entnahme', ArtikelBuchung::class)
+     ->middleware(['auth', 'berechtigung:artikel buchen'])
+     ->defaults('modus', 'entnahme')
+     ->name('artikel.entnahme');
 
-Route::get('scanartikel', ScanArtikel::class)
-    ->middleware(['auth', 'berechtigung:artikel buchen'])
-    ->name('scanartikel');
+Route::get('artikel/rueckgabe', ArtikelBuchung::class)
+     ->middleware(['auth', 'berechtigung:artikel buchen'])
+     ->defaults('modus', 'rueckgabe')
+     ->name('artikel.rueckgabe');
+
+Route::get('artikel/korrektur', ArtikelBuchung::class)
+     ->middleware(['auth', 'berechtigung:artikel buchen'])
+     ->defaults('modus', 'korrektur')
+     ->name('artikel.korrektur');
 
 
 Route::get('etikettenerstellen', EtikettenErstellen::class)
@@ -52,6 +63,10 @@ Route::get('mitarbeiter', UserVerwaltung::class)
 
 Route::get('protokoll', ProtokolleListen::class)
     ->middleware(['auth', 'berechtigung:protokoll anzeigen'])
+    ->name('protokoll');
+
+Route::get('protokoll', ProtokolleListen::class)
+    ->middleware(['auth', 'berechtigung:einkaufsliste anzeigen'])
     ->name('protokoll');
 
 

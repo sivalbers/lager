@@ -50,13 +50,21 @@ class BestandsbuchungRepository
         return $bestand->id;
     }
 
-    public function BucheBestand($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge){
+    public function BucheBestand($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge, $modus){
+
+        if ($modus === 'entnahme') {
+            $menge = $menge * -1;
+            $buchungsgrund_id = 1;
+        }
+        elseif ($modus === 'rueckgabe') {
+            $buchungsgrund_id = 2;
+        }
+        elseif ($modus === 'korrektur'){
+            $buchungsgrund_id = 3;
+        }
 
         if ( $this->_bucheBestand($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge) > 0){
-
-            $buchungsgrund_id = ($menge > 0) ? 2 : 1;
             $this->createProtokoll($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge, $buchungsgrund_id);
-
         }
 
     }

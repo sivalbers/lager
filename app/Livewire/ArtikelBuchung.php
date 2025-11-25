@@ -5,16 +5,21 @@ namespace App\Livewire;
 use App\Models\Abladestelle;
 use App\Models\Lagerort;
 use App\Models\Artikel;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\BestandsbuchungRepository;
 
-class ScanArtikel extends Component
+class ArtikelBuchung extends Component
 {
 
+    public ArtikelBuchungRepository $artikelRepository;
+
     public $inputData = [];
-    public int $abladestelle = -1;
+    public $abladestellen_ids = [];
+
     public int $debitornr = -1;
     public $abladestellen = [];
     public $lagerorte = [];
@@ -26,9 +31,22 @@ class ScanArtikel extends Component
     public $mLagerort = '';
     public $mLagerplatz = '';
     public $mMenge = 0;
+    public $modus = '';
+    private $ueberschrift = '';
 
 
-    public function mount(){
+    public function mount($modus){
+        $this->modus = $modus;
+        if ($modus === 'rueckgabe'){
+            $this->ueberschrift = 'Artikelzugang buchen';
+        } elseif ($modus === 'entnahme'){
+            $this->ueberschrift = 'Artikelabgang buchen';
+        } elseif ($modus === 'korrektur'){
+            $this->ueberschrift = 'Artikelkorrektur buchen';
+        }
+        else {
+            $this->ueberschrift = 'Sonstige Buchung';
+        }
 
         /*
         $this->inputData[] =  [
@@ -44,7 +62,10 @@ class ScanArtikel extends Component
         $this->inputData = null;
 
         $this->debitornr = auth()->user()->debitor_nr;
-        $this->abladestelle = auth()->user()->abladestelle_id;
+
+
+        $user = User::findOrFail(Auth::id());
+        $this->abladestellen_ids = $user->abladestellen->pluck('id')->toArray();
         $this->loadAbladestellen();
 
     }
@@ -126,7 +147,7 @@ public function addRow($index = null)
     public function render()
     {
         Log:info($this->inputData);
-        return view('livewire.scan-artikel')->layout('layouts.app');
+        return view('livewire.artikel-buchen', ['ueberschrift' => $this->ueberschrift ])->layout('layouts.app');
     }
 
 
@@ -139,7 +160,8 @@ public function addRow($index = null)
                 $row['Abladestelle_id'],
                 $row['Lagerort_id'],
                 $row['Lagerplatz'],
-                $row['Menge']);
+                $row['Menge'],
+                $this->modus);
         }
 
         $this->inputData = [];
@@ -170,7 +192,11 @@ public function addRow($index = null)
     }
 
     public function loadAbladestellen(){
-        $this->abladestellen = Abladestelle::select('name', 'id')->where( 'debitor_nr', $this->debitornr)->orderBy('name')->get()->toArray();
+        $this->abladestellen = Abladestelle::select('name', 'id')->whereIn( 'id', $this->abladestellen_ids )->orderBy('name')->get()->toArray();
+        if (count($this->abladestellen_ids) == 1){
+            $this->mAbladestelle = $this->abladestellen_ids[0];
+            $this->loadLagerorte();
+        }
         Log::info(['loadAbladestellen' => $this->abladestellen]);
     }
 

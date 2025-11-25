@@ -1,3 +1,5 @@
+
+
 <div class="w-5/6 m-auto"
     x-data="{ showBerechtigung: false }"
     <h1 class="text-2xl font-bold mt-4">Mitarbeiterverwaltung</h1>
@@ -34,7 +36,7 @@
             <div class="w-2/12">Name</div>
             <div class="w-3/12">E-Mail</div>
             <div class="w-2/12">Debitor</div>
-            <div class="w-2/12">Abladestelle</div>
+            <div class="w-2/12">Abladestelle(n)</div>
             <div class="w-2/12">Rechtegruppe</div>
             <div class="w-1/12"></div>
         </div>
@@ -44,7 +46,11 @@
                 <div class="w-2/12">{{ $user->name }}</div>
                 <div class="w-3/12">{{ $user->email }}</div>
                 <div class="w-2/12">{{ $user->debitor->nr ?? '-' }} {{ $user->debitor->name ?? '-' }}</div>
-                <div class="w-2/12">{{ $user->abladestelle->name ?? '-' }}</div>
+                <div class="w-2/12">
+                    @foreach ($user->abladestellen as $stelle)
+                        <span class="inline-block text-sm bg-gray-100 px-2 py-1 rounded mr-1">{{ $stelle->name }}</span>
+                    @endforeach
+                </div>
                 <div class="w-2/12">{{ $user->rechtegruppe->name ?? '-' }}</div>
                 <div class="w-1/12">
                     @if(auth()->user()->hasBerechtigung('mitarbeiter ändern'))
@@ -111,12 +117,15 @@
 
                         <div>
                             <label>Abladestelle</label>
-                            <select wire:model="abladestelle_id" class="w-full border border-gray-300 rounded p-1">
-                                <option value="">-</option>
+                            <select wire:model="abladestelle_ids"
+                                    wire:key="abladestelle-select-{{ implode('-', $abladestelle_ids) }}"
+                                    multiple
+                                    class="w-full border border-gray-300 rounded p-1">
                                 @foreach($abladestellen as $stelle)
                                     <option value="{{ $stelle->id }}">{{ $stelle->name }}</option>
                                 @endforeach
                             </select>
+
                         </div>
 
                         <div>
@@ -154,4 +163,17 @@
             </div>
         </div>
     </div>
+
+<div wire:loading class="fixed inset-0 z-50 bg-white bg-opacity-50">
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <svg class="animate-spin h-10 w-10 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <p class="mt-2 text-gray-700 text-sm text-center">Lade Daten...</p>
+    </div>
+</div>
+
+
+
 </div>

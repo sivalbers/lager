@@ -34,7 +34,9 @@ class EtikettenErstellen extends Component
             if (count($werte) >= 2) {
                 $this->data[] = [
                     'artikel' => $werte[0],
-                    'lagerort' => $werte[1],
+                    'abladestelle' => $werte[1],
+                    'lagerort' => $werte[2],
+                    'lagerplatz' => $werte[3]
                 ];
             }
         }

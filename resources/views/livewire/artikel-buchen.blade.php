@@ -1,11 +1,10 @@
 <div class="w-[80vh] md:w-5/6  m-auto">
 
     <div class="flex flex-row items-center space-x-4">
-        <div class="text-2xl font-bold mt-4">Artikel zu-/abbuchen</div>
+        <div class="text-2xl font-bold mt-4">{{ $ueberschrift }}</div>
 
-    </div
+    </div>
 
-    <!-- Scanner-Feld -->
     <div class="py-6">
         <div class="flex flex-row items-center space-x-4">
             <div>
@@ -14,6 +13,7 @@
             <div>
                 <select id="cameraSelection" class="h-10 rounded"></select>
             </div>
+        </div>
     </div>
 
     <div id="reader" style="width: 200px; height: 200px; border:1px solid #ccc;"></div>
@@ -41,7 +41,8 @@
         {{-- 2. Zeile: Eingabefelder --}}
         <input type="text" wire:model.blur="mArtikel" class="h-10 border rounded px-2 text-sm" />
         <input type="text" value="{{ $mBezeichnung }}" disabled class="h-10 border rounded px-2 bg-gray-100 text-sm text-gray-600" />
-        <select wire:model.blur="mAbladestelle" class="h-10 border rounded px-2 text-sm">
+
+        <select wire:model.blur="mAbladestelle" class="h-10 border rounded px-2 text-sm"  {{ (count($abladestellen) == 1) ? 'disabled' : '' }} >
             <option value="">Bitte wählen</option>
             @foreach($abladestellen as $stelle)
                 <option value="{{ $stelle['id'] }}">{{ $stelle['name'] }}</option>
@@ -56,7 +57,7 @@
 
 
         <input type="text" wire:model="mLagerplatz" class="h-10 border rounded px-2 text-sm" />
-        <input type="number" wire:model="mMenge" class="h-10 border rounded px-2 text-sm w-20" />
+        <input type="number" wire:model="mMenge" class="h-10 border rounded px-2 text-sm w-20" min="0" />
         <button type="submit" class="h-10 px-4 bg-sky-600 text-white rounded">Hinzufügen</button>
     </div>
 

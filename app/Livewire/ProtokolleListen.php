@@ -23,7 +23,7 @@ public $dateFrom;
 public $dateTo;
 
 public $sortField = 'datum_zeit';
-public $sortDirection = 'asc';
+public $sortDirection = 'desc';
 
     public function render()
     {

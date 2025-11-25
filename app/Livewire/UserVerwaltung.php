@@ -24,7 +24,8 @@ class UserVerwaltung extends Component
     public $email;
     public $password;
     public $debitor_nr;
-    public $abladestelle_id;
+    public array $abladestelle_ids = []; // statt $abladestelle_id
+
     public $rechtegruppe_id;
 
     public $debitors;
@@ -53,7 +54,7 @@ class UserVerwaltung extends Component
 
     public function loadUsers()
     {
-        $this->users = User::with(['debitor', 'abladestelle', 'rechtegruppe'])
+        $this->users = User::with(['debitor', 'abladestellen', 'rechtegruppe'])
             ->when($this->search, fn($q) => $q->where('name', 'like', "%{$this->search}%")
                 ->orWhere('email', 'like', "%{$this->search}%"))
             ->get();
@@ -62,17 +63,18 @@ class UserVerwaltung extends Component
     public function editUser($doCreate, $id = null)
     {
         $this->resetValidation();
-        $this->reset(['userId', 'name', 'email', 'password', 'debitor_nr', 'abladestelle_id', 'rechtegruppe_id']);
+        $this->reset(['userId', 'name', 'email', 'password', 'debitor_nr', 'abladestelle_ids', 'rechtegruppe_id']);
 
         $this->isEditUser = !$doCreate;
 
         if (!$doCreate) {
             $user = User::findOrFail($id);
+            $this->abladestellen = \App\Models\Abladestelle::where('debitor_nr', $user->debitor_nr)->get();
             $this->userId = $user->id;
             $this->name = $user->name;
             $this->email = $user->email;
             $this->debitor_nr = $user->debitor_nr;
-            $this->abladestelle_id = $user->abladestelle_id;
+            $this->abladestelle_ids = $user->abladestellen->pluck('id')->toArray();
             $this->rechtegruppe_id = $user->rechtegruppe_id;
         }
 
@@ -85,7 +87,9 @@ class UserVerwaltung extends Component
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->userId)],
             'debitor_nr' => 'nullable|exists:debitoren,nr',
-            'abladestelle_id' => 'nullable|exists:abladestellen,id',
+            'abladestelle_ids' => 'required|array|min:1',
+            'abladestelle_ids.*' => 'exists:abladestellen,id',
+
             'rechtegruppe_id' => 'nullable|exists:rechtegruppe,id',
         ];
 
@@ -105,7 +109,8 @@ class UserVerwaltung extends Component
         }
 
         $user->debitor_nr = $this->debitor_nr;
-        $user->abladestelle_id = $this->abladestelle_id;
+        $user->abladestellen()->sync($this->abladestelle_ids);
+
         $user->rechtegruppe_id = $this->rechtegruppe_id;
 
         $user->save();
@@ -142,7 +147,7 @@ class UserVerwaltung extends Component
         {
             \Log::info('Debitor changed to: ' . $value);
             $this->abladestellen = \App\Models\Abladestelle::where('debitor_nr', $value)->get();
-            $this->abladestelle_id = null;
+            $this->abladestelle_ids = [];
         }
 
     public function updatedEmail($value)

@@ -46,8 +46,8 @@ class LieferscheinVerarbeiten extends Component
 
 
     public function __construct(){
-        $this->user     = 'testuser';
-        $this->key      = 'Sieverding22!';
+        $this->user     = 'EWEWEBSERVICEUSER';
+        $this->key      = 'Sieverding22!3242a_.';
     }
 
     public function updateJsonResult($data)

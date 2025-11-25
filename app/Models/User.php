@@ -23,7 +23,6 @@ class User extends Authenticatable
         'email',
         'password',
         'debitor_nr',
-        'abladestelle_id',
         'rechtegruppe_id'
     ];
 
@@ -40,11 +39,6 @@ class User extends Authenticatable
     public function debitor()
     {
         return $this->belongsTo(Debitor::class, 'debitor_nr');
-    }
-
-    public function abladestelle()
-    {
-        return $this->belongsTo(Abladestelle::class, 'abladestelle_id');
     }
 
     public function rechtegruppe()
@@ -69,10 +63,17 @@ class User extends Authenticatable
         );
     }
 
+    // Neue Beziehung:
+    public function abladestellen()
+    {
+        return $this->belongsToMany(Abladestelle::class, 'debitor_abladestellen');
+    }
+
+
     public function hasBerechtigung(string $bezeichnung): bool
     {
         return $this->berechtigungen->contains('bezeichnung', $bezeichnung);
-        
+
     }
 
 

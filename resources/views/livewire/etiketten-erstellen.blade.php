@@ -3,7 +3,7 @@
 
     <!-- Eingabeformular -->
     <form wire:submit.prevent="createDataFromText" class="print:hidden mb-6">
-        <label for="zeilen" class="block mb-2 font-semibold">Artikelnummer, Lagerort (Ein Artikel pro Zeile):</label>
+        <label for="zeilen" class="block mb-2 font-semibold">Artikelnummer, Abladestelle, Lagerort, Lagerplatz:</label>
         <textarea wire:model.defer="text" id="zeilen" rows="6" class="w-full border p-2"></textarea>
 
         <button type="submit" class="mt-3 px-4 py-2 bg-blue-500 text-white rounded">
@@ -22,7 +22,7 @@
                     <div class="flex flex-col gap-6">
 
                         <div> {!! QrCode::size(150)->generate(json_encode($item)) !!} </div>
-                        <div class="text-left">{{ $item['artikel'] }} | {{ $item['lagerort'] }}</div>
+                        <div class="text-left">{{ $item['artikel'] }} | {{ $item['abladestelle'] }} | {{ $item['lagerort'] }} | {{ $item['lagerplatz'] }}</div>
                     </div>
                 </div>
             @endforeach

@@ -14,7 +14,7 @@ class Artikeleinrichtung extends Model
     protected $fillable = [
         'artikelnr',
         'abladestelle_id',
-        'lagerort',
+        'lagerort_id',
         'mindestbestand',
         'bestellmenge',
         'abladestellenspezifisch',
@@ -32,5 +32,10 @@ class Artikeleinrichtung extends Model
     public function abladestelle()
     {
         return $this->belongsTo(Abladestelle::class, 'abladestelle_id');
+    }
+
+    public function lagerort()
+    {
+        return $this->belongsTo(Lagerort::class, 'lagerort_id');
     }
 }

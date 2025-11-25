@@ -3,9 +3,13 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\User;
 use App\Models\Artikel;
 use App\Models\Artikeleinrichtung;
 use App\Models\Abladestelle;
+use App\Models\Lagerort;
+use App\Repositories\ArtikelRepository;
+use Illuminate\Support\Facades\Auth;
 
 class ArtikelListen extends Component
 {
@@ -13,14 +17,15 @@ class ArtikelListen extends Component
     public $showArtikel = false;
     public $isEditArtikel = false;
 
-    public $artikelnr;
+    public $artikelnr = '100100';
     public $artikelBezeichnung;
     public $artikelEinheit;
     public $artikelMaterialgruppe;
+    public $artikelEkpreis;
 
     public $einrichtungId;
     public $abladestelle_id;
-    public $lagerort;
+    public $lagerort_id;
     public $mindestbestand;
     public $bestellmenge;
     public $bestellrhythmus;
@@ -31,36 +36,52 @@ class ArtikelListen extends Component
     public $isEditEinrichtung = false;
 
     public $abladestellen;
+    public $lagerortAuswahl;
+
+
+    public $confirmingDelete = false;
+    public $deleteEinrichtungId = 0;
+
+
+
 
     public function mount()
     {
         $this->loadArtikel();
-        $this->abladestellen = Abladestelle::all();
+        $this->lagerortAuswahl = Lagerort::orderBy('bezeichnung')->get();
+        $user = User::findOrFail(Auth::id());
+        $abladestelle_ids = $user->abladestellen->pluck('id')->toArray();
+
+        $this->abladestellen = Abladestelle::whereIn('id', $abladestelle_ids)->get();
     }
 
     public function render()
     {
+        \Log::info(['render()' => 'x', 'artikel' => $this->artikelnr ]);
         return view('livewire.artikel-listen')->layout('layouts.app');
     }
 
     public function loadArtikel()
     {
-        $this->artikel = Artikel::with('einrichtungen.abladestelle')->orderBy('artikelnr')->get();
+        $this->artikel = Artikel::with('einrichtungen.abladestelle.lagerorte')->orderBy('artikelnr')->get();
     }
 
     public function editArtikel($create = true, $nr = null)
     {
+
         $this->isEditArtikel = !$create;
         $this->showArtikel = true;
 
         if ($create) {
             $this->artikelnr = $this->artikelBezeichnung = $this->artikelEinheit = $this->artikelMaterialgruppe = '';
+
         } else {
             $artikel = Artikel::find($nr);
             $this->artikelnr = $artikel->artikelnr;
             $this->artikelBezeichnung = $artikel->bezeichnung;
             $this->artikelEinheit = $artikel->einheit;
             $this->artikelMaterialgruppe = $artikel->materialgruppe;
+            $this->artikelEkpreis = $artikel->ekpreis;
         }
     }
 
@@ -73,7 +94,8 @@ class ArtikelListen extends Component
             [
                 'bezeichnung' => $this->artikelBezeichnung,
                 'einheit' => $this->artikelEinheit,
-                'materialgruppe' => $this->artikelMaterialgruppe
+                'materialgruppe' => $this->artikelMaterialgruppe,
+                'ekpreis' => $this->artikelEkpreis,
             ]
         );
 
@@ -100,7 +122,7 @@ class ArtikelListen extends Component
             $this->artikelnr = $einrichtung->artikelnr;
             $this->artikelBezeichnung = $einrichtung->artikel->bezeichnung;
             $this->abladestelle_id = $einrichtung->abladestelle_id;
-            $this->lagerort = $einrichtung->lagerort;
+            $this->lagerort_id = $einrichtung->lagerort_id;
             $this->mindestbestand = $einrichtung->mindestbestand;
             $this->bestellmenge = $einrichtung->bestellmenge;
             $this->abladestellenspezifisch = $einrichtung->abladestellenspezifisch;
@@ -120,7 +142,7 @@ class ArtikelListen extends Component
             [
                 'artikelnr' => $this->artikelnr,
                 'abladestelle_id' => ($this->abladestelle_id==="") ? 0 : $this->abladestelle_id,
-                'lagerort' => $this->lagerort,
+                'lagerort_id' => $this->lagerort_id,
                 'mindestbestand' => $this->mindestbestand,
                 'bestellmenge' => $this->bestellmenge,
                 'bestellrhythmus' => $this->bestellrhythmus,
@@ -131,4 +153,41 @@ class ArtikelListen extends Component
 
         $this->loadArtikel();
     }
+
+    public function loadFromFaveo($artikelnr){
+
+        $artikelRepository = new ArtikelRepository();
+        $artikel = $artikelRepository->holeArtikel($artikelnr);
+        if ($artikel){
+            $this->artikelnr = $artikel->artikelnr;
+            $this->artikelBezeichnung = $artikel->bezeichnung;
+            $this->artikelEinheit = $artikel->einheit;
+            $this->artikelMaterialgruppe = $artikel->materialgruppe;
+            $this->artikelEkpreis = $artikel->ekpreis;
+        }
+        else
+        {
+            $this->artikelBezeichnung = 'Das hat nicht funktionert';
+            $this->artikelnr = $artikel->artikelnr;
+            $this->artikelBezeichnung = $artikel->bezeichnung;
+            $this->artikelEinheit = $artikel->einheit;
+            $this->artikelMaterialgruppe = $artikel->materialgruppe;
+            $this->artikelEkpreis = $artikel->ekpreis;
+        }
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->confirmingDelete = true;
+        $this->deleteEinrichtungId = $id;
+    }
+
+    public function deleteEinrichtung()
+    {
+        Artikeleinrichtung::findOrFail($this->deleteEinrichtungId)->delete();
+        $this->confirmingDelete = false;
+        $this->deleteEinrichtungId = null;
+        
+    }
+
 }
