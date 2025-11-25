@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('artikelnr', 12);
             $table->foreignId('abladestelle_id');
-            $table->string('lagerort', 30);
+            $table->integer('lagerort_id');
             $table->integer('mindestbestand');
             $table->integer('bestellmenge');
             $table->boolean('abladestellenspezifisch')->default(false);
@@ -20,6 +20,8 @@ return new class extends Migration
 
             $table->foreign('artikelnr')->references('artikelnr')->on('artikel');
             $table->foreign('abladestelle_id')->references('id')->on('abladestellen');
+            $table->foreign('lagerort_id')->references('id')->on('lagerorte');
+
         });
     }
 
