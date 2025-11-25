@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('artikelnr', 12);
             $table->foreignId('abladestelle_id');
-            $table->integer('lagerort_id');
+            $table->foreignId('lagerort_id');
             $table->integer('mindestbestand');
             $table->integer('bestellmenge');
             $table->boolean('abladestellenspezifisch')->default(false);
