@@ -13,8 +13,14 @@ return new class extends Migration {
                     $table->dropColumn('lagerort');
             }
 
-            $table->bigInteger('lagerort_id')->nullable()->after('abladestelle_id'); // nach Bedarf positionieren
-            $table->foreign('lagerort_id')->references('id')->on('lagerorte')->nullOnDelete();
+            if (!Schema::hasColumn('artikeleinrichtung', 'lagerort_id')) {
+                $table->bigInteger('lagerort_id')->nullable()->after('abladestelle_id'); // nach Bedarf positionieren
+                $table->foreign('lagerort_id')->references('id')->on('lagerorte')->nullOnDelete();
+            }
+
+
+
+
         });
     }
 
