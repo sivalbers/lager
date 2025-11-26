@@ -20,8 +20,8 @@
     </div>
 
     @foreach ($artikel as $art)
-        <div class="flex flex-col pb-6" wire:key="artikel-{{ $art->artikelnr }}">
-            <div class="flex flex-row bg-slate-300 px-1">
+        <div class="flex flex-col pb-6 " wire:key="artikel-{{ $art->artikelnr }}">
+            <div class="flex flex-row bg-slate-300 hover:bg-slate-200 px-1">
                 <div class="w-2/12">
                     @if(auth()->user()->hasBerechtigung('artikel ändern'))
                         <a href="#" wire:click="editArtikel(false, '{{ $art->artikelnr }}')" class="hover:underline text-sky-600">{{ $art->artikelnr }}</a>
@@ -63,7 +63,7 @@
 
 
             @foreach ($art->einrichtungen as $einr)
-                <div class="flex justify-between hover:bg-slate-100">
+                <div class="flex justify-between hover:bg-slate-200">
                     <div class="flex flex-row w-full px-1 text-sm" wire:key="einrichtung-{{ $einr->id }}">
                         <div class="w-1/12"></div>
                         <div class="w-2/12">
@@ -128,16 +128,11 @@
             </h2>
             <input type="hidden" wire:model="artikelnr" />
 
-            <div x-data="{ spezifisch: @entangle('abladestellenspezifisch') }" class="grid grid-cols-2 gap-4 align-bottom">
-                <div class="col-span-2">
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" x-model="spezifisch" class="mr-2"> Abladestellenspezifisch
-                    </label>
-                </div>
+            <div x-data="" class="grid grid-cols-2 gap-4 align-bottom">
                 <div>
                     <label>Abladestelle</label>
-                    <select wire:model="abladestelle_id" class="w-full border border-gray-300 rounded p-1 disabled:bg-gray-100"
-                        x-bind:disabled="!spezifisch">
+                    <select wire:model.live="abladestelle_id" class="w-full border border-gray-300 rounded p-1 disabled:bg-gray-100"
+                         {{ ($isEditEinrichtung == true )  ? 'disabled' : '' }} >
                         <option value="0">Bitte wählen</option>
 
                         @foreach ($abladestellen as $stelle)
@@ -146,16 +141,17 @@
                     </select>
                 </div>
 
-                <x-bladewind::input label="Lagerort" wire:model="lagerort" x-bind:disabled="!spezifisch" />
-
                 <div>
-                    <label>Lagerort</label>
-                    <select wire:model="lagerort_id" class="w-full border border-gray-300 rounded p-1 disabled:bg-gray-100"
-                        x-bind:disabled="!spezifisch">
-                        <option value="0">Bitte wählen</option>
+                    <label>Lagerort  IsDisabled {{ ($isEditEinrichtung == true )  ? 'disabled' : '' }}
+                        <br>
+                        LagerortId: {{ $lagerort_id }}
+                    </label>
+                    <select wire:model="lagerort_id" class="w-full border border-gray-300 rounded p-1 disabled:bg-gray-100">
+
+                        <option value="0" {{ ($lagerort_id === 0) ? 'selected' : '' }}>Bitte wählen</option>
 
                         @foreach ($lagerortAuswahl as $lagerort)
-                            <option value="{{ $lagerort->id }}">{{ $lagerort->bezeichnung }}</option>
+                            <option value="{{ (int) $lagerort->id }}" {{ ($lagerort_id === $lagerort->id ) ? 'selected' : '' }}>{{ $lagerort->bezeichnung }}</option>
                         @endforeach
                     </select>
                 </div>

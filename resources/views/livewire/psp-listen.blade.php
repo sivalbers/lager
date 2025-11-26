@@ -22,7 +22,7 @@
 
     @foreach ($psps as $psp)
         <div class="flex flex-col pb-4" wire:key="psp-{{ $psp->id }}">
-            <div class="flex flex-row bg-slate-300 px-1">
+            <div class="flex flex-row px-1 hover:bg-slate-200">
                 <div class="w-1/12">
                     <a href="#" wire:click="editPsp(false, {{ $psp->id }})"
                        class="hover:underline text-sky-600">{{ $psp->netzregion }}</a>

@@ -65,9 +65,9 @@ Route::get('protokoll', ProtokolleListen::class)
     ->middleware(['auth', 'berechtigung:protokoll anzeigen'])
     ->name('protokoll');
 
-Route::get('protokoll', ProtokolleListen::class)
+Route::get('einkaufsliste', EinkaufslisteVerwalten::class)
     ->middleware(['auth', 'berechtigung:einkaufsliste anzeigen'])
-    ->name('protokoll');
+    ->name('einkaufsliste');
 
 
 

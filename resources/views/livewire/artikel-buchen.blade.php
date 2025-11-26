@@ -99,27 +99,27 @@
 
 
                     <div class="w-20 flex-none">
-                        <input wire:model="inputData.{{ $index }}.Artikel" type="text"
+                        <input wire:model="inputData.{{ $index }}.artikel" type="text"
                             class="w-full border rounded px-2 py-1">
                     </div>
                     <div class="flex-1">
-                        <input wire:model="inputData.{{ $index }}.Bezeichnung" type="text"
+                        <input wire:model="inputData.{{ $index }}.bezeichnung" type="text"
                             class="w-full border rounded px-2 py-1">
                     </div>
                     <div class="flex-1">
-                        <input wire:model="inputData.{{ $index }}.Abladestelle" type="text"
+                        <input wire:model="inputData.{{ $index }}.abladestelle" type="text"
                             class="w-full border rounded px-2 py-1">
                     </div>
                     <div class="flex-1">
-                        <input wire:model="inputData.{{ $index }}.Lagerort" type="text"
+                        <input wire:model="inputData.{{ $index }}.lagerort" type="text"
                             class="w-full border rounded px-2 py-1">
                     </div>
                     <div class="flex-1">
-                        <input wire:model="inputData.{{ $index }}.Lagerplatz" type="text"
+                        <input wire:model="inputData.{{ $index }}.lagerplatz" type="text"
                             class="w-full border rounded px-2 py-1">
                     </div>
                     <div class="w-20 flex-none">
-                        <input wire:model="inputData.{{ $index }}.Menge" type="number"
+                        <input wire:model="inputData.{{ $index }}.menge" type="number"
                             class="w-full border rounded px-2 py-1 text-right">
                     </div>
                 </div>

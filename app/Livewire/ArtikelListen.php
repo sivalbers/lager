@@ -10,6 +10,7 @@ use App\Models\Abladestelle;
 use App\Models\Lagerort;
 use App\Repositories\ArtikelRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ArtikelListen extends Component
 {
@@ -48,16 +49,24 @@ class ArtikelListen extends Component
     public function mount()
     {
         $this->loadArtikel();
-        $this->lagerortAuswahl = Lagerort::orderBy('bezeichnung')->get();
+        $this->lagerortAuswahl = [];
         $user = User::findOrFail(Auth::id());
-        $abladestelle_ids = $user->abladestellen->pluck('id')->toArray();
+
+        if ($user->hasBerechtigung('seine artikel abladestellen einstellungen')){
+            $abladestelle_ids = $user->abladestellen->pluck('id')->toArray();
+        }
+        else {
+            $abladestelle_ids = Abladestelle::pluck('id')->toArray();
+        }
 
         $this->abladestellen = Abladestelle::whereIn('id', $abladestelle_ids)->get();
+
     }
 
     public function render()
     {
-        \Log::info(['render()' => 'x', 'artikel' => $this->artikelnr ]);
+        Log::info(['render()' => 'x', 'artikel' => $this->artikelnr ]);
+        Log::info('lagerort_id Typ: ' . gettype($this->lagerort_id));
         return view('livewire.artikel-listen')->layout('layouts.app');
     }
 
@@ -105,7 +114,7 @@ class ArtikelListen extends Component
     public function editEinrichtung($create = true, $id = null, $artikelnr = null)
     {
         $this->isEditEinrichtung = !$create;
-        $this->showEinrichtung = true;
+
 
 
         if ($create) {
@@ -114,7 +123,7 @@ class ArtikelListen extends Component
             $this->artikelnr = $artikelnr;
             $this->artikelBezeichnung = $artikel->bezeichnung;
             $this->abladestelle_id = 0;
-            $this->abladestellenspezifisch = false;
+            $this->abladestellenspezifisch = true;
         } else {
             $einrichtung = Artikeleinrichtung::find($id);
 
@@ -122,13 +131,17 @@ class ArtikelListen extends Component
             $this->artikelnr = $einrichtung->artikelnr;
             $this->artikelBezeichnung = $einrichtung->artikel->bezeichnung;
             $this->abladestelle_id = $einrichtung->abladestelle_id;
-            $this->lagerort_id = $einrichtung->lagerort_id;
+
             $this->mindestbestand = $einrichtung->mindestbestand;
             $this->bestellmenge = $einrichtung->bestellmenge;
             $this->abladestellenspezifisch = $einrichtung->abladestellenspezifisch;
 
+            $this->lagerortAuswahl = Lagerort::where('abladestelle_id', $this->abladestelle_id )->orderBy('bezeichnung')->get();
+            $this->lagerort_id = $einrichtung->lagerort_id;
 
         }
+
+        $this->showEinrichtung = true;
     }
 
     public function saveEinrichtung()
@@ -187,7 +200,16 @@ class ArtikelListen extends Component
         Artikeleinrichtung::findOrFail($this->deleteEinrichtungId)->delete();
         $this->confirmingDelete = false;
         $this->deleteEinrichtungId = null;
-        
+
+    }
+
+    public function updatedAbladestelleId()
+    {
+        \Log::info(['updatedAbladestelle_id' => $this->abladestelle_id ]);
+        $this->lagerortAuswahl = Lagerort::where('abladestelle_id', $this->abladestelle_id )->orderBy('bezeichnung')->get();
+        if (!$this->lagerortAuswahl){
+            $this->lagerortAuswahl = [];
+        }
     }
 
 }

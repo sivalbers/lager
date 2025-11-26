@@ -17,6 +17,8 @@ new class extends Component
     }
 }; ?>
 
+<div>
+
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class=" mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,6 +95,14 @@ new class extends Component
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('etikettenerstellen')" :active="request()->routeIs('etikettenerstellen')" wire:navigate>
                         {{ __('Etiketten erstellen') }}
+                    </x-nav-link>
+                </div>
+                @endif
+
+                @if(auth()->user()->hasBerechtigung('einkaufsliste anzeigen'))
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('einkaufsliste')" :active="request()->routeIs('einkaufsliste')" wire:navigate>
+                        {{ __('Einkaufsliste') }}
                     </x-nav-link>
                 </div>
                 @endif
@@ -289,6 +299,14 @@ new class extends Component
         </div>
         @endif
 
+        @if(auth()->user()->hasBerechtigung('einkaufsliste anzeigen') )
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('einkaufsliste')" :active="request()->routeIs('einkaufsliste')" wire:navigate>
+                {{ __('Einkaufsliste') }}
+            </x-responsive-nav-link>
+        </div>
+        @endif
+
         <!-- Navigation Links -->
         @if(auth()->user()->hasBerechtigung('psp anzeigen'))
         <div class="pt-2 pb-3 space-y-1">
@@ -343,3 +361,4 @@ new class extends Component
         </div>
     </div>
 </nav>
+</div>

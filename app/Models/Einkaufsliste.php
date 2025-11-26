@@ -19,6 +19,8 @@ class Einkaufsliste extends Model
         'kommentar',
     ];
 
+    protected $table = 'einkaufslisten';
+
     public function user()
     {
         return $this->belongsTo(User::class);

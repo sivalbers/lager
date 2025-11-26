@@ -31,7 +31,7 @@
 
     @foreach ($debitoren as $debitor)
         <div class="flex flex-col pb-6" wire:key="debitor-{{ $debitor->nr }}">
-            <div class="flex flex-row bg-slate-300 px-1">
+            <div class="flex flex-row bg-slate-300 px-1 hover:bg-slate-200">
                 <div class="w-1/12">
                     <a wire:click="editDebitor(false, {{ $debitor->nr }})"
                         class="cursor-pointer hover:underline text-sky-600">{{ $debitor->nr }}</a>
@@ -89,7 +89,7 @@
 
 
                 @foreach ($debitor->abladestellen as $abladestelle)
-                    <div class="flex flex-row w-full px-1" wire:key="abladestelle-{{ $abladestelle->id }}">
+                    <div class="flex flex-row w-full px-1 hover:bg-slate-200" wire:key="abladestelle-{{ $abladestelle->id }}">
                         <div class="w-1/12">
 
                         </div>
@@ -136,8 +136,8 @@
                     </div>
 
                     @foreach ($abladestelle->lagerorte as $lagerort)
-                    <div class="flex flex-col w-full pl-40" wire:key="lagerort-{{ $lagerort->id }}">
-                        <div class="w-80">
+                    <div class="flex flex-col w-full pl-40 hover:bg-slate-200" wire:key="lagerort-{{ $lagerort->id }}">
+                        <div class="w-80 ">
 
                             <a title="Lagerort ändern" class="h-5 w-5 text-sky-600 cursor-pointer"
                                 wire:click="editLagerort(false, {{ $lagerort->id }} )">

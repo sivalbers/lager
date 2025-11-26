@@ -28,7 +28,7 @@
         <div class="flex font-bold ">
             <div class="flex-[2] basis-0 pr-2">Artikelnr.</div>
             <div class="flex-[5] basis-0 pr-2">Abladestelle</div>
-            <div class="flex-[5] basis-0">Lagerort</div>
+            
         </div>
 
         <!-- Eingabefelder -->

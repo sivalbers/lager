@@ -22,7 +22,7 @@ class BestandsverwaltungRepository
         return $user->abladestellen;
     }
 
-
+    
     // Liste aller Artikel im Bestand des angemeldeten Users
     public function artikelArrayAusBestandInAbladestellenVonUser(){
         $abladestellen_id_array = $this->abladestellenArray();
@@ -51,7 +51,7 @@ public function artikelArrayAusBestand_artikel_abladestellen_lagerorte($artikeln
     \Log::info('Abladestellen-IDs: ', $abladestellen_id_array);
     \Log::info('Lagerorte-IDs: ', $lagerorte_id_array);
 
-    
+
     $query = Artikelbestand::query();
 
     if (!empty($artikelnr)) {

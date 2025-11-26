@@ -11,11 +11,13 @@ use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\BestandsbuchungRepository;
+use App\Repositories\BestandsverwaltungRepository;
 
 class ArtikelBuchung extends Component
 {
 
-    public ArtikelBuchungRepository $artikelRepository;
+    public BestandsbuchungRepository $artikelRepository;
+    protected ?BestandsverwaltungRepository $bestandsverwaltungRepository = null;
 
     public $inputData = [];
     public $abladestellen_ids = [];
@@ -48,17 +50,6 @@ class ArtikelBuchung extends Component
             $this->ueberschrift = 'Sonstige Buchung';
         }
 
-        /*
-        $this->inputData[] =  [
-                'Artikel'  => '200333',
-                'Bezeichnung'  => 'Testartikel 200333',
-                'Abladestelle'  => 'BM Wesermarsch',
-                'Lagerort' => '0098',
-                'Lagerplatz' => 'A01-01-01',
-                'Menge'    => -1,
-            ];
-*/
-
         $this->inputData = null;
 
         $this->debitornr = auth()->user()->debitor_nr;
@@ -68,6 +59,15 @@ class ArtikelBuchung extends Component
         $this->abladestellen_ids = $user->abladestellen->pluck('id')->toArray();
         $this->loadAbladestellen();
 
+    }
+
+    protected function getBestandsverwaltungRepository(): BestandsverwaltungRepository
+    {
+        if (!$this->bestandsverwaltungRepository) {
+            $this->bestandsverwaltungRepository = new BestandsverwaltungRepository();
+        }
+
+        return $this->bestandsverwaltungRepository;
     }
 
 
@@ -83,9 +83,13 @@ public function handleScan(string $code = null): void {
 
     if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
         $this->inputData[] = [
-            'Artikel'  => $decoded['artikel'] ?? '',
-            'Lagerort' => $decoded['lagerort'] ?? '',
-            'Menge'    => $decoded['menge'] ?? -1,
+            'artikel'  => $decoded['artikel'] ?? '',
+            'abladestelle_id' => $decoded['abladestelle'] ?? '',
+            'abladestelle' => Abladestelle::where('id', $decoded['abladestelle'] ?? 0)->value('name') ?? '',
+            'lagerort' => $decoded['lagerort'] ?? '',
+            'lagerort_id' => Lagerort::Where('id', $decoded['lagerort'] ?? 0)->value('bezeichnung') ?? '',
+            'lagerplatz' => $decoded['lagerplatz'] ?? '',
+            'menge'    => $decoded['menge'] ?? -1,
         ];
     }
 
@@ -99,25 +103,25 @@ public function addRow($index = null)
     {
         if ($index === null) {
             $this->inputData[] = [
-                'Artikel'  => '',
-                'Bezeichnung'  => '',
-                'Abladestelle'  => '',
-                'Lagerort' => '',
-                'Lagerplatz' => '',
-                'Menge'    => 0,
+                'artikel'  => '',
+                'bezeichnung'  => '',
+                'abladestelle'  => '',
+                'lagerort' => '',
+                'lagerplatz' => '',
+                'menge'    => 0,
             ];
             return;
         }
         else {
             $newRow = [
-                'Artikel'  => '',
-                'Bezeichnung'  => '',
-                'Abladestelle'  => '',
-                'Abladestelle_id' => 0,
-                'Lagerort' => '',
-                'Lagerort_id' => 0,
-                'Lagerplatz' => '',
-                'Menge'    => 0,
+                'artikel'  => '',
+                'bezeichnung'  => '',
+                'abladestelle'  => '',
+                'abladestelle_id' => 0,
+                'lagerort' => '',
+                'lagerort_id' => 0,
+                'lagerplatz' => '',
+                'menge'    => 0,
             ];
             array_splice($this->inputData, $index + 1, 0, [$newRow]);
         }
@@ -130,14 +134,14 @@ public function addRow($index = null)
         $la = Lagerort::where ('id', (int)$this->mLagerort)->first();
         Log::info(['Abladestelle' => $this->mAbladestelle]);
             $this->inputData[] = [
-                'Artikel'  => $this->mArtikel,
-                'Bezeichnung'  => $this->mBezeichnung,
-                'Abladestelle'  => $ab->name,
-                'Abladestelle_id'  => (int)$this->mAbladestelle,
-                'Lagerort' => $la->bezeichnung,
-                'Lagerort_id' => (int)$this->mLagerort,
-                'Lagerplatz' => $this->mLagerplatz,
-                'Menge'    => $this->mMenge,
+                'artikel'  => $this->mArtikel,
+                'bezeichnung'  => $this->mBezeichnung,
+                'abladestelle'  => $ab->name,
+                'abladestelle_id'  => (int)$this->mAbladestelle,
+                'lagerort' => $la->bezeichnung,
+                'lagerort_id' => (int)$this->mLagerort,
+                'lagerplatz' => $this->mLagerplatz,
+                'menge'    => $this->mMenge,
             ];
             Log::info($this->inputData[count($this->inputData)-1]);
             return;
@@ -156,11 +160,11 @@ public function addRow($index = null)
         $bestandsRepository = new BestandsbuchungRepository();
         foreach ($this->inputData as $row) {
             $bestandsRepository->BucheBestand(
-                $row['Artikel'],
-                $row['Abladestelle_id'],
-                $row['Lagerort_id'],
-                $row['Lagerplatz'],
-                $row['Menge'],
+                $row['artikel'],
+                $row['abladestelle_id'],
+                $row['lagerort_id'],
+                $row['lagerplatz'],
+                $row['menge'],
                 $this->modus);
         }
 

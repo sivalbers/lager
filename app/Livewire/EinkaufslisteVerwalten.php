@@ -50,6 +50,22 @@ class EinkaufslisteVerwalten extends Component
             $this->menge = $e->menge;
             $this->kommentar = $e->kommentar;
         }
+        else{
+            $this->debitorNr = Auth::user()->debitor_nr ?? 0;
+            $abladestellen = Auth::user()->abladestellen;
+            if (count($abladestellen) === 1){
+                $this->abladestelleId = $abladestellen->first()->id;
+            }
+            else{
+                $this->abladestelleId = 0 ;
+            }
+            if ($this->abladestelleId != 0) {
+                $this->lagerortId = Lagerort::where ('abladestelle_id', $this->abladestelleId)->pluck('id');
+            }
+            else{
+                    $this->lagerortId = 0;
+            }
+        }
 
         $this->showModal = true;
     }
@@ -83,6 +99,6 @@ class EinkaufslisteVerwalten extends Component
 
     public function render()
     {
-        return view('livewire.einkaufsliste-verwalten');
+        return view('livewire.einkaufsliste-verwalten')->layout('layouts.app');
     }
 }

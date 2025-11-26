@@ -42,7 +42,7 @@
         </div>
 
         @foreach ($users as $user)
-            <div class="flex py-2 border-b items-center" wire:key="user-{{ $user->id }}">
+            <div class="flex py-2 border-b items-center hover:bg-slate-200" wire:key="user-{{ $user->id }}">
                 <div class="w-2/12">{{ $user->name }}</div>
                 <div class="w-3/12">{{ $user->email }}</div>
                 <div class="w-2/12">{{ $user->debitor->nr ?? '-' }} {{ $user->debitor->name ?? '-' }}</div>
