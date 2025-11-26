@@ -84,10 +84,11 @@ public function handleScan(string $code = null): void {
     if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
         $this->inputData[] = [
             'artikel'  => $decoded['artikel'] ?? '',
+            'bezeichnung'  => Artikel::where('artikelnr', $decoded['artikel'] ?? '')->value('bezeichnung') ?? '',
             'abladestelle_id' => $decoded['abladestelle'] ?? '',
             'abladestelle' => Abladestelle::where('id', $decoded['abladestelle'] ?? 0)->value('name') ?? '',
-            'lagerort' => $decoded['lagerort'] ?? '',
-            'lagerort_id' => Lagerort::Where('id', $decoded['lagerort'] ?? 0)->value('bezeichnung') ?? '',
+            'lagerort' => Lagerort::Where('id', $decoded['lagerort'] ?? 0)->value('bezeichnung') ?? '',
+            'lagerort_id' => $decoded['lagerort'] ?? '',
             'lagerplatz' => $decoded['lagerplatz'] ?? '',
             'menge'    => $decoded['menge'] ?? -1,
         ];
