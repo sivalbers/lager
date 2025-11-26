@@ -15,7 +15,7 @@ use App\Livewire\EinkaufslisteVerwalten;
 use App\Http\Controllers\FileUploadController;
 
 
-Route::view('/', 'welcome');
+Route::redirect('/', '/bestand');
 
 Route::get('bestand', ListBestand::class)
     ->middleware(['auth'])

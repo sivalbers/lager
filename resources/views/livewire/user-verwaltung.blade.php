@@ -98,12 +98,28 @@
 
                     <div class="space-y-4">
                         <x-bladewind::input label="Name" wire:model="name" />
+                        @error('name')
+                            <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
 
                         <x-bladewind::input label="E-Mail-Adresse" wire:model="email" type="email" />
+                        @error('email')
+                            <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
+                                {{ $message }}
+                            </div>
+                        @enderror
 
                         @if (!$isEditUser)
                             <x-bladewind::input label="Passwort" wire:model="password" type="password" />
                         @endif
+                        @error('password')
+                            <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
+                                {{ $message }}
+                            </div>
+                        @enderror
 
                         <div>
                             <label>Debitor</label>
@@ -113,6 +129,11 @@
                                     <option value="{{ $debitor->nr }}">{{ $debitor->name }} ({{ $debitor->nr }})</option>
                                 @endforeach
                             </select>
+                        @error('debitor_nr')
+                            <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
+                                {{ $message }}
+                            </div>
+                        @enderror
                         </div>
 
                         <div>

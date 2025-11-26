@@ -33,6 +33,8 @@ class UserVerwaltung extends Component
     public $rechtegruppen;
     public $legende;
 
+    
+
     public function mount()
     {
         $this->debitors = Debitor::all();
@@ -86,7 +88,7 @@ class UserVerwaltung extends Component
         $rules = [
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->userId)],
-            'debitor_nr' => 'nullable|exists:debitoren,nr',
+            'debitor_nr' => 'required|exists:debitoren,nr',
             'abladestelle_ids' => 'required|array|min:1',
             'abladestelle_ids.*' => 'exists:abladestellen,id',
 
@@ -107,13 +109,13 @@ class UserVerwaltung extends Component
         if (!$this->userId && $this->password) {
             $user->password = bcrypt($this->password);
         }
-
+        $user->save();
         $user->debitor_nr = $this->debitor_nr;
         $user->abladestellen()->sync($this->abladestelle_ids);
 
         $user->rechtegruppe_id = $this->rechtegruppe_id;
 
-        $user->save();
+        //$user->save();
 
         $this->showUser = false;
         $this->loadUsers();
