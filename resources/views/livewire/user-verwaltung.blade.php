@@ -138,7 +138,8 @@
 
                         <div>
                             <label>Abladestelle</label>
-                            <select wire:model="abladestelle_ids"
+                            <select name="abladestelle_ids"
+                                    wire:model="abladestelle_ids"
                                     wire:key="abladestelle-select-{{ implode('-', $abladestelle_ids) }}"
                                     multiple
                                     class="w-full border border-gray-300 rounded p-1">
@@ -151,7 +152,7 @@
 
                         <div>
                             <label>Rechtegruppe</label>
-                            <select wire:model="rechtegruppe_id" class="w-full border border-gray-300 rounded p-1">
+                            <select name="rechtegruppe_id" wire:model="rechtegruppe_id" class="w-full border border-gray-300 rounded p-1">
                                 <option value="">-</option>
                                 @foreach($rechtegruppen as $gruppe)
                                     <option value="{{ $gruppe->id }}">{{ $gruppe->name }}</option>
