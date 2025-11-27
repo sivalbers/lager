@@ -79,7 +79,7 @@ new class extends Component
                 </div>
 
                 @if(auth()->user()->hasBerechtigung('protokoll anzeigen'))
-                <div class="hidden space-x-8 ">
+                <div class="flex space-x-8 ">
                     <x-nav-link :href="route('protokoll')" :active="request()->routeIs('protokoll')" wire:navigate>
 
                         <div class="hidden md:flex md:-my-px md:ms-10">
@@ -101,15 +101,15 @@ new class extends Component
                         {{ __('Warenzugang') }}
                         </div>
                         <div class="flex md:hidden w-10 md:-my-px md:ms-10">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <path fill="currentColor" d="
-    M100 20 L30 70 L30 180 L170 180 L170 70 Z
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                            <path fill="currentColor" d="
+                                M100 20 L30 70 L30 180 L170 180 L170 70 Z
 
-    M70 90 L70 180 L130 180 L130 90 Z
+                                M70 90 L70 180 L130 180 L130 90 Z
 
-    M90 115 L110 115 L110 135 L120 135 L100 160 L80 135 L90 135 Z
-  " fill-rule="evenodd"/>
-</svg>
+                                M90 115 L110 115 L110 135 L120 135 L100 160 L80 135 L90 135 Z
+                            " fill-rule="evenodd"/>
+                            </svg>
 
                         </div>
                     </x-nav-link>
@@ -118,7 +118,7 @@ new class extends Component
 
                 <!-- Navigation Links -->
                 @if(auth()->user()->hasBerechtigung('warenzugang buchen'))
-                <div class="hidden space-x-8">
+                <div class="flex space-x-8">
                     <x-nav-link :href="route('etikettenerstellen')" :active="request()->routeIs('etikettenerstellen')" wire:navigate>
                         <div class="hidden md:flex md:-my-px md:ms-10">
                             {{ __('Etiketten erstellen') }}
@@ -146,7 +146,7 @@ new class extends Component
 
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -165,7 +165,7 @@ new class extends Component
                     <x-slot name="content">
 
                         @if(auth()->user()->hasBerechtigung('artikel buchen'))
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="flex space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <x-dropdown-link :href="route('artikel.entnahme')" wire:navigate>
 
                                     <div class="hidden md:flex ">
@@ -209,7 +209,7 @@ new class extends Component
                         @endif
 
                         @if(auth()->user()->hasBerechtigung('artikel buchen'))
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <x-dropdown-link :href="route('artikel.rueckgabe')" wire:navigate>
 
 
