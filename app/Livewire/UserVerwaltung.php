@@ -33,7 +33,7 @@ class UserVerwaltung extends Component
     public $rechtegruppen;
     public $legende;
 
-    
+
 
     public function mount()
     {
@@ -46,6 +46,7 @@ class UserVerwaltung extends Component
 
     public function render()
         {
+            \Log::info('Rendering UserVerwaltung component');
             return view('livewire.user-verwaltung',['legende' => $this->legende ])->layout('layouts.app');
         }
 
@@ -109,13 +110,14 @@ class UserVerwaltung extends Component
         if (!$this->userId && $this->password) {
             $user->password = bcrypt($this->password);
         }
-        $user->save();
+
         $user->debitor_nr = $this->debitor_nr;
+        $user->save();
         $user->abladestellen()->sync($this->abladestelle_ids);
 
         $user->rechtegruppe_id = $this->rechtegruppe_id;
 
-        //$user->save();
+        $user->save();
 
         $this->showUser = false;
         $this->loadUsers();

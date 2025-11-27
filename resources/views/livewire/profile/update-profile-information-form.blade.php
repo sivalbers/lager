@@ -12,8 +12,7 @@ new class extends Component
 {
     public string $name = '';
     public string $email = '';
-    public int $debitor_nr = 0;
-    public int $abladestelle_id = 0 ;
+
 
     public $debitoren = [];
     public $abladestellen = [];
@@ -25,18 +24,6 @@ new class extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
-        $this->debitor_nr = Auth::user()->debitor_nr;
-
-        $this->debitoren = Debitor::select('name', 'nr')->orderBy('name')->get()->toArray();
-        $this->abladestellen = Abladestelle::select('name', 'id')->where('debitor_nr', $this->debitor_nr)->orderBy('name')->get()->toArray();
-        $this->abladestelle_id = Auth::user()->abladestelle_id;
-    }
-
-
-    public function updatedDebitorNr($value)
-    {
-        $this->abladestellen = Abladestelle::select('name', 'id')->where('debitor_nr', $value)->orderBy('name')->get()->toArray();
-         
     }
 
     /**
@@ -49,8 +36,6 @@ new class extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
-            'debitor_nr'       => ['required', 'integer', 'min:0'],
-            'abladestelle_id'  => ['required', 'integer', 'min:0'],
         ]);
 
         $user->fill($validated);
@@ -101,27 +86,6 @@ new class extends Component
             <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
-        <div>
-            <x-input-label for="debitor_nr" :value="__('Debitor:')" />
-            <select wire:model.live="debitor_nr" id=""debitor_nr" class="mt-1 w-full border rounded px-2 py-1 h-10 border-gray-300">
-            <option value="0">Bitte wählen</option>
-                @foreach($debitoren as $debitor)
-                    <option value="{{ $debitor['nr'] }}">
-                        {{ str_pad($debitor['nr'], 6, ' ', STR_PAD_RIGHT) }} - {{ $debitor['name'] }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <x-input-label for="abladestelle_id" :value="__('Abladestelle:')" />
-            <select wire:model="abladestelle_id" name="abladestelle_id" class="mt-1 w-full border rounded px-2 py-1 h-10 border-gray-300">
-            <option value="0">Bitte wählen</option>
-                @foreach($abladestellen as $stelle)
-                    <option value="{{ $stelle['id'] }}">{{ $stelle['name'] }}</option>
-                @endforeach
-            </select>
-        </div>
-
 
         <div>
             <x-input-label for="email" :value="__('E-Mail')" />
