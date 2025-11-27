@@ -44,7 +44,7 @@ class ArtikelBuchung extends Component
         } elseif ($modus === 'entnahme'){
             $this->ueberschrift = 'Artikelabgang buchen';
         } elseif ($modus === 'korrektur'){
-            $this->ueberschrift = 'Artikelkorrektur buchen';
+            $this->ueberschrift = 'Artikelkorrektur buchen ** Funktion ist noch in Arbeit - bitte nicht verwenden **';
         }
         else {
             $this->ueberschrift = 'Sonstige Buchung';

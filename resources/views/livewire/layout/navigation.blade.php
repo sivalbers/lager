@@ -19,7 +19,7 @@ new class extends Component
 
 <div>
 
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class=" mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -67,42 +67,79 @@ new class extends Component
 
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="flex space-x-8 sm:-my-px sm:ms-10">
                     <x-nav-link :href="route('bestand')" :active="request()->routeIs('bestand')" wire:navigate>
+                        <div class="hidden md:flex">
                         {{ __('Lagerbestand') }}
+                        </div>
+                        <div class="flex md:hidden">
+                            <x-heroicon-s-cube class="w-10" />
+                        </div>
                     </x-nav-link>
                 </div>
 
                 @if(auth()->user()->hasBerechtigung('protokoll anzeigen'))
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 ">
                     <x-nav-link :href="route('protokoll')" :active="request()->routeIs('protokoll')" wire:navigate>
-                        {{ __('Buchungsprotokoll') }}
+
+                        <div class="hidden md:flex md:-my-px md:ms-10">
+                            {{ __('Buchungsprotokoll') }}
+                        </div>
+                        <div class="flex md:hidden w-10">
+                            <x-heroicon-o-list-bullet class="w-10" />
+                        </div>
                     </x-nav-link>
                 </div>
                 @endif
 
                 <!-- Navigation Links -->
                 @if(auth()->user()->hasBerechtigung('warenzugang buchen'))
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('lieferschein')" :active="request()->routeIs('lieferschein')" wire:navigate>
+                <div class="flex space-x-8 ">
+                    <x-nav-link :href="route('lieferschein')" :active="request()->routeIs('lieferschein')" wire:navigate alt="Warenzugang" title="Warenzugang">
+
+                        <div class="hidden md:flex ">
                         {{ __('Warenzugang') }}
+                        </div>
+                        <div class="flex md:hidden w-10 md:-my-px md:ms-10">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <path fill="currentColor" d="
+    M100 20 L30 70 L30 180 L170 180 L170 70 Z
+
+    M70 90 L70 180 L130 180 L130 90 Z
+
+    M90 115 L110 115 L110 135 L120 135 L100 160 L80 135 L90 135 Z
+  " fill-rule="evenodd"/>
+</svg>
+
+                        </div>
                     </x-nav-link>
                 </div>
                 @endif
 
                 <!-- Navigation Links -->
                 @if(auth()->user()->hasBerechtigung('warenzugang buchen'))
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8">
                     <x-nav-link :href="route('etikettenerstellen')" :active="request()->routeIs('etikettenerstellen')" wire:navigate>
-                        {{ __('Etiketten erstellen') }}
+                        <div class="hidden md:flex md:-my-px md:ms-10">
+                            {{ __('Etiketten erstellen') }}
+                        </div>
+                        <div class="flex md:hidden w-10" >
+                            <x-heroicon-o-qr-code />
+                        </div>
                     </x-nav-link>
                 </div>
                 @endif
 
                 @if(auth()->user()->hasBerechtigung('einkaufsliste anzeigen'))
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="flex space-x-8 ">
                     <x-nav-link :href="route('einkaufsliste')" :active="request()->routeIs('einkaufsliste')" wire:navigate>
-                        {{ __('Einkaufsliste') }}
+
+                        <div class="hidden md:flex md:-my-px md:ms-10">
+                            {{ __('Einkaufsliste') }}
+                        </div>
+                        <div class="flex md:hidden w-10">
+                            <x-heroicon-s-shopping-bag />
+                        </div>
                     </x-nav-link>
                 </div>
                 @endif
@@ -130,7 +167,43 @@ new class extends Component
                         @if(auth()->user()->hasBerechtigung('artikel buchen'))
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <x-dropdown-link :href="route('artikel.entnahme')" wire:navigate>
-                                    {{ __('Entnahme') }}
+
+                                    <div class="hidden md:flex ">
+                                        {{ __('Entnahme') }}
+                                    </div>
+
+                                    <div class="flex md:hidden h-10">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+
+                                            viewBox="0 0 200 200">
+
+                                        <!-- Zentrierte proportional skalierte Grafik -->
+                                        <g transform="translate(5.78, 0) scale(0.3846)">
+
+                                            <defs>
+                                            <style type="text/css">
+                                                <![CDATA[
+                                                .str0 {stroke:#FEFEFE;stroke-width:16;stroke-miterlimit:22.9256}
+                                                .fil1 {fill:#0876B3}
+                                                .fil0 {fill:black;fill-rule:nonzero}
+                                                ]]>
+                                            </style>
+                                            </defs>
+
+                                            <g id="Ebene_x0020_1">
+                                            <g>
+                                                <path class="fil0" d="M255 3c-3,-2 -6,-3 -10,-3 -3,0 -7,1 -10,3l-217 126 226 132 226 -132 -217 -126zm236 159l-226 132 0 226 217 -127c6,-3 9,-10 9,-16 0,0 0,0 0,0l0 -216zm-264 358l0 -226 -226 -132 0 216c0,0 0,0 0,0 0,7 4,13 9,16l217 127 0 0z"/>
+                                            </g>
+
+                                            <polygon class="fil1 str0"
+                                                points="245,388 428,205 297,205 297,132 245,132 194,132 194,205 62,205"/>
+                                            </g>
+
+                                        </g>
+                                        </svg>
+                                    </div>
+
                                 </x-dropdown-link>
                             </div>
                         @endif
@@ -138,7 +211,45 @@ new class extends Component
                         @if(auth()->user()->hasBerechtigung('artikel buchen'))
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <x-dropdown-link :href="route('artikel.rueckgabe')" wire:navigate>
-                                    {{ __('Rückgabe') }}
+
+
+                                    <div class="hidden md:flex ">
+                                        {{ __('Rückgabe') }}
+                                    </div>
+
+                                    <div class="flex md:hidden h-10">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+
+                                            viewBox="0 0 200 200">
+
+                                        <!-- Proportional skaliert und horizontal zentriert -->
+                                        <g transform="translate(5.8, 0) scale(0.10282)">
+
+                                            <defs>
+                                            <style type="text/css">
+                                                <![CDATA[
+                                                .str0 {stroke:#FEFEFE;stroke-width:61;stroke-miterlimit:22.9256}
+                                                .fil1 {fill:#0876B3}
+                                                .fil0 {fill:black;fill-rule:nonzero}
+                                                ]]>
+                                            </style>
+                                            </defs>
+
+                                            <g id="Ebene_x0020_1">
+                                            <g>
+                                                <path class="fil0" d="M952 10c-11,-6 -23,-10 -36,-10 -12,0 -25,3 -36,10l-811 473 846 494 846 -494 -811 -473zm881 595l-846 494 0 846 811 -473c22,-13 35,-36 35,-61 0,0 0,0 0,0l0 -806zm-987 1340l0 -846 -846 -494 0 806c0,0 0,0 0,0 0,25 13,48 35,61l811 473 0 0z"/>
+                                            </g>
+
+                                            <polygon class="fil1 str0"
+                                                    points="917,492 232,1177 724,1177 724,1453 917,1453 1110,1453 1110,1177 1602,1177"/>
+                                            </g>
+
+                                        </g>
+                                        </svg>
+
+
+                                    </div>
                                 </x-dropdown-link>
                             </div>
                         @endif
@@ -242,123 +353,9 @@ new class extends Component
                 </x-dropdown>
             </div>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('bestand')" :active="request()->routeIs('bestand')" wire:navigate>
-                {{ __('Bestand') }}
-            </x-responsive-nav-link>
-        </div>
 
-        @if(auth()->user()->hasBerechtigung('protokoll anzeigen'))
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('protokoll')" :active="request()->routeIs('protokoll')" wire:navigate>
-                {{ __('Buchungsprotokoll') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
-
-
-        @if(auth()->user()->hasBerechtigung('debitor anzeigen'))
-        <!-- Navigation Links -->
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('debitoren')" :active="request()->routeIs('debitoren')" wire:navigate>
-                {{ __('Debitoren') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
-
-        <!-- Navigation Links -->
-        @if(auth()->user()->hasBerechtigung('warenzugang buchen'))
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('lieferschein')" :active="request()->routeIs('lieferschein')" wire:navigate>
-                {{ __('Warenzugang') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
-
-
-        <!-- Navigation Links -->
-        @if(auth()->user()->hasBerechtigung('warenzugang buchen'))
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('etikettenerstellen')" :active="request()->routeIs('etikettenerstellen')" wire:navigate>
-                {{ __('Etiketten erstellen') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
-
-        @if(auth()->user()->hasBerechtigung('einkaufsliste anzeigen') )
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('einkaufsliste')" :active="request()->routeIs('einkaufsliste')" wire:navigate>
-                {{ __('Einkaufsliste') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
-
-        <!-- Navigation Links -->
-        @if(auth()->user()->hasBerechtigung('psp anzeigen'))
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('psp')" :active="request()->routeIs('psp')" wire:navigate>
-                {{ __('PSP-Elemente') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
-
-        <!-- Navigation Links -->
-        @if(auth()->user()->hasBerechtigung('artikel anzeigen'))
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('artikel')" :active="request()->routeIs('artikel')" wire:navigate>
-                {{ __('Artikel') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
-
-        @if(auth()->user()->hasBerechtigung('mitarbeiter anzeigen'))
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('mitarbeiter')" :active="request()->routeIs('mitarbeiter')" wire:navigate>
-                {{ __('Mitarbeiter') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
-
-
-
-
-
-
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-                <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile')" wire:navigate>
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <button wire:click="logout" class="w-full text-start">
-                    <x-responsive-nav-link>
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </button>
-            </div>
-        </div>
-    </div>
 </nav>
 </div>

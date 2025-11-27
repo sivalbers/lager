@@ -1,9 +1,16 @@
 <div class="w-5/6 m-auto">
     <h1 class="text-2xl font-bold my-4 print:hidden">Etiketten erstellen</h1>
+    <div class="text-red-500">
+
+        Wichtig: Die Funktion soll später in den Warenzugang integriert werden.<br>
+        Zum Testen werden ich kurzfristig die funktionalität nachliefern, Etiketten für Abladestellen und Lagerorte zu erstellen.
+
+
+    </div>
 
     <!-- Eingabeformular -->
     <form wire:submit.prevent="createDataFromText" class="print:hidden mb-6">
-        <label for="zeilen" class="block mb-2 font-semibold">Artikelnummer, Abladestelle, Lagerort, Lagerplatz:</label>
+        <label for="zeilen" class="block mb-2 font-semibold">Artikelnummer, Abladestelle-ID, Lagerort-ID, Lagerplatz:</label>
         <textarea wire:model.defer="text" id="zeilen" rows="6" class="w-full border p-2"></textarea>
 
         <button type="submit" class="mt-3 px-4 py-2 bg-blue-500 text-white rounded">

@@ -1,5 +1,5 @@
 <div x-data="{ showModal: @entangle('showModal') }" class="p-6">
-    <h1 class="text-2xl font-bold mb-4">Einkaufsliste</h1>
+    <h1 class="text-2xl font-bold mb-4">Einkaufsliste ** Funktion ist in Arbeit - bisher nicht funktionstüchtig **</h1>
 
     <div class="flex justify-end mb-4">
         <x-bladewind::button wire:click="edit">Neu</x-bladewind::button>

@@ -5,6 +5,7 @@
 
     </div>
 
+    <div class="font-bold mt-4 text-red-400">Wird die Kameraauswahl nicht angezeigt, bitte die Seite mit <F5> aktualisieren!</div>
     <div class="py-6">
         <div class="flex flex-row items-center space-x-4">
             <div>
