@@ -116,6 +116,7 @@ new class extends Component {
             <x-input-label for="cameraSelection" :value="__('Kameraauswahl')" />
             <div class="flex flex-row items-center space-x-4">
                 <select name="cameraSelection" id="cameraSelection" class="h-10 rounded"></select>
+                <div id="reader" style="hidden width: 200px; height: 200px; border:1px solid #ccc;"></div>
             </div>
         </div>
 
