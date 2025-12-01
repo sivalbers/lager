@@ -151,6 +151,24 @@ new class extends Component {
                             cameraSelect.appendChild(option);
                         });
 
+                        cameraSelect.addEventListener('change', async () => {
+                            const newCameraId = cameraSelect.value;
+
+                            if (html5QrCode && currentCameraId !== newCameraId) {
+                                await html5QrCode.stop();
+                                currentCameraId = newCameraId;
+                                html5QrCode.start(
+                                    currentCameraId, {
+                                        fps: 10,
+                                        qrbox: {
+                                            width: 250,
+                                            height: 250
+                                        }
+                                    },
+                                    onScanSuccess
+                                ).catch(err => console.error("Start-Fehler:", err));
+                            }
+                        });
 
                         cameraSelectInitialized = true;
                     }
@@ -161,9 +179,37 @@ new class extends Component {
                         cameraSelect.value = currentCameraId;
                     }
 
+
                 }
             }).catch(err => console.error("Kamera-Fehler:", err));
         }
+
+        function onScanSuccess(decodedText) {
+            console.log("QR erkannt:", decodedText);
+            Livewire.dispatch('qrcode-scanned', [String(decodedText)]);
+
+
+
+            // Scanner kurz stoppen, um Doppel-Scans zu vermeiden
+            html5QrCode.stop().then(() => {
+                console.log("Scanner gestoppt");
+                setTimeout(() => startScanner(), 1500);
+            });
+        }
+        window.addEventListener('scan-processed', () => {
+            console.log("Browser-Event 'scan-processed' empfangen!");
+
+            // kleinen Timeout, damit DOM fertig ist
+            setTimeout(() => {
+                const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
+                if (inputs.length > 0) {
+                    const lastInput = inputs[inputs.length - 1];
+                    lastInput.focus();
+                    lastInput.select();
+                    console.log("Fokus gesetzt auf letzte Menge!");
+                }
+            }, 50);
+        });
 
         document.addEventListener("livewire:navigated", startScanner);
     </script>
