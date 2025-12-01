@@ -24,7 +24,7 @@ new class extends Component {
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
-        $this->camera_device_id = $user->camera_device_id;
+        $this->camera_device_id = Auth::user()->camera_device_id;
     }
 
     /**
