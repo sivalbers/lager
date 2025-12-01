@@ -153,11 +153,25 @@ new class extends Component {
 </section>
 
 @push('scripts')
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://unpkg.com/html5-qrcode"
+        type="text/javascript"
+        onload="window.qrLibLoaded = true;">
+    </script>
+
     <script>
         let html5QrCode;
         let currentCameraId = null;
         let cameraSelectInitialized = false;
+
+        function tryStartScanner() {
+            if (window.qrLibLoaded) {
+                 try { html5QrCode.stop(); } catch(e) {}
+                startScanner();
+            } else {
+                console.warn("html5-qrcode noch nicht geladen – retry in 200ms…");
+                setTimeout(tryStartScanner, 200);
+            }
+        }
 
         function startScanner() {
             html5QrCode = new Html5Qrcode("reader");
@@ -180,7 +194,7 @@ new class extends Component {
                             const newCameraId = cameraSelect.value;
 
                             // an Livewire senden
-                            Livewire.dispatch('camera-selected', { id: newCameraId });
+                            Livewire.dispatch('camera-selected', newCameraId);
 
                             if (html5QrCode && currentCameraId !== newCameraId) {
                                 await html5QrCode.stop();
@@ -204,7 +218,6 @@ new class extends Component {
                     let savedCameraId = @json($camera_device_id);
 
                     if (savedCameraId) {
-                        // prüfen, ob diese Kamera existiert
                         const exists = devices.some(dev => dev.id === savedCameraId);
 
                         if (exists) {
@@ -218,9 +231,10 @@ new class extends Component {
                                 onScanSuccess
                             ).catch(err => console.error("Start-Fehler:", err));
 
-                            Livewire.dispatch('camera-selected', cameraSelect.value);
+                            // 🔥 FEHLTE — jetzt richtig:
+                            cameraSelect.dispatchEvent(new Event('change'));
 
-                            return; // fertig → keine weitere Kamera auswählen
+                            return;
                         }
                     }
 
@@ -228,6 +242,7 @@ new class extends Component {
                     if (!currentCameraId) {
                         currentCameraId = devices[0].id;
                         cameraSelect.value = currentCameraId;
+                        cameraSelect.dispatchEvent(new Event('change'));
 
                     }
 
@@ -264,6 +279,7 @@ new class extends Component {
             }, 50);
         });
 
-        document.addEventListener("livewire:navigated", startScanner);
+        document.addEventListener("livewire:navigated", tryStartScanner);
+
     </script>
 @endpush
