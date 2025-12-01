@@ -140,38 +140,45 @@
 
 @push('scripts')
     <script>
-        // verhindert doppelte Initialisierung bei Livewire Navigations
+        window.savedCameraId = @json($cameraId);
+
+        function waitForHtml5Qrcode(callback) {
+            if (window.Html5Qrcode) {
+                callback();
+            } else {
+                console.log("Html5Qrcode noch nicht geladen – retry...");
+                setTimeout(() => waitForHtml5Qrcode(callback), 200);
+            }
+        }
+    </script>
+
+    <!-- Bibliothek laden -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <script>
         if (!window.scannerInitialized) {
             window.scannerInitialized = true;
 
-            window.savedCameraId = @json($cameraId);
             let html5QrCode = null;
             let currentCameraId = window.savedCameraId || null;
 
             function startScanner() {
-                if (html5QrCode !== null) {
-                    try { html5QrCode.stop(); } catch (e) {}
-                }
+                waitForHtml5Qrcode(() => {
 
-                html5QrCode = new Html5Qrcode("reader");
+                    html5QrCode = new Html5Qrcode("reader");
 
-                Html5Qrcode.getCameras().then(devices => {
+                    Html5Qrcode.getCameras().then(devices => {
 
-                    // 1️⃣ gespeicherte Kamera existiert → verwenden
-                    if (currentCameraId) {
-                        const exists = devices.some(d => d.id === currentCameraId);
-                        if (exists) {
-                            console.log("Starte gespeicherte Kamera:", currentCameraId);
-                            return startCamera(currentCameraId);
+                        if (currentCameraId && devices.some(d => d.id === currentCameraId)) {
+                            startCamera(currentCameraId);
+                            return;
                         }
-                    }
 
-                    // 2️⃣ fallback
-                    currentCameraId = devices[0].id;
-                    console.log("Starte erste Kamera:", currentCameraId);
-                    startCamera(currentCameraId);
+                        currentCameraId = devices[0].id;
+                        startCamera(currentCameraId);
 
-                }).catch(err => console.error("Kamera-Fehler:", err));
+                    }).catch(err => console.error("Kamera-Fehler:", err));
+                });
             }
 
             function startCamera(cameraId) {
@@ -183,30 +190,16 @@
             }
 
             function onScanSuccess(decodedText) {
-                console.log("QR erkannt:", decodedText);
-                Livewire.dispatch('qrcode-scanned', [String(decodedText)]);
+                Livewire.dispatch('qrcode-scanned', [decodedText]);
 
                 html5QrCode.stop().then(() => {
                     setTimeout(startScanner, 1500);
                 });
             }
 
-            window.addEventListener('scan-processed', () => {
-                setTimeout(() => {
-                    const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
-                    if (inputs.length > 0) {
-                        const lastInput = inputs[inputs.length - 1];
-                        lastInput.focus();
-                        lastInput.select();
-                    }
-                }, 50);
-            });
-
             document.addEventListener("livewire:navigated", startScanner);
 
-            // beim ersten Laden starten
-            startScanner();
+            startScanner(); // erster Start
         }
     </script>
 @endpush
-
