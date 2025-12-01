@@ -35,18 +35,23 @@ new class extends Component {
         $user = Auth::user();
 
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
-            'camera_device_id' => ['nullable', 'string'],
+            'name'  => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255',
+                        Rule::unique(User::class)->ignore($user->id)],
+            // ❌ NICHT validieren, nicht füllen lassen!
+            // 'camera_device_id' => ['nullable', 'string'],
         ]);
 
         $user->fill($validated);
 
+        // email verification reset
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
+        // Hier separat setzen – korrekt!
         $user->camera_device_id = $this->camera_device_id;
+
         $user->save();
 
         $this->dispatch('profile-updated', name: $user->name);
@@ -223,7 +228,7 @@ new class extends Component {
                         cameraSelect.value = currentCameraId;
 
                     }
-                    
+
                     Livewire.dispatch('camera-selected', cameraSelect.value);
 
                 }
