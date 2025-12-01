@@ -140,74 +140,73 @@
 
 @push('scripts')
     <script>
-        window.savedCameraId = @json($cameraId);
-    </script>
+        // verhindert doppelte Initialisierung bei Livewire Navigations
+        if (!window.scannerInitialized) {
+            window.scannerInitialized = true;
 
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+            window.savedCameraId = @json($cameraId);
+            let html5QrCode = null;
+            let currentCameraId = window.savedCameraId || null;
 
-    <script>
-        let html5QrCode;
-        let currentCameraId = window.savedCameraId || null; // gespeicherte Kamera laden
+            function startScanner() {
+                if (html5QrCode !== null) {
+                    try { html5QrCode.stop(); } catch (e) {}
+                }
 
-        function startScanner() {
+                html5QrCode = new Html5Qrcode("reader");
 
-            html5QrCode = new Html5Qrcode("reader");
+                Html5Qrcode.getCameras().then(devices => {
 
-            Html5Qrcode.getCameras().then(devices => {
-
-                // 1: gespeicherte Kamera prüfen
-                if (currentCameraId) {
-                    const exists = devices.some(d => d.id === currentCameraId);
-
-                    if (exists) {
-                        console.log("Starte gespeicherte Kamera:", currentCameraId);
-                        return startCamera(currentCameraId);
+                    // 1️⃣ gespeicherte Kamera existiert → verwenden
+                    if (currentCameraId) {
+                        const exists = devices.some(d => d.id === currentCameraId);
+                        if (exists) {
+                            console.log("Starte gespeicherte Kamera:", currentCameraId);
+                            return startCamera(currentCameraId);
+                        }
                     }
-                }
 
-                // 2: Fallback → erste Kamera
-                currentCameraId = devices[0].id;
-                console.log("Starte erste Kamera:", currentCameraId);
-                startCamera(currentCameraId);
+                    // 2️⃣ fallback
+                    currentCameraId = devices[0].id;
+                    console.log("Starte erste Kamera:", currentCameraId);
+                    startCamera(currentCameraId);
 
-            }).catch(err => console.error("Kamera-Fehler:", err));
-        }
+                }).catch(err => console.error("Kamera-Fehler:", err));
+            }
 
-        function startCamera(cameraId) {
-            html5QrCode.start(
-                cameraId,
-                { fps: 10, qrbox: { width: 250, height: 250 }},
-                onScanSuccess
-            ).catch(err => console.error("Start-Fehler:", err));
-        }
+            function startCamera(cameraId) {
+                html5QrCode.start(
+                    cameraId,
+                    { fps: 10, qrbox: { width: 250, height: 250 }},
+                    onScanSuccess
+                ).catch(err => console.error("Start-Fehler:", err));
+            }
 
-        function onScanSuccess(decodedText) {
+            function onScanSuccess(decodedText) {
+                console.log("QR erkannt:", decodedText);
+                Livewire.dispatch('qrcode-scanned', [String(decodedText)]);
 
-            console.log("QR erkannt:", decodedText);
-            Livewire.dispatch('qrcode-scanned', [String(decodedText)]);
+                html5QrCode.stop().then(() => {
+                    setTimeout(startScanner, 1500);
+                });
+            }
 
-            html5QrCode.stop().then(() => {
-                console.log("Scanner gestoppt");
-                setTimeout(startScanner, 1500);
+            window.addEventListener('scan-processed', () => {
+                setTimeout(() => {
+                    const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
+                    if (inputs.length > 0) {
+                        const lastInput = inputs[inputs.length - 1];
+                        lastInput.focus();
+                        lastInput.select();
+                    }
+                }, 50);
             });
+
+            document.addEventListener("livewire:navigated", startScanner);
+
+            // beim ersten Laden starten
+            startScanner();
         }
-
-        // Fokus setzen nach dem Scan
-        window.addEventListener('scan-processed', () => {
-            setTimeout(() => {
-                const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
-                if (inputs.length > 0) {
-                    const last = inputs[inputs.length - 1];
-                    last.focus();
-                    last.select();
-                }
-            }, 50);
-        });
-
-        // Scanner nach Livewire-Navigation starten
-        document.addEventListener("livewire:navigated", startScanner);
-
-        // Scanner beim ersten Laden starten
-        startScanner();
     </script>
 @endpush
+
