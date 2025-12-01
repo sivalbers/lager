@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Models\Debitor;
 use App\Models\Abladestelle;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
@@ -79,6 +80,7 @@ new class extends Component {
     public function kameraGewechselt($id)
     {
         $this->camera_device_id = $id;
+        Log::info("Kamera gewechselt: " . $id);
     }
 
 
