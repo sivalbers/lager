@@ -43,11 +43,6 @@
         </main>
     </div>
 
-    <!-- Bladewind Helpers -->
-
-
-    <!-- AlpineJS -->
-
 
     <!-- Livewire Scripts -->
     @livewireScripts

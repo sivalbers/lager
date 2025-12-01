@@ -70,6 +70,8 @@ new class extends Component {
                                 <div class="flex flex-row items-center">
 
                                     <div class="hidden md:flex">
+                                    
+
                                         {{ $item['label'] }}
                                     </div>
 

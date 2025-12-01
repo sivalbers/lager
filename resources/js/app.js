@@ -1,5 +1,7 @@
 import './bootstrap';
 
+
+
 import * as FilePond from 'filepond';
 import 'filepond/dist/filepond.min.css';
 
@@ -8,6 +10,8 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+
 
 
 // Plugins registrieren
@@ -60,3 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+document.addEventListener("livewire:navigated", () => {
+    document.querySelectorAll('.dropdown').forEach((el) => {
+        if (typeof BladewindDropmenu !== 'undefined') {
+            let menu = new BladewindDropmenu();
+            menu.activate(el); // ✅ so ist es korrekt
+        }
+    });
+});
