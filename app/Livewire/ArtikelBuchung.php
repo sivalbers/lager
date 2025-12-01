@@ -37,6 +37,7 @@ class ArtikelBuchung extends Component
     public $mMenge = 0;
     public $modus = '';
     private $ueberschrift = '';
+    public $cameraId = null;
 
 
     public function mount($modus){
@@ -55,6 +56,7 @@ class ArtikelBuchung extends Component
         $this->inputData = null;
 
         $this->debitornr = auth()->user()->debitor_nr;
+        $this->cameraId = auth()->user()->camera_device_id;
 
 
         $user = User::findOrFail(Auth::id());

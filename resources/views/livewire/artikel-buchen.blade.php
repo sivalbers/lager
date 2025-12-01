@@ -6,16 +6,6 @@
     </div>
 
     <div class="font-bold mt-4 text-red-400">Wird die Kameraauswahl nicht angezeigt, bitte die Seite mit <F5> aktualisieren!</div>
-    <div class="py-6">
-        <div class="flex flex-row items-center space-x-4">
-            <div>
-                Kameraauswahl:
-            </div>
-            <div>
-                <select id="cameraSelection" class="h-10 rounded"></select>
-            </div>
-        </div>
-    </div>
 
     <div id="reader" style="width: 200px; height: 200px; border:1px solid #ccc;"></div>
 
@@ -149,96 +139,75 @@
 </div>
 
 @push('scripts')
+    <script>
+        window.savedCameraId = @json($cameraId);
+    </script>
+
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
     <script>
         let html5QrCode;
-        let currentCameraId = null;
-        let cameraSelectInitialized = false;
+        let currentCameraId = window.savedCameraId || null; // gespeicherte Kamera laden
 
         function startScanner() {
+
             html5QrCode = new Html5Qrcode("reader");
 
             Html5Qrcode.getCameras().then(devices => {
-                if (devices && devices.length) {
-                    const cameraSelect = document.getElementById('cameraSelection');
 
-                    if (!cameraSelectInitialized) {
-                        devices.forEach(device => {
-                            const option = document.createElement('option');
-                            option.value = device.id;
-                            option.text = device.label;
-                            cameraSelect.appendChild(option);
-                        });
+                // 1: gespeicherte Kamera prüfen
+                if (currentCameraId) {
+                    const exists = devices.some(d => d.id === currentCameraId);
 
-                        cameraSelect.addEventListener('change', async () => {
-                            const newCameraId = cameraSelect.value;
-
-                            if (html5QrCode && currentCameraId !== newCameraId) {
-                                await html5QrCode.stop();
-                                currentCameraId = newCameraId;
-                                html5QrCode.start(
-                                    currentCameraId, {
-                                        fps: 10,
-                                        qrbox: {
-                                            width: 250,
-                                            height: 250
-                                        }
-                                    },
-                                    onScanSuccess
-                                ).catch(err => console.error("Start-Fehler:", err));
-                            }
-                        });
-
-                        cameraSelectInitialized = true;
+                    if (exists) {
+                        console.log("Starte gespeicherte Kamera:", currentCameraId);
+                        return startCamera(currentCameraId);
                     }
-
-                    // Kamera auswählen: entweder bereits gewählt oder erste
-                    if (!currentCameraId) {
-                        currentCameraId = devices[0].id;
-                        cameraSelect.value = currentCameraId;
-                    }
-
-                    html5QrCode.start(
-                        currentCameraId, {
-                            fps: 10,
-                            qrbox: {
-                                width: 250,
-                                height: 250
-                            }
-                        },
-                        onScanSuccess
-                    ).catch(err => console.error("Start-Fehler:", err));
                 }
+
+                // 2: Fallback → erste Kamera
+                currentCameraId = devices[0].id;
+                console.log("Starte erste Kamera:", currentCameraId);
+                startCamera(currentCameraId);
+
             }).catch(err => console.error("Kamera-Fehler:", err));
         }
 
+        function startCamera(cameraId) {
+            html5QrCode.start(
+                cameraId,
+                { fps: 10, qrbox: { width: 250, height: 250 }},
+                onScanSuccess
+            ).catch(err => console.error("Start-Fehler:", err));
+        }
+
         function onScanSuccess(decodedText) {
+
             console.log("QR erkannt:", decodedText);
             Livewire.dispatch('qrcode-scanned', [String(decodedText)]);
 
-
-
-            // Scanner kurz stoppen, um Doppel-Scans zu vermeiden
             html5QrCode.stop().then(() => {
                 console.log("Scanner gestoppt");
-                setTimeout(() => startScanner(), 1500);
+                setTimeout(startScanner, 1500);
             });
         }
-        window.addEventListener('scan-processed', () => {
-            console.log("Browser-Event 'scan-processed' empfangen!");
 
-            // kleinen Timeout, damit DOM fertig ist
+        // Fokus setzen nach dem Scan
+        window.addEventListener('scan-processed', () => {
             setTimeout(() => {
                 const inputs = document.querySelectorAll('input[type="number"][wire\\:model$=".Menge"]');
                 if (inputs.length > 0) {
-                    const lastInput = inputs[inputs.length - 1];
-                    lastInput.focus();
-                    lastInput.select();
-                    console.log("Fokus gesetzt auf letzte Menge!");
+                    const last = inputs[inputs.length - 1];
+                    last.focus();
+                    last.select();
                 }
             }, 50);
         });
 
+        // Scanner nach Livewire-Navigation starten
         document.addEventListener("livewire:navigated", startScanner);
+
+        // Scanner beim ersten Laden starten
+        startScanner();
     </script>
 @endpush
