@@ -14,6 +14,8 @@ new class extends Component {
 
     public $debitoren = [];
     public $abladestellen = [];
+    public ?string $camera_device_id = null;
+
 
     /**
      * Mount the component.
@@ -22,6 +24,7 @@ new class extends Component {
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->camera_device_id = $user->camera_device_id;
     }
 
     /**
@@ -34,6 +37,7 @@ new class extends Component {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'camera_device_id' => ['nullable', 'string'],
         ]);
 
         $user->fill($validated);
@@ -42,6 +46,7 @@ new class extends Component {
             $user->email_verified_at = null;
         }
 
+        $user->camera_device_id = $this->camera_device_id;
         $user->save();
 
         $this->dispatch('profile-updated', name: $user->name);
@@ -64,6 +69,14 @@ new class extends Component {
 
         Session::flash('status', 'verification-link-sent');
     }
+
+    #[On('camera-selected')]
+    public function kameraGewechselt($id)
+    {
+        $this->camera_device_id = $id;
+    }
+
+
 }; ?>
 
 <section>
@@ -115,8 +128,10 @@ new class extends Component {
         <div>
             <x-input-label for="cameraSelection" :value="__('Kameraauswahl')" />
             <div class="flex flex-row items-center space-x-4">
-                <select name="cameraSelection" id="cameraSelection" class="h-10 rounded"></select>
-                <div id="reader" style="hidden width: 200px; height: 200px; border:1px solid #ccc;"></div>
+                <select name="cameraSelection" id="cameraSelection"
+                        wire:model="camera_device_id"
+                        class="h-10 rounded"></select>
+                <div id="reader" style="width: 200px; height: 200px; border:1px solid #ccc;"></div>
             </div>
         </div>
 
@@ -144,6 +159,8 @@ new class extends Component {
                 if (devices && devices.length) {
                     const cameraSelect = document.getElementById('cameraSelection');
 
+
+
                     if (!cameraSelectInitialized) {
                         devices.forEach(device => {
                             const option = document.createElement('option');
@@ -154,6 +171,9 @@ new class extends Component {
 
                         cameraSelect.addEventListener('change', async () => {
                             const newCameraId = cameraSelect.value;
+
+                            // an Livewire senden
+                            Livewire.dispatch('camera-selected', { id: newCameraId });
 
                             if (html5QrCode && currentCameraId !== newCameraId) {
                                 await html5QrCode.stop();
@@ -174,7 +194,28 @@ new class extends Component {
                         cameraSelectInitialized = true;
                     }
 
-                    // Kamera auswählen: entweder bereits gewählt oder erste
+                    let savedCameraId = @json($camera_device_id);
+
+                    if (savedCameraId) {
+                        // prüfen, ob diese Kamera existiert
+                        const exists = devices.some(dev => dev.id === savedCameraId);
+
+                        if (exists) {
+                            currentCameraId = savedCameraId;
+                            cameraSelect.value = savedCameraId;
+
+                            // Scanner sofort mit gespeicherter Kamera starten
+                            html5QrCode.start(
+                                savedCameraId,
+                                { fps: 10, qrbox: { width: 250, height: 250 }},
+                                onScanSuccess
+                            ).catch(err => console.error("Start-Fehler:", err));
+
+                            return; // fertig → keine weitere Kamera auswählen
+                        }
+                    }
+
+                    // FALLBACK: erste Kamera verwenden
                     if (!currentCameraId) {
                         currentCameraId = devices[0].id;
                         cameraSelect.value = currentCameraId;
