@@ -211,6 +211,8 @@ new class extends Component {
                                 onScanSuccess
                             ).catch(err => console.error("Start-Fehler:", err));
 
+                            Livewire.dispatch('camera-selected', cameraSelect.value);
+
                             return; // fertig → keine weitere Kamera auswählen
                         }
                     }
@@ -219,8 +221,10 @@ new class extends Component {
                     if (!currentCameraId) {
                         currentCameraId = devices[0].id;
                         cameraSelect.value = currentCameraId;
-                    }
 
+                    }
+                    
+                    Livewire.dispatch('camera-selected', cameraSelect.value);
 
                 }
             }).catch(err => console.error("Kamera-Fehler:", err));
