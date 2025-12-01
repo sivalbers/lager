@@ -26,6 +26,8 @@ class ArtikelBuchung extends Component
     public $abladestellen = [];
     public $lagerorte = [];
 
+    public $artikelliste = [];
+
 
     public $mArtikel = '';
     public $mBezeichnung = '';
@@ -58,6 +60,9 @@ class ArtikelBuchung extends Component
         $user = User::findOrFail(Auth::id());
         $this->abladestellen_ids = $user->abladestellen->pluck('id')->toArray();
         $this->loadAbladestellen();
+
+        $this->artikelliste =  $this->getBestandsverwaltungRepository()->artikelNrBez_ArrayAusBestandInAbladestellenVonUser();
+
 
     }
 

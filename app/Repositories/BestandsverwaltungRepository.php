@@ -22,11 +22,22 @@ class BestandsverwaltungRepository
         return $user->abladestellen;
     }
 
-    
+
     // Liste aller Artikel im Bestand des angemeldeten Users
     public function artikelArrayAusBestandInAbladestellenVonUser(){
         $abladestellen_id_array = $this->abladestellenArray();
         return Artikelbestand::whereIn('abladestelle_id', $abladestellen_id_array)->distinct()->pluck('artikelnr')->toArray();
+    }
+
+
+    // Liefert ein Array mit 0 => [ 'artikelnr' => ..., 'bezeichnung' => ... ], 1 => [ ... ]  aller Artikel im Bestand der Abladestellen des angemeldeten Users
+    public function artikelNrBez_ArrayAusBestandInAbladestellenVonUser(){
+        return Artikelbestand::whereIn('abladestelle_id', $this->abladestellenArray())
+            ->join('artikel', 'artikel.artikelnr', '=', 'artikelbestand.artikelnr')
+            ->select('artikelbestand.artikelnr', 'artikel.bezeichnung')
+            ->distinct()
+            ->get()->toArray();
+
     }
 
     public function artikelArrayAusBestandInAbladestelle($abladestelle_id){

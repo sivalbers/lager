@@ -40,7 +40,17 @@
         <div></div> {{-- Leerzelle für den Button --}}
 
         {{-- 2. Zeile: Eingabefelder --}}
-        <input type="text" wire:model.blur="mArtikel" class="h-10 border rounded px-2 text-sm" />
+        <input  type="text"
+                list="artikelListe"
+                wire:model.blur="mArtikel" class="h-10 border rounded px-2 text-sm" />
+
+        <datalist id="artikelListe">
+            @foreach($artikelliste as $artikel)
+                <option value="{{ $artikel['artikelnr'] }}">{{ $artikel['bezeichnung']  }}</option>
+            @endforeach
+        </datalist>
+
+
         <input type="text" value="{{ $mBezeichnung }}" disabled class="h-10 border rounded px-2 bg-gray-100 text-sm text-gray-600" />
 
         <select wire:model.blur="mAbladestelle" class="h-10 border rounded px-2 text-sm"  {{ (count($abladestellen) == 1) ? 'disabled' : '' }} >
