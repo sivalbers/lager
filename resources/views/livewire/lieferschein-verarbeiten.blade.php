@@ -13,9 +13,7 @@
                     <input type="number" wire:model="lieferscheinNr" auto class="h-9 rounded">
                 </div>
                 <div class="">
-                    <x-bladewind::button type="button" wire:click="readLieferschein" class="border border-gray-500 bg-blue-500 text-white rounded-md">
                         Lieferschein holen
-                    </x-bladewind::button>
                 </div>
             </div>
             <div class="flex flex-row items-center space-x-2 text-gray-500">

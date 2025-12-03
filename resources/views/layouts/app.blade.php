@@ -7,27 +7,20 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
+    <!--
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    -->
 
-    <!-- Bladewind CSS -->
-    <link href="{{ asset('vendor/bladewind/css/animate.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('vendor/bladewind/css/bladewind-ui.min.css') }}" rel="stylesheet" />
-
-    <script src="{{ asset('vendor/bladewind/js/helpers.js') }}"></script>
-
-    <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Livewire Styles -->
     @livewireStyles
     @stack('styles')
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
         <div class="print:hidden">
-        <livewire:layout.navigation />
+            <livewire:layout.navigation />
         </div>
 
         @if (isset($header))
@@ -43,10 +36,7 @@
         </main>
     </div>
 
-
-    <!-- Livewire Scripts -->
     @livewireScripts
-
     @stack('scripts')
 </body>
 </html>

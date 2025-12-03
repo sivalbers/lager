@@ -10,13 +10,10 @@
 <div class="flex justify-between items-center mt-4">
 
     <div class="w-1/3">
-        <x-bladewind::input placeholder="Suche nach Name oder E-Mail" wire:model.live.debounce.500ms="search" />
     </div>
     @if(auth()->user()->hasBerechtigung('mitarbeiter anlegen'))
     <div class="flex pr-2">
-        <x-bladewind::button wire:click="editUser(true)">
-            Neuen Mitarbeiter anlegen <x-bladewind::icon name="plus-circle" />
-        </x-bladewind::button>
+            Neuen Mitarbeiter anlegen <x-mary-icon name="o-plus-circle" />
     </div>
     @endif
 </div>
@@ -97,7 +94,6 @@
                     <h2 class="text-xl font-bold mb-4">{{ $isEditUser ? 'Mitarbeiter bearbeiten' : 'Neuer Mitarbeiter' }}</h2>
 
                     <div class="space-y-4">
-                        <x-bladewind::input label="Name" wire:model="name" />
                         @error('name')
                             <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
                                 {{ $message }}
@@ -105,7 +101,6 @@
                         @enderror
 
 
-                        <x-bladewind::input label="E-Mail-Adresse" wire:model="email" type="email" />
                         @error('email')
                             <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
                                 {{ $message }}
@@ -113,7 +108,6 @@
                         @enderror
 
                         @if (!$isEditUser)
-                            <x-bladewind::input label="Passwort" wire:model="password" type="password" />
                         @endif
                         @error('password')
                             <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
@@ -161,8 +155,6 @@
                         </div>
 
                         <div class="flex justify-end gap-4 mt-4">
-                            <x-bladewind::button type="secondary" @click="showUser = false">Schließen</x-bladewind::button>
-                            <x-bladewind::button type="primary" wire:click="saveUser">Speichern</x-bladewind::button>
                         </div>
                     </div>
                 </form>
@@ -179,8 +171,6 @@
                 <p>Möchtest du diesen Benutzer wirklich löschen?</p>
 
                 <div class="flex justify-end mt-4 gap-4">
-                    <x-bladewind::button type="secondary" @click="showDelete = false">Abbrechen</x-bladewind::button>
-                    <x-bladewind::button type="danger" wire:click="deleteUser">Löschen</x-bladewind::button>
                 </div>
             </div>
         </div>

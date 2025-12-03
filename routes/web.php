@@ -15,6 +15,9 @@ use App\Livewire\EinkaufslisteVerwalten;
 use App\Http\Controllers\FileUploadController;
 
 
+use App\Livewire\MaryTabsTest;
+
+
 Route::redirect('/', '/bestand');
 
 Route::get('bestand', ListBestand::class)
@@ -81,3 +84,38 @@ Route::post('/upload', [FileUploadController::class, 'store']);
 Route::delete('/upload/revert', [FileUploadController::class, 'revert']);
 
 require __DIR__.'/auth.php';
+
+
+Route::get('/mary-test', MaryTabsTest::class);
+
+
+Route::get('/icons', function () {
+    $base = base_path('node_modules/heroicons');
+
+    $sets = [
+        'outline' => "$base/24/outline",
+        'solid'   => "$base/24/solid",
+        'mini'    => "$base/20/solid",
+    ];
+
+    $icons = [];
+
+    foreach ($sets as $type => $path) {
+        $files = collect(File::files($path))
+            ->map(fn($f) => pathinfo($f->getFilename(), PATHINFO_FILENAME)) // <-- WICHTIG!
+            ->map(function ($name) use ($type) {
+                return match ($type) {
+                    'outline' => "o-$name",
+                    'solid'   => "s-$name",
+                    'mini'    => "m-$name",
+                };
+            });
+
+        $icons[$type] = $files;
+    }
+
+    return view('icons-list', [
+        'icons' => $icons,
+    ]);
+});
+

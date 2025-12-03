@@ -4,9 +4,7 @@
 
     @if(auth()->user()->hasBerechtigung('artikel anlegen'))
     <div class="flex justify-end pr-2">
-        <x-bladewind::button wire:click="editArtikel(true)">
-            Neuen Artikel anlegen <x-bladewind::icon name="plus-circle" />
-        </x-bladewind::button>
+            Neuen Artikel anlegen <x-mary-icon name="o-plus-circle" />
     </div>
     @endif
 
@@ -41,7 +39,7 @@
                     <div>
                         <button title="Neue Einrichtung anlegen" class="h-5 w-5 text-sky-600"
                             wire:click="editEinrichtung(true, null, '{{ $art->artikelnr }}')">
-                            <x-bladewind::icon name="plus-circle" />
+                            <x-mary-icon name="o-plus-circle" />
                         </button>
                     </div>
                     @endif
@@ -99,22 +97,14 @@
                 <div class="flex flex-row items-center bg-red-100">
         <div x-data="{ nr: '{{ $artikelnr }}' }">
         <input x-model="nr" type="text" />
-                <x-bladewind::button
                 @click="$wire.set('artikelnr', nr).then(() => $wire.loadFromFaveo(nr))">
                 Artikel holen
-                </x-bladewind::button>
             </div>
 
                 </div>
-                <x-bladewind::input label="Bezeichnung" wire:model="artikelBezeichnung" />
-                <x-bladewind::input label="Einheit" wire:model="artikelEinheit" />
-                <x-bladewind::input label="Materialgruppe" wire:model="artikelMaterialgruppe" />
-                <x-bladewind::input label="EK-Preis (€)" wire:model="artikelEkpreis" numeric="true" with_dots="true" />
             </div>
 
             <div class="flex justify-end gap-4 mt-4">
-                <x-bladewind::button type="secondary" @click="showArtikel = false">Schließen</x-bladewind::button>
-                <x-bladewind::button type="primary" wire:click="saveArtikel">Speichern</x-bladewind::button>
             </div>
         </div>
     </div>
@@ -156,13 +146,9 @@
                     </select>
                 </div>
 
-                <x-bladewind::input label="Mindestbestand" wire:model="mindestbestand" numeric="true" />
-                <x-bladewind::input label="Bestellmenge" wire:model="bestellmenge" numeric="true" />
             </div>
 
             <div class="flex justify-end gap-4 mt-4">
-                <x-bladewind::button type="secondary" @click="showEinrichtung = false">Schließen</x-bladewind::button>
-                <x-bladewind::button type="primary" wire:click="saveEinrichtung">Speichern</x-bladewind::button>
             </div>
         </div>
     </div>
@@ -174,8 +160,6 @@
                 <p>Möchtest du diese Einrichtung wirklich löschen?</p>
 
                 <div class="flex justify-end mt-4 gap-4">
-                    <x-bladewind::button type="secondary" @click="showDelete = false">Abbrechen</x-bladewind::button>
-                    <x-bladewind::button type="danger" wire:click="deleteEinrichtung">Löschen</x-bladewind::button>
                 </div>
             </div>
         </div>

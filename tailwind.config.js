@@ -1,14 +1,14 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
-import forms from '@tailwindcss/forms';
+import defaultTheme from 'tailwindcss/defaultTheme'
+import forms from '@tailwindcss/forms'
 
-/** @type {import('tailwindcss').Config} */
 export default {
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './vendor/livewire/**/*.blade.php',
+        './vendor/robsontenorio/mary/**/*.blade.php',
+        './storage/framework/views/*.php',
+        './app/View/Components/**/*.blade.php',
     ],
-
     theme: {
         extend: {
             fontFamily: {
@@ -16,6 +16,14 @@ export default {
             },
         },
     },
-
-    plugins: [forms],
-};
+    plugins: [
+        forms,
+        require('daisyui'),  // ← DaisyUI als Plugin
+    ],
+    daisyui: {
+        themes: ["light", "dark", "cupcake"],  // ← Themes aktivieren (für Primary/Success etc.)
+        base: true,  // ← Basis-Styles aktivieren
+        utils: true,  // ← Utility-Klassen (btn, dropdown etc.)
+        logs: false,  // ← Logs deaktivieren
+    },
+}

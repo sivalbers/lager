@@ -3,9 +3,7 @@
     <h1 class="text-2xl font-bold mt-4">PSP Ermittlung</h1>
 
     <div class="flex justify-end pr-2">
-        <x-bladewind::button wire:click="editPsp(true)">
-            Neues PSP anlegen <x-bladewind::icon name="plus-circle" />
-        </x-bladewind::button>
+            Neues PSP anlegen <x-mary-icon name="o-plus-circle" />
     </div>
 
     <div class="flex flex-col w-full border-b border-gray-600">
@@ -49,22 +47,18 @@
                 </div>
                 <div class="flex items-center">
                     <div class="w-3/12">Netzregion:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspTestNetzregion" /></div>
                 </div>
 
                 <div class="flex items-center">
                     <div class="w-3/12">Kostenstelle:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspTestKostenstelle" /></div>
                 </div>
 
                 <div class="flex items-center">
                     <div class="w-3/12">Artikel:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspTestArtikel" /></div>
                 </div>
 
                 <div class="flex items-center">
                     <div class="w-3/12">Materialgruppe:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspTestMaterialgruppe" /></div>
                 </div>
 
 
@@ -72,7 +66,6 @@
 
             <div class="flex flex-row justify-end gap-4 mt-6">
 
-                <x-bladewind::button type="primary" wire:click="testFindPsp()">Test ausführen</x-bladewind::button>
             </div>
         </form>
 
@@ -100,40 +93,32 @@
             <div class="flex flex-col w-full space-y-3">
                 <div class="flex items-center">
                     <div class="w-3/12">Netzregion:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspNetzregion" /></div>
                 </div>
 
                 <div class="flex items-center">
                     <div class="w-3/12">Kostenstelle:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspKostenstelle" /></div>
                 </div>
 
                 <div class="flex items-center">
                     <div class="w-3/12">Artikel:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspArtikel" /></div>
                 </div>
 
                 <div class="flex items-center">
                     <div class="w-3/12">Materialgruppe:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspMaterialgruppe" /></div>
                 </div>
 
                 <div class="flex items-center">
                     <div class="w-3/12">Format:</div>
-                    <div class="w-9/12"><x-bladewind::input wire:model="pspFormat" /></div>
                 </div>
 
                 <div class="flex items-center">
                     <div class="w-3/12">Beschreibung:</div>
                     <div class="w-9/12">
-                        <x-bladewind::textarea wire:model="pspBeschreibung" rows="4" />
                     </div>
                 </div>
             </div>
 
             <div class="flex flex-row justify-end gap-4 mt-6">
-                <x-bladewind::button type="secondary" @click="showPsp = false">Schließen</x-bladewind::button>
-                <x-bladewind::button type="primary" wire:click="savePsp">Speichern</x-bladewind::button>
             </div>
         </div>
     </div>
