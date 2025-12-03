@@ -9,7 +9,7 @@
     <h1 class="text-2xl font-bold mt-4">Debitoren</h1>
 
     <div class="flex justify-end pr-2">
-            Neuen Debitor anlegen <x-mary-icon name="o-plus-circle" />
+        <x-mary-button wire:click="editDebitor(true)" label="Neuen Debitor anlegen" icon="o-plus-circle" class="btn-primary bg-sky-600 text-white px-4" />
     </div>
 
 
@@ -53,8 +53,7 @@
                         <div>
                             @if ($berechtigung === 'voll')
                                 <button title="Neue Abladestelle anlegen" class="h-5 w-5 text-sky-600"
-                                    wire:click="editAbladestelle(true, {{ $debitor->nr }})">
-                                    <x-mary-icon name="o-plus-circle" />
+                                    wire:click="editAbladestelle(true, {{ $debitor->nr }})" icon="o-plus-circle">
                                 </button>
                             @endif
                         </div>
@@ -118,15 +117,11 @@
                                 <div>{{ $abladestelle->naechstes_belieferungsdatum?->format('d.m.Y') ?? '-' }}</div>
                                 <div>
                                     @if ($berechtigung === 'voll')
-                                        <button title="Abladestelle kopieren" class="h-5 w-5 text-sky-600"
-                                            wire:click="editAbladestelle(true, {{ $debitor->nr }}, {{ $abladestelle->id }} )">
-                                            <x-mary-icon name="o-plus-circle" />
-                                        </button>
-                                        <button title="Lagerort anlegen" class="h-5 w-5 text-sky-600"
-                                            wire:click="editLagerort(true, {{ $abladestelle->id }} )">
-                                            <x-mary-icon name="o-plus-circle" />
-                                        </button>
+                                        <x-mary-button title="Abladestelle kopieren" class="h-5 w-5 text-sky-600"
+                                            wire:click="editAbladestelle(true, {{ $debitor->nr }}, {{ $abladestelle->id }} )" icon="o-plus-circle" />
 
+                                        <x-mary-button title="Lagerort anlegen" class="h-5 w-5 text-sky-600"
+                                            wire:click="editLagerort(true, {{ $abladestelle->id }} )" icon="o-plus-circle" />
                                     @endif
                                 </div>
                             </div>
@@ -154,10 +149,8 @@
                         </div>
                         <div>
                             @if ($berechtigung === 'voll')
-                                <button title="Neue Abladestelle anlegen" class="h-5 w-5 text-sky-600"
-                                    wire:click="editAbladestelle(true, {{ $debitor->nr }})">
-                                    <x-mary-icon name="o-plus-circle" />
-                                </button>
+                                <x-mary-button title="Neue Abladestelle anlegen" class="h-5 w-5 text-sky-600"
+                                    wire:click="editAbladestelle(true, {{ $debitor->nr }})" icon="o-plus-circle" />
                             @endif
                         </div>
                     </div>
@@ -181,6 +174,7 @@
                         Nr:
                     </div>
                     <div class="w-10/12">
+                        <x-mary-input numeric="true" wire:model="debitorNr" />
                     </div>
                 </div>
 
@@ -189,6 +183,7 @@
                         Name:
                     </div>
                     <div class="w-10/12">
+                        <x-mary-input wire:model="debitorName" />
                     </div>
                 </div>
 
@@ -197,6 +192,7 @@
                         Netzregion:
                     </div>
                     <div class="w-10/12">
+                        <x-mary-input wire:model="debitorNetzregion" />
                     </div>
                 </div>
 
@@ -205,9 +201,13 @@
 
 
             <div class="flex flex-row justify-end gap-4">
+                <x-mary-button type="secondary" @click="showDebitor = false">
                     Schließen
+                </x-mary-button>
 
+                <x-mary-button type="primary" wire:click="saveDebitor">
                     Speichern
+                </x-mary-button>
             </div>
         </div>
     </div>
@@ -227,6 +227,7 @@
                     </div>
                     <div class="w-10/12">
                         <input type="hidden" wire:model="abladestelleId" />
+                        <x-mary-input wire:model="abladestelleName" />
                     </div>
                 </div>
                 <div class="flex flex-row items-center">
@@ -234,6 +235,7 @@
                         Name 2:
                     </div>
                     <div class="w-10/12">
+                        <x-mary-input wire:model="abladestelleName2" />
                     </div>
                 </div>
                 <div class="flex flex-row items-center">
@@ -241,6 +243,7 @@
                         Strasse:
                     </div>
                     <div class="w-10/12">
+                        <x-mary-input wire:model="abladestelleStrasse" />
                     </div>
                 </div>
                 <div class="flex flex-row items-center">
@@ -248,11 +251,13 @@
                         PLZ-Ort:
                     </div>
                     <div class="w-2/12">
+                        <x-mary-input wire:model="abladestellePlz" />
                     </div>
                     <div class="w-1/12 text-center">
                         -
                     </div>
                     <div class="w-7/12">
+                        <x-mary-input wire:model="abladestelleOrt" />
                     </div>
                 </div>
                 <div class="flex flex-row items-center">
@@ -260,6 +265,7 @@
                         Kostenstelle:
                     </div>
                     <div class="w-9/12">
+                        <x-mary-input wire:model="abladestelleKostenstelle" />
                     </div>
                 </div>
 
@@ -306,6 +312,9 @@
                 </div>
 
                 <div class="flex flex-row justify-end items-center gap-4">
+                    <x-mary-button type="secondary"
+                        @click="showAbladestelle = false">Schließen</x-mary-button>
+                    <x-mary-button type="primary" wire:click="saveAbladestelle">Speichern</x-mary-button>
                 </div>
 
             </div>
@@ -329,10 +338,16 @@
                         Bezeichnung:
                     </div>
                     <div class="w-10/12">
+                        <x-mary-input type="hidden" wire:model="lagerortNr" />
+                        <x-mary-input type="hidden" wire:model="lagerortAbladestelleId" />
+                        <x-mary-input wire:model="lagerortBezeichnung" />
                     </div>
                 </div>
 
                 <div class="flex flex-row justify-end items-center gap-4">
+                    <x-mary-button type="secondary"
+                        @click="showLagerort = false">Schließen</x-mary-button>
+                    <x-mary-button type="primary" wire:click="saveLagerort">Speichern</x-mary-button>
                 </div>
 
             </div>

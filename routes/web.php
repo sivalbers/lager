@@ -11,6 +11,7 @@ use App\Livewire\ArtikelListen;
 use App\Livewire\UserVerwaltung;
 use App\Livewire\ProtokolleListen;
 use App\Livewire\EinkaufslisteVerwalten;
+use App\Livewire\WarenzugangBuchen;
 
 use App\Http\Controllers\FileUploadController;
 
@@ -60,6 +61,10 @@ Route::get('lieferschein', LieferscheinVerarbeiten::class)
     ->middleware(['auth', 'berechtigung:warenzugang buchen'])
     ->name('lieferschein');
 
+Route::get('warenzugang', WarenzugangBuchen::class)
+    ->middleware(['auth', 'berechtigung:warenzugang buchen'])
+    ->name('warenzugang');
+
 Route::get('mitarbeiter', UserVerwaltung::class)
     ->middleware(['auth', 'berechtigung:mitarbeiter anzeigen'])
     ->name('mitarbeiter');
@@ -89,33 +94,5 @@ require __DIR__.'/auth.php';
 Route::get('/mary-test', MaryTabsTest::class);
 
 
-Route::get('/icons', function () {
-    $base = base_path('node_modules/heroicons');
 
-    $sets = [
-        'outline' => "$base/24/outline",
-        'solid'   => "$base/24/solid",
-        'mini'    => "$base/20/solid",
-    ];
-
-    $icons = [];
-
-    foreach ($sets as $type => $path) {
-        $files = collect(File::files($path))
-            ->map(fn($f) => pathinfo($f->getFilename(), PATHINFO_FILENAME)) // <-- WICHTIG!
-            ->map(function ($name) use ($type) {
-                return match ($type) {
-                    'outline' => "o-$name",
-                    'solid'   => "s-$name",
-                    'mini'    => "m-$name",
-                };
-            });
-
-        $icons[$type] = $files;
-    }
-
-    return view('icons-list', [
-        'icons' => $icons,
-    ]);
-});
 

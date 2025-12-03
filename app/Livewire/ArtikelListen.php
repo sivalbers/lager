@@ -180,12 +180,13 @@ class ArtikelListen extends Component
         }
         else
         {
+            
             $this->artikelBezeichnung = 'Das hat nicht funktionert';
-            $this->artikelnr = $artikel->artikelnr;
-            $this->artikelBezeichnung = $artikel->bezeichnung;
-            $this->artikelEinheit = $artikel->einheit;
-            $this->artikelMaterialgruppe = $artikel->materialgruppe;
-            $this->artikelEkpreis = $artikel->ekpreis;
+            $this->artikelnr = '';
+            $this->artikelBezeichnung = '';
+            $this->artikelEinheit = '';
+            $this->artikelMaterialgruppe = '';
+            $this->artikelEkpreis = 0;
         }
     }
 

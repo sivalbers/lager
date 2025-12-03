@@ -13,7 +13,7 @@
     </div>
     @if(auth()->user()->hasBerechtigung('mitarbeiter anlegen'))
     <div class="flex pr-2">
-            Neuen Mitarbeiter anlegen <x-mary-icon name="o-plus-circle" />
+        <x-mary-button wire:click="editUser(true)" label="Neuen Mitarbeiter anlegen" icon="o-plus-circle" class="px-4 bg-sky-600 text-white" />
     </div>
     @endif
 </div>
@@ -155,6 +155,10 @@
                         </div>
 
                         <div class="flex justify-end gap-4 mt-4">
+
+                            <x-mary-button type="secondary" @click="showUser = false" label="Schließen" class="btn-primary bg-gray-500 text-white px-4" />
+                            <x-mary-button type="primary" wire:click="saveUser" label="Speichern"  class="btn-primary bg-sky-600 text-white px-4" />
+
                         </div>
                     </div>
                 </form>

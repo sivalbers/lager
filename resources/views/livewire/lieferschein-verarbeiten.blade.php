@@ -13,7 +13,9 @@
                     <input type="number" wire:model="lieferscheinNr" auto class="h-9 rounded">
                 </div>
                 <div class="">
+                    <x-mary-button wire:click="readLieferschein">
                         Lieferschein holen
+                    </x-mary-button>
                 </div>
             </div>
             <div class="flex flex-row items-center space-x-2 text-gray-500">
