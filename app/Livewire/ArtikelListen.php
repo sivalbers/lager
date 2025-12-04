@@ -18,7 +18,7 @@ class ArtikelListen extends Component
     public $showArtikel = false;
     public $isEditArtikel = false;
 
-    public $artikelnr = '100100';
+    public $artikelnr = '';
     public $artikelBezeichnung;
     public $artikelEinheit;
     public $artikelMaterialgruppe;
@@ -65,13 +65,12 @@ class ArtikelListen extends Component
 
     public function render()
     {
-        Log::info(['render()' => 'x', 'artikel' => $this->artikelnr ]);
-        Log::info('lagerort_id Typ: ' . gettype($this->lagerort_id));
         return view('livewire.artikel-listen')->layout('layouts.app');
     }
 
     public function loadArtikel()
     {
+
         $this->artikel = Artikel::with('einrichtungen.abladestelle.lagerorte')->orderBy('artikelnr')->get();
     }
 
@@ -82,7 +81,9 @@ class ArtikelListen extends Component
         $this->showArtikel = true;
 
         if ($create) {
-            $this->artikelnr = $this->artikelBezeichnung = $this->artikelEinheit = $this->artikelMaterialgruppe = '';
+            $this->artikelnr = 'x';
+            $this->artikelBezeichnung = $this->artikelEinheit = $this->artikelMaterialgruppe = '';
+
 
         } else {
             $artikel = Artikel::find($nr);
@@ -168,7 +169,7 @@ class ArtikelListen extends Component
     }
 
     public function loadFromFaveo($artikelnr){
-
+        
         $artikelRepository = new ArtikelRepository();
         $artikel = $artikelRepository->holeArtikel($artikelnr);
         if ($artikel){
@@ -180,7 +181,7 @@ class ArtikelListen extends Component
         }
         else
         {
-            
+
             $this->artikelBezeichnung = 'Das hat nicht funktionert';
             $this->artikelnr = '';
             $this->artikelBezeichnung = '';

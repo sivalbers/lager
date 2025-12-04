@@ -89,31 +89,19 @@
     <div x-data="{ showUser: @entangle('showUser') }">
         <div x-show="showUser" x-cloak class="fixed inset-0 bg-black/40 z-10 flex justify-center items-center">
             <div class="bg-white p-6 rounded shadow w-5/12">
-                <form method="POST" >
+
                     @csrf
                     <h2 class="text-xl font-bold mb-4">{{ $isEditUser ? 'Mitarbeiter bearbeiten' : 'Neuer Mitarbeiter' }}</h2>
 
                     <div class="space-y-4">
-                        @error('name')
-                            <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
-                                {{ $message }}
-                            </div>
-                        @enderror
+                        <x-mary-input type="text" wire:model="name" label="Name" class="!outline-none focus:!outline-none focus:!ring-0" />
+                        <x-mary-input type="email" wire:model="email" label="E-Mail-Adresse" class="!outline-none focus:!outline-none focus:!ring-0" />
 
-
-                        @error('email')
-                            <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
-                                {{ $message }}
-                            </div>
-                        @enderror
 
                         @if (!$isEditUser)
+                        <x-mary-input type="password" wire:model="password" label="Passwort" class="!outline-none focus:!outline-none focus:!ring-0" />
                         @endif
-                        @error('password')
-                            <div class="w-2/3 md:w-full lg:w-2/3 text-red-500 text-left">
-                                {{ $message }}
-                            </div>
-                        @enderror
+
 
                         <div>
                             <label>Debitor</label>
@@ -161,7 +149,7 @@
 
                         </div>
                     </div>
-                </form>
+
             </div>
 
         </div>
@@ -175,6 +163,10 @@
                 <p>Möchtest du diesen Benutzer wirklich löschen?</p>
 
                 <div class="flex justify-end mt-4 gap-4">
+
+                    <x-mary-button type="secondary" @click="showDelete = false" label="Abbrechen" class="btn-primary bg-gray-500 text-white px-4" />
+                    <x-mary-button type="danger" wire:click="deleteUser" label="Löschen" class="btn-warning bg-red-600 text-white px-4" />
+
                 </div>
             </div>
         </div>

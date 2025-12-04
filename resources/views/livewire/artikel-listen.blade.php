@@ -1,4 +1,5 @@
-<div x-data="{ showArtikel: @entangle('showArtikel'), showEinrichtung: @entangle('showEinrichtung') }" class="w-5/6 m-auto">
+<div x-data="{ showArtikel: @entangle('showArtikel'),
+                showEinrichtung: @entangle('showEinrichtung') }" class="w-5/6 m-auto">
 
     <h1 class="text-2xl font-bold mt-4">Artikelverwaltung</h1>
 
@@ -92,31 +93,37 @@
         </div>
     @endforeach
 
+
+
     {{-- Modal: Artikel --}}
-    <div x-show="showArtikel" key="{{ now() }}" x-cloak class="fixed inset-0 z-10 bg-black/40 flex justify-center items-center">
+    <div x-data="{ nr: '{{ $artikelnr }}' }" x-show="showArtikel" key="{{ now() }}" x-cloak class="fixed inset-0 z-10 bg-black/40 flex justify-center items-center">
+
         <div class="bg-white p-6 rounded-md shadow-gray-500 shadow-md w-6/12">
             <h2 class="text-xl font-bold mb-4">Artikel {{ $isEditArtikel ? 'ändern' : 'anlegen' }} => {{ $artikelnr }} </h2>
 
             <div class="flex flex-col gap-2">
-                <div class="flex flex-row items-center bg-pink-300">
-                    <div x-data="{ nr: '{{ $artikelnr }}' }" class="flex flex-row items-center w-full">
-                        <x-mary-input label="Artikelnr." x-model="nr" type="text" class="w-20" />
-                        <x-mary-button class="btn-primary mt-6 ml-4 bg-sky-600 text-white h-8 px-4"
-                            @click="$wire.set('artikelnr', nr).then(() => $wire.loadFromFaveo(nr)) "
-                            label="Artikel holen" >
+                <div class="flex flex-row items-end">
 
-                        </x-mary-button>
+                    <div x-data="{ nr: '{{ $artikelnr }}' }" class="flex flex-row items-center w-full">
+                        <x-mary-input  label="Artikelnr." x-model="nr" type="text" class="w-20" :disabled="$isEditArtikel" class="!outline-none focus:!outline-none focus:!ring-0" />
+                        <x-mary-button class="btn-primary mt-6 ml-4 bg-sky-600 text-white h-8 px-4"
+
+                            @click="$wire.set('artikelnr', nr).then(() => $wire.loadFromFaveo(nr))"
+
+                            label="Artikel holen" />
+
+
                     </div>
                 </div>
-                <x-mary-input label="Bezeichnung" wire:model="artikelBezeichnung" />
-                <x-mary-input label="Einheit" wire:model="artikelEinheit" />
-                <x-mary-input label="Materialgruppe" wire:model="artikelMaterialgruppe" />
-                <x-mary-input label="EK-Preis (€)" wire:model="artikelEkpreis" numeric="true" with_dots="true" />
+                <x-mary-input label="Bezeichnung" wire:model="artikelBezeichnung" class="!outline-none focus:!outline-none focus:!ring-0" />
+                <x-mary-input label="Einheit" wire:model="artikelEinheit" class="!outline-none focus:!outline-none focus:!ring-0" />
+                <x-mary-input label="Materialgruppe" wire:model="artikelMaterialgruppe" class="!outline-none focus:!outline-none focus:!ring-0" />
+                <x-mary-input label="EK-Preis (€)" wire:model="artikelEkpreis" numeric="true" with_dots="true" class="!outline-none focus:!outline-none focus:!ring-0" />
             </div>
 
             <div class="flex justify-end gap-4 mt-4">
-                <x-mary-button type="secondary" @click="showArtikel = false" label="Schließen" class="btn-secondary mt-6 ml-4 bg-gray-500 text-white h-8 px-4"/>
-                <x-mary-button type="primary" wire:click="saveArtikel" label="Speichern" class="btn-secondary mt-6 ml-4 bg-sky-600 text-white h-8 px-4"/>
+                <x-mary-button type="secondary" @click="showArtikel = false" label="Schließen" class="mt-6 ml-4 bg-gray-500 text-white h-8 px-4 shadow-md shadow-gray-500"/>
+                <x-mary-button type="primary" wire:click="saveArtikel" label="Speichern" class="mt-6 ml-4 bg-sky-600 text-white h-8 px-4 shadow-md shadow-gray-500"/>
             </div>
         </div>
     </div>

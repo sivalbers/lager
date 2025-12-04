@@ -131,7 +131,19 @@ class ArtikelRepository
             $materialgruppe = 'GAS';
         }
         else
-        if (substr($artikelNr, 0, 1) === '7') {
+        if (substr($artikelNr, 0, 2) === '73') {
+            $materialgruppe = 'Wasser';
+        }
+		else
+        if (substr($artikelNr, 0, 2) === '75') {
+            $materialgruppe = 'Wasser';
+        }
+		else
+        if (substr($artikelNr, 0, 2) === '76') {
+            $materialgruppe = 'Wasser';
+        }
+		else
+        if (substr($artikelNr, 0, 2) === '77') {
             $materialgruppe = 'Wasser';
         }
 

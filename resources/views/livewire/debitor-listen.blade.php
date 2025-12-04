@@ -8,9 +8,12 @@
 
     <h1 class="text-2xl font-bold mt-4">Debitoren</h1>
 
-    <div class="flex justify-end pr-2">
-        <x-mary-button wire:click="editDebitor(true)" label="Neuen Debitor anlegen" icon="o-plus-circle" class="btn-primary bg-sky-600 text-white px-4" />
-    </div>
+    @if (auth()->user()->hasBerechtigung('debitor anlegen'))
+        <div class="flex justify-end pr-2">
+            <x-mary-button wire:click="editDebitor(true)" label="Neuen Debitor anlegen" icon="o-plus-circle"
+                class="btn-primary bg-sky-600 text-white px-4" />
+        </div>
+    @endif
 
 
     <div class="flex flex-col w-full border-b border-gray-600">
@@ -50,11 +53,12 @@
                         <div>
                             Abladestellen:
                         </div>
-                        <div>
-                            @if ($berechtigung === 'voll')
-                                <button title="Neue Abladestelle anlegen" class="h-5 w-5 text-sky-600"
-                                    wire:click="editAbladestelle(true, {{ $debitor->nr }})" icon="o-plus-circle">
-                                </button>
+                        <div class="">
+                            @if (auth()->user()->hasBerechtigung('debitor anlegen'))
+                                <x-mary-button title="Neue Abladestelle anlegen" class="h-5 w-5 text-sky-600"
+                                    wire:click="editAbladestelle(true, {{ $debitor->nr }})" icon="o-plus-circle" />
+                            @else
+                                <div>NO</div>
                             @endif
                         </div>
                     </div>
@@ -86,7 +90,8 @@
 
 
                 @foreach ($debitor->abladestellen as $abladestelle)
-                    <div class="flex flex-row w-full px-1 hover:bg-slate-200" wire:key="abladestelle-{{ $abladestelle->id }}">
+                    <div class="flex flex-row w-full px-1 hover:bg-slate-200"
+                        wire:key="abladestelle-{{ $abladestelle->id }}">
                         <div class="w-1/12">
 
                         </div>
@@ -116,12 +121,14 @@
                             <div class="flex flex-row justify-between">
                                 <div>{{ $abladestelle->naechstes_belieferungsdatum?->format('d.m.Y') ?? '-' }}</div>
                                 <div>
-                                    @if ($berechtigung === 'voll')
+                                    @if (auth()->user()->hasBerechtigung('debitor anlegen'))
                                         <x-mary-button title="Abladestelle kopieren" class="h-5 w-5 text-sky-600"
-                                            wire:click="editAbladestelle(true, {{ $debitor->nr }}, {{ $abladestelle->id }} )" icon="o-plus-circle" />
+                                            wire:click="editAbladestelle(true, {{ $debitor->nr }}, {{ $abladestelle->id }} )"
+                                            icon="o-plus-circle" />
 
                                         <x-mary-button title="Lagerort anlegen" class="h-5 w-5 text-sky-600"
-                                            wire:click="editLagerort(true, {{ $abladestelle->id }} )" icon="o-plus-circle" />
+                                            wire:click="editLagerort(true, {{ $abladestelle->id }} )"
+                                            icon="o-plus-circle" />
                                     @endif
                                 </div>
                             </div>
@@ -129,17 +136,17 @@
                     </div>
 
                     @foreach ($abladestelle->lagerorte as $lagerort)
-                    <div class="flex flex-col w-full pl-40 hover:bg-slate-200" wire:key="lagerort-{{ $lagerort->id }}">
-                        <div class="w-80 ">
+                        <div class="flex flex-col w-full pl-40 hover:bg-slate-200"
+                            wire:key="lagerort-{{ $lagerort->id }}">
+                            <div class="w-80 ">
 
-                            <a title="Lagerort ändern" class="h-5 w-5 text-sky-600 cursor-pointer"
-                                wire:click="editLagerort(false, {{ $lagerort->id }} )">
-                                - {{ $lagerort->bezeichnung }}
-                            </a>
+                                <a title="Lagerort ändern" class="h-5 w-5 text-sky-600 cursor-pointer"
+                                    wire:click="editLagerort(false, {{ $lagerort->id }} )">
+                                    - {{ $lagerort->bezeichnung }}
+                                </a>
+                            </div>
                         </div>
-                    </div>
                     @endforeach
-
                 @endforeach
             @else
                 <div class="flex flex-row w-full bg-slate-200 px-1">
@@ -148,7 +155,7 @@
                             Keine Abladestellen vorhanden.
                         </div>
                         <div>
-                            @if ($berechtigung === 'voll')
+                            @if (auth()->user()->hasBerechtigung('debitor anlegen'))
                                 <x-mary-button title="Neue Abladestelle anlegen" class="h-5 w-5 text-sky-600"
                                     wire:click="editAbladestelle(true, {{ $debitor->nr }})" icon="o-plus-circle" />
                             @endif
@@ -163,195 +170,109 @@
     @endforeach
 
 
-    <div x-show="showDebitor" x-cloak class="fixed inset-0 z-10 bg-black/40 flex justify-center items-center">
-        <div class="bg-white p-6 rounded-md shadow-gray-500 shadow-md w-6/12">
-            <h2 class="text-xl font-bold mb-4">Debitor {{ $isEditDebitor === true ? 'ändern' : 'anlegen/kopieren' }}
-            </h2>
-
-            <div class="flex flex-col w-full ">
-                <div class="flex flex-row w-full items-center">
-                    <div class="w-2/12 items-center">
-                        Nr:
-                    </div>
-                    <div class="w-10/12">
-                        <x-mary-input numeric="true" wire:model="debitorNr" />
-                    </div>
-                </div>
-
-                <div class="flex flex-row items-center">
-                    <div class="w-2/12 items-center">
-                        Name:
-                    </div>
-                    <div class="w-10/12">
-                        <x-mary-input wire:model="debitorName" />
-                    </div>
-                </div>
-
-                <div class="flex flex-row items-center">
-                    <div class="w-2/12 items-center">
-                        Netzregion:
-                    </div>
-                    <div class="w-10/12">
-                        <x-mary-input wire:model="debitorNetzregion" />
-                    </div>
-                </div>
+    <x-mary-modal wire:model="showDebitor"
+        title="Debitor {{ $isEditDebitor === true ? 'ändern' : 'anlegen/kopieren' }}"
+        class="backdrop-blur" box-class="w-11/12 max-w-3xl">
 
 
-            </div>
+
+        <x-mary-input label="Nr." numeric="true" wire:model="debitorNr" class="!outline-none focus:!outline-none focus:!ring-0" />
+        <x-mary-input label="Name" wire:model="debitorName" class="!outline-none focus:!outline-none focus:!ring-0" />
+        <x-mary-input label="Netzregion" wire:model="debitorNetzregion" class="!outline-none focus:!outline-none focus:!ring-0" />
 
 
-            <div class="flex flex-row justify-end gap-4">
-                <x-mary-button type="secondary" @click="showDebitor = false">
-                    Schließen
-                </x-mary-button>
+        <x-slot:actions>
+            <x-mary-button type="secondary" @click="showDebitor = false" label="Schliessen"  class="bg-gray-500 text-white px-4 mr-4" />
+            <x-mary-button label="Speichern" class="btn-primary" wire:click="saveDebitor"  class="bg-sky-600 text-white px-4" />
+        </x-slot:actions>
 
-                <x-mary-button type="primary" wire:click="saveDebitor">
-                    Speichern
-                </x-mary-button>
-            </div>
-        </div>
-    </div>
+    </x-mary-modal>
 
-    <div x-show="showAbladestelle" x-cloak
-        class="fixed inset-0 bg-slate-100/60 z-20 flex items-center justify-center backdrop-blur-[2px]">
-        <div class="bg-white p-6 rounded-md shadow-gray-500 shadow-md w-5/12">
-            <div class="text-xl font-bold mb-4">Abladestelle
-                {{ $isEditAbladestelle === true ? 'ändern' : "anlegen für Debitor: $debitorNr - $debitorName" }}
-            </div>
 
-            <div class="flex flex-col w-full ">
 
-                <div class="flex flex-row items-center">
-                    <div class="w-2/12 items-center">
-                        Name 1:
-                    </div>
-                    <div class="w-10/12">
-                        <input type="hidden" wire:model="abladestelleId" />
-                        <x-mary-input wire:model="abladestelleName" />
-                    </div>
-                </div>
-                <div class="flex flex-row items-center">
-                    <div class="w-2/12 items-center">
-                        Name 2:
-                    </div>
-                    <div class="w-10/12">
-                        <x-mary-input wire:model="abladestelleName2" />
-                    </div>
-                </div>
-                <div class="flex flex-row items-center">
-                    <div class="w-2/12 items-center">
-                        Strasse:
-                    </div>
-                    <div class="w-10/12">
-                        <x-mary-input wire:model="abladestelleStrasse" />
-                    </div>
-                </div>
-                <div class="flex flex-row items-center">
-                    <div class="w-2/12 flex items-center">
-                        PLZ-Ort:
-                    </div>
-                    <div class="w-2/12">
-                        <x-mary-input wire:model="abladestellePlz" />
-                    </div>
-                    <div class="w-1/12 text-center">
-                        -
-                    </div>
-                    <div class="w-7/12">
-                        <x-mary-input wire:model="abladestelleOrt" />
-                    </div>
-                </div>
-                <div class="flex flex-row items-center">
-                    <div class="w-2/12 items-center">
-                        Kostenstelle:
-                    </div>
-                    <div class="w-9/12">
-                        <x-mary-input wire:model="abladestelleKostenstelle" />
-                    </div>
-                </div>
 
-                <div class="flex flex-row items-center">
-                    <label>Bestellrhythmus</label>
-                    <select wire:model="abladestelleBestellrhythmus"
-                        class="w-full border border-gray-300 rounded p-1 disabled:bg-gray-100">
-                        <option value="0">Manuell</option>
-                        <optgroup label="Montag">
-                            <option value="11">1. Montag im Monat</option>
-                            <option value="12">2. Montag im Monat</option>
-                            <option value="13">3. Montag im Monat</option>
-                            <option value="14">4. Montag im Monat</option>
-                        </optgroup>
 
-                        <optgroup label="Dienstag">
-                            <option value="21">1. Dienstag im Monat</option>
-                            <option value="22">2. Dienstag im Monat</option>
-                            <option value="23">3. Dienstag im Monat</option>
-                            <option value="24">4. Dienstag im Monat</option>
-                        </optgroup>
 
-                        <optgroup label="Mittwoch">
-                            <option value="31">1. Mittwoch im Monat</option>
-                            <option value="32">2. Mittwoch im Monat</option>
-                            <option value="33">3. Mittwoch im Monat</option>
-                            <option value="34">4. Mittwoch im Monat</option>
-                        </optgroup>
+    <x-mary-modal wire:model="showAbladestelle"
+        title="Abladestelle {{ $isEditAbladestelle === true ? 'ändern' : 'anlegen für Debitor: ' }} {{ $debitorNr }} {{ $debitorName }}"
+        class="backdrop-blur" box-class="w-11/12 max-w-3xl">
 
-                        <optgroup label="Donnerstag">
-                            <option value="41">1. Donnerstag im Monat</option>
-                            <option value="42">2. Donnerstag im Monat</option>
-                            <option value="43">3. Donnerstag im Monat</option>
-                            <option value="44">4. Donnerstag im Monat</option>
-                        </optgroup>
 
-                        <optgroup label="Freitag">
-                            <option value="51">1. Freitag im Monat</option>
-                            <option value="52">2. Freitag im Monat</option>
-                            <option value="53">3. Freitag im Monat</option>
-                            <option value="54">4. Freitag im Monat</option>
-                        </optgroup>
-                    </select>
-                </div>
+        @php
+            $grouped = [
+                'Montag' => [
+                    ['id' => 11, 'name' => '1. Montag im Monat'],
+                    ['id' => 12, 'name' => '2. Montag im Monat'],
+                    ['id' => 13, 'name' => '3. Montag im Monat'],
+                    ['id' => 14, 'name' => '4. Montag im Monat'],
+                ],
+                'Dienstag' => [
+                    ['id' => 21, 'name' => '1. Dienstag im Monat'],
+                    ['id' => 22, 'name' => '2. Dienstag im Monat'],
+                    ['id' => 23, 'name' => '3. Dienstag im Monat'],
+                    ['id' => 24, 'name' => '4. Dienstag im Monat'],
+                ],
+                'Mittwoch' => [
+                    ['id' => 31, 'name' => '1. Mittwoch im Monat'],
+                    ['id' => 32, 'name' => '2. Mittwoch im Monat'],
+                    ['id' => 33, 'name' => '3. Mittwoch im Monat'],
+                    ['id' => 34, 'name' => '4. Mittwoch im Monat'],
+                ],
+                'Donnerstag' => [
+                    ['id' => 41, 'name' => '1. Donnerstag im Monat'],
+                    ['id' => 42, 'name' => '2. Donnerstag im Monat'],
+                    ['id' => 43, 'name' => '3. Donnerstag im Monat'],
+                    ['id' => 44, 'name' => '4. Donnerstag im Monat'],
+                ],
+                'Freitag' => [
+                    ['id' => 51, 'name' => '1. Freitag im Monat'],
+                    ['id' => 52, 'name' => '2. Freitag im Monat'],
+                    ['id' => 53, 'name' => '3. Freitag im Monat'],
+                    ['id' => 54, 'name' => '4. Freitag im Monat'],
+                ],
+            ];
+        @endphp
 
-                <div class="flex flex-row justify-end items-center gap-4">
-                    <x-mary-button type="secondary"
-                        @click="showAbladestelle = false">Schließen</x-mary-button>
-                    <x-mary-button type="primary" wire:click="saveAbladestelle">Speichern</x-mary-button>
-                </div>
+        <div class="flex flex-col w-full ">
 
-            </div>
+            <x-mary-input type="hidden" wire:model="abladestelleId" class="!outline-none focus:!outline-none focus:!ring-0" />
+            <x-mary-input label="Name 1" inline wire:model="abladestelleName" class="!outline-none focus:!outline-none focus:!ring-0" />
+            <x-mary-input label="Name 2" wire:model="abladestelleName2" class="!outline-none focus:!outline-none focus:!ring-0" />
+            <x-mary-input label="Strasse" wire:model="abladestelleStrasse" class="!outline-none focus:!outline-none focus:!ring-0" />
+            <x-mary-input label="PLZ-Ort" wire:model="abladestellePlz" class="!outline-none focus:!outline-none focus:!ring-0" />
+            <x-mary-input label="Ort" wire:model="abladestelleOrt" class="!outline-none focus:!outline-none focus:!ring-0" />
+            <x-mary-input label="kostenstelle" wire:model="abladestelleKostenstelle" class="!outline-none focus:!outline-none focus:!ring-0" />
+            <x-mary-select-group label="Bestellrythmus" :options="$grouped" wire:model="abladestelleBestellrhythmus" class="!outline-none focus:!outline-none focus:!ring-0" />
 
 
         </div>
-    </div>
 
-    <div x-show="showLagerort" x-cloak
-        class="fixed inset-0 bg-slate-100/60 z-30 flex items-center justify-center backdrop-blur-[2px]">
-        <div class="bg-white p-6 rounded-md shadow-gray-500 shadow-md w-4/12">
-            <div class="text-xl font-bold mb-4 border-b pb-2">
-                {{ $isEditLagerort ? 'Lagerort bearbeiten' : 'Neuen Lagerort anlegen' }}
-                <div class="text-sm font-normal text-gray-600">
-                    zur Abladestelle: "{{ $lagerortAbladestelleName }}"
-                </div>
+    <x-slot:actions>
+        <x-mary-button type="secondary" @click="showAbladestelle = false" label="Schliessen"  class="bg-gray-500 text-white px-4 mr-4" />
+        <x-mary-button label="Speichern" class="btn-primary" wire:click="saveAbladestelle"  class="bg-sky-600 text-white px-4" />
+    </x-slot:actions>
+
+    </x-mary-modal>
+
+
+    <x-mary-modal wire:model="showLagerort"
+        title="{{ $isEditLagerort ? 'Lagerort bearbeiten' : 'Neuen Lagerort anlegen' }}"
+        class="backdrop-blur" box-class="w-11/12 max-w-3xl">
+
+            <div class="text-sm font-normal text-gray-600">
+                zur Abladestelle: "{{ $lagerortAbladestelleName }}"
             </div>
-            <div class="flex flex-col w-full ">
-                <div class="flex flex-row items-center">
-                    <div class="w-2/12 mr-2">
-                        Bezeichnung:
-                    </div>
-                    <div class="w-10/12">
-                        <x-mary-input type="hidden" wire:model="lagerortNr" />
-                        <x-mary-input type="hidden" wire:model="lagerortAbladestelleId" />
-                        <x-mary-input wire:model="lagerortBezeichnung" />
-                    </div>
-                </div>
+        <x-mary-input type="text" hidden wire:model="lagerortId" class="h-0" />
+        <x-mary-input type="text" hidden wire:model="lagerortAbladestelleId"  class="h-0" />
 
-                <div class="flex flex-row justify-end items-center gap-4">
-                    <x-mary-button type="secondary"
-                        @click="showLagerort = false">Schließen</x-mary-button>
-                    <x-mary-button type="primary" wire:click="saveLagerort">Speichern</x-mary-button>
-                </div>
+        <x-mary-input label="Bezeichnung" wire:model="lagerortBezeichnung" class="!outline-none focus:!outline-none focus:!ring-0" />
 
-            </div>
-        </div>
-    </div>
+        <x-slot:actions>
+            <x-mary-button type="secondary" @click="showLagerort = false" label="Schliessen"  class="bg-gray-500 text-white px-4 mr-4" />
+            <x-mary-button label="Speichern" class="btn-primary" wire:click="saveLagerort"  class="bg-sky-600 text-white px-4" />
+        </x-slot:actions>
+
+    </x-mary-modal>
+
 
 </div>

@@ -19,8 +19,6 @@ new #[Layout('layouts.guest')] class extends Component
         $this->form->authenticate();
 
         Session::regenerate();
-        Session::put('berechtigung', 'voll');
-        
 
         $this->redirectIntended(default: route('bestand', absolute: false), navigate: true);
     }

@@ -34,7 +34,7 @@ class DebitorListen extends Component
     public $abladestelleBestellrhythmus;
 
 
-    public $lagerortNr;
+    public $lagerortId;
     public $lagerortAbladestelleId;
     public $lagerortBezeichnung;
     public $lagerortAbladestelleName;
@@ -133,7 +133,7 @@ class DebitorListen extends Component
         $this->isEditLagerort = !$doCreate;
 
         if ($doCreate) {
-            $this->lagerortNr = null;
+            $this->lagerortId = null;
             $this->lagerortBezeichnung = '';
             $this->lagerortAbladestelleId = $id;
 
@@ -141,7 +141,7 @@ class DebitorListen extends Component
         } else {
             $lagerort = Lagerort::with('abladestelle')->findOrFail($id);
 
-            $this->lagerortNr = $lagerort->id;
+            $this->lagerortId = $lagerort->id;
             $this->lagerortBezeichnung = $lagerort->bezeichnung;
             $this->lagerortAbladestelleId = $lagerort->abladestelle_id;
             $this->lagerortAbladestelleName = $lagerort->abladestelle?->name;
@@ -200,8 +200,8 @@ class DebitorListen extends Component
             'lagerortAbladestelleId' => 'required|exists:abladestellen,id',
         ]);
 
-        if ($this->isEditLagerort && $this->lagerortNr) {
-            $lagerort = Lagerort::findOrFail($this->lagerortNr);
+        if ($this->isEditLagerort && $this->lagerortId) {
+            $lagerort = Lagerort::findOrFail($this->lagerortId);
         } else {
             $lagerort = new Lagerort();
             $lagerort->abladestelle_id = $this->lagerortAbladestelleId;
