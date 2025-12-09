@@ -93,8 +93,8 @@ public function handleScan(string $code = null): void {
 
         if (empty($this->inputData) or count($this->inputData) === 0 ){
             $this->inputData[] = [
-                'artikel' => $decoded['artikel'] ?? '',
-                'bezeichnung' => Artikel::where('artikelnr', $decoded['artikel'] ?? '')->value('bezeichnung') ?? '',
+                'artikel' => $decoded['artikelnr'] ?? '',
+                'bezeichnung' => Artikel::where('artikelnr', $decoded['artikelnr'] ?? '')->value('bezeichnung') ?? '',
                 'abladestelle_id' => $decoded['abladestelle'] ?? '',
                 'abladestelle' => Abladestelle::where('id', $decoded['abladestelle'] ?? 0)->value('name') ?? '',
                 'lagerort' => Lagerort::Where('id', $decoded['lagerort'] ?? 0)->value('bezeichnung') ?? '',
@@ -104,8 +104,8 @@ public function handleScan(string $code = null): void {
         }
         else {
         array_unshift($this->inputData, [
-            'artikel'         => $decoded['artikel'] ?? '',
-            'bezeichnung'     => Artikel::where('artikelnr', $decoded['artikel'] ?? '')->value('bezeichnung') ?? '',
+            'artikel'         => $decoded['artikelnr'] ?? '',
+            'bezeichnung'     => Artikel::where('artikelnr', $decoded['artikelnr'] ?? '')->value('bezeichnung') ?? '',
             'abladestelle_id' => $decoded['abladestelle'] ?? '',
             'abladestelle'    => Abladestelle::where('id', $decoded['abladestelle'] ?? 0)->value('name') ?? '',
             'lagerort'        => Lagerort::where('id', $decoded['lagerort'] ?? 0)->value('bezeichnung') ?? '',
