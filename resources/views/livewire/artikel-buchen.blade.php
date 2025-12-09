@@ -211,10 +211,7 @@
                     setTimeout(startScanner, 1500);
                 });
 
-        if (mengeInput) {
-            mengeInput.focus();
-            mengeInput.select(); // optional: Inhalt markieren
-        }
+
 
             }
 
