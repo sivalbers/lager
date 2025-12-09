@@ -3,13 +3,20 @@ import forms from '@tailwindcss/forms'
 
 export default {
     content: [
-        './resources/views/**/*.blade.php',
-        './resources/js/**/*.js',
-        './app/Livewire/**/*.php',               // ← WICHTIG!
-        './app/View/Components/**/*.php',
-        './vendor/livewire/**/*.blade.php',
-        './vendor/robsontenorio/mary/**/*.blade.php',
-        './storage/framework/views/*.php',
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+        "./app/Livewire/**/*.php",
+        "./app/View/Components/**/*.php",
+        "./vendor/livewire/**/*.blade.php",
+        "./vendor/robsontenorio/mary/**/*.blade.php",
+
+        // besonders wichtig unter Plesk!
+        "./storage/framework/views/*.php",
+
+        // DaisyUI braucht dynamische Klassen
+        "./node_modules/daisyui/dist/**/*.js",
+        "./node_modules/daisyui/**/*.js",
     ],
     theme: {
         extend: {
@@ -20,12 +27,12 @@ export default {
     },
     plugins: [
         forms,
-        require('daisyui'),  // ← DaisyUI als Plugin
+        require("daisyui")
     ],
     daisyui: {
-        themes: ["light", "dark", "cupcake"],  // ← Themes aktivieren (für Primary/Success etc.)
-        base: true,  // ← Basis-Styles aktivieren
-        utils: true,  // ← Utility-Klassen (btn, dropdown etc.)
-        logs: false,  // ← Logs deaktivieren
+        themes: ["light", "dark", "cupcake"],
+        base: true,
+        utils: true,
+        logs: false,
     },
 }
