@@ -1,4 +1,4 @@
-<div class="md:w-10/12 mx-auto w-full">
+<div class=" w-11/12 md:w-10/12 mx-auto w-full">
 
 
 
@@ -11,7 +11,14 @@
         <div>            {{-- Menge --}}
             <div class="min-w-0 flex flex-row items-center space-x-5">
                 <label class="block text-sm text-gray-600 mb-1">Menge</label>
-                <input type="number" wire:model="mMenge" class="block w-20 h-10 border rounded px-2 text-sm" min="0" />
+                <input
+    type="number"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    wire:model="mMenge"
+    class="block w-20 h-10 border rounded px-2 text-sm"
+    min="0"
+/>
                 <div id="reader" style="width: 100px; height: 80px; border:1px solid #ccc;"></div>
             </div>
         </div>
@@ -32,7 +39,7 @@
                                         <div class="flex flex-row justify-between space-x-2">
                                             <div><span class="text-gray-500 text-xs">Artikel:</span> {{ $row['artikel'] }}</div>
                                             <div>
-                                                
+
                                                 <x-mary-button wire:click="delInputData({{ $index }})" title="Artikel löschen" icon="o-trash" />
                                             </div>
 
