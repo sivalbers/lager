@@ -19,6 +19,60 @@
     </div>
 
 
+@if ($inputData)
+    <div class="flex flex-col w-full my-8">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+                @foreach ($inputData as $index => $row)
+                    <div class="block p-2 bg-white rounded-lg shadow-md shadow-gray-300"  wire:key="{{ $index }}" style="border-width: 2px; border-color: #ccc">
+                        <div class="flex flex-row ">
+                            <div class="grow flex-col">
+                                <div class="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg mb-1">
+                                    <div class="flex flex-col">
+                                        <div class="flex flex-row space-x-2">
+                                            <div><span class="text-gray-500 text-xs">Artikel:</span> {{ $row['artikel'] }}</div>
+
+                                        </div>
+                                        <div class="flex flex-row space-x-2">
+                                            <div class="text-sm">{{ $row['bezeichnung'] }}</div>
+                                        </div>
+
+                                        <div class="flex flex-row space-x-2">
+                                            <div><span class="text-gray-500 text-xs">Abladestelle:</span> {{ $row['abladestelle'] }}</div>
+                                        </div>
+                                        <div class="flex flex-row space-x-2">
+                                            <div><span class="text-gray-500 text-xs">Lagerort:</span> {{ $row['lagerort'] }}</div>
+                                        </div>
+
+                                        <div class="flex flex-row justify-between">
+                                            <div><span class="text-gray-500 text-xs">Lagerplatz:</span> {{ $row['lagerplatz'] }}</div>
+                                            <div><span class="text-gray-500 text-xs">Menge:</span> {{ $row['menge'] }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+
+
+            <div class="flex justify-end">
+                <button wire:click="buchen" class="mt-4 px-4 py-2 bg-sky-600 text-white rounded">
+                    Buchen
+                </button>
+            </div>
+
+            @if (session()->has('message'))
+                <div class="mt-2 text-green-600">{{ session('message') }}</div>
+            @endif
+
+
+    </div>
+@endif
+
+
 
     <div class="mt-6 px-4 py-6 bg-white border rounded shadow max-w-full overflow-hidden">
         <div class="text-2xl font-bold mb-4">
@@ -95,57 +149,6 @@
     </div>
 
 
-
-    <div class="flex flex-col w-full my-8">
-        @if ($inputData)
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
-                @foreach ($inputData as $index => $row)
-                    <div class="block p-2 bg-white rounded-lg shadow-md shadow-gray-300"  wire:key="{{ $index }}" style="border-width: 2px; border-color: #ccc">
-                        <div class="flex flex-row ">
-                            <div class="grow flex-col">
-                                <div class="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg mb-1">
-                                    <div class="flex flex-col">
-                                        <div class="flex flex-row space-x-2">
-                                            <div><span class="text-gray-500 text-xs">Artikel:</span> {{ $row['artikel'] }}</div>
-
-                                        </div>
-                                        <div class="flex flex-row space-x-2">
-                                            <div class="text-sm">{{ $row['bezeichnung'] }}</div>
-                                        </div>
-
-                                        <div class="flex flex-row space-x-2">
-                                            <div><span class="text-gray-500 text-xs">Abladestelle:</span> {{ $row['abladestelle'] }}</div>
-                                        </div>
-                                        <div class="flex flex-row space-x-2">
-                                            <div><span class="text-gray-500 text-xs">Lagerort:</span> {{ $row['lagerort'] }}</div>
-                                        </div>
-
-                                        <div class="flex flex-row justify-between">
-                                            <div><span class="text-gray-500 text-xs">Lagerplatz:</span> {{ $row['lagerplatz'] }}</div>
-                                            <div><span class="text-gray-500 text-xs">Menge:</span> {{ $row['menge'] }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-
-
-            <div class="flex justify-end">
-                <button wire:click="buchen" class="mt-4 px-4 py-2 bg-sky-600 text-white rounded">
-                    Buchen
-                </button>
-            </div>
-
-            @if (session()->has('message'))
-                <div class="mt-2 text-green-600">{{ session('message') }}</div>
-            @endif
-        @endif
-
-    </div>
 
 
 

@@ -4,10 +4,12 @@ import forms from '@tailwindcss/forms'
 export default {
     content: [
         './resources/views/**/*.blade.php',
+        './resources/js/**/*.js',
+        './app/Livewire/**/*.php',               // ← WICHTIG!
+        './app/View/Components/**/*.php',
         './vendor/livewire/**/*.blade.php',
         './vendor/robsontenorio/mary/**/*.blade.php',
         './storage/framework/views/*.php',
-        './app/View/Components/**/*.blade.php',
     ],
     theme: {
         extend: {
