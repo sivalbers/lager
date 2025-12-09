@@ -98,7 +98,7 @@ public function handleScan(string $code = null): void {
             'lagerort' => Lagerort::Where('id', $decoded['lagerort'] ?? 0)->value('bezeichnung') ?? '',
             'lagerort_id' => $decoded['lagerort'] ?? '',
             'lagerplatz' => $decoded['lagerplatz'] ?? '',
-            'menge'    => $decoded['menge'] ?? -1,
+            'menge'    => $this->mMenge ?? -1,
         ];
     }
 
