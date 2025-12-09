@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Abladestelle;
 use App\Models\Lagerort;
 use App\Models\Artikel;
+use App\Models\Etikett;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -36,7 +37,7 @@ class ArtikelBuchung extends Component
     public $mLagerplatz = '';
     public $mMenge = 0;
     public $modus = '';
-    private $ueberschrift = '';
+    public $ueberschrift = '';
     public $cameraId = null;
 
 
@@ -216,5 +217,7 @@ public function addRow($index = null)
         $this->lagerorte = Lagerort::select( 'id', 'bezeichnung' )->where( 'abladestelle_id', $this->mAbladestelle)->orderBy('bezeichnung')->get()->toArray();
         Log::info(['loadLagerorte' => $this->lagerorte]);
     }
+
+
 
 }

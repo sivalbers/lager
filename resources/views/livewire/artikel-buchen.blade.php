@@ -1,141 +1,152 @@
-<div class="w-[80vh] md:w-5/6  m-auto">
+<div class="md:w-10/12 mx-auto w-full">
+
+
 
     <div class="flex flex-row items-center space-x-4">
-        <div class="text-2xl font-bold mt-4">{{ $ueberschrift }}</div>
+        <div class="text-2xl font-bold my-4">{{ $ueberschrift }}</div>
 
     </div>
-
-    <div class="font-bold mt-4 text-red-400">Wird die Kameraauswahl nicht angezeigt, bitte die Seite mit <F5> aktualisieren!</div>
 
     <div id="reader" style="width: 200px; height: 200px; border:1px solid #ccc;"></div>
 
 
 
-
-<div class="mt-6 p-4 border rounded-md shadow-md bg-white">
-    <div class="text-2xl font-bold mb-4">
-        Manuelle Erfassung:
-    </div>
-
-<form wire:submit.prevent="manuelleErfassung" class="grid grid-cols-[auto_1fr_1fr_1fr_1fr_auto_auto] gap-4 items-end">
-
-    <div class="grid grid-cols-[auto_auto_1fr_1fr_1fr_auto_auto] gap-x-4 ">
-        {{-- 1. Zeile: Labels --}}
-        <label class="text-base text-gray-500">Artikel</label>
-        <label class="text-base text-gray-500">Bezeichnung</label>
-        <label class="text-base text-gray-500">Abladestelle</label>
-        <label class="text-base text-gray-500">Lagerort</label>
-        <label class="text-base text-gray-500">Lagerplatz</label>
-        <label class="text-base text-gray-500">Menge</label>
-        <div></div> {{-- Leerzelle für den Button --}}
-
-        {{-- 2. Zeile: Eingabefelder --}}
-        <input  type="text"
-                list="artikelListe"
-                wire:model.blur="mArtikel" class="h-10 border rounded px-2 text-sm" />
-
-        <datalist id="artikelListe">
-            @foreach($artikelliste as $artikel)
-                <option value="{{ $artikel['artikelnr'] }}">{{ $artikel['bezeichnung']  }}</option>
-            @endforeach
-        </datalist>
-
-
-        <input type="text" value="{{ $mBezeichnung }}" disabled class="h-10 border rounded px-2 bg-gray-100 text-sm text-gray-600" />
-
-        <select wire:model.blur="mAbladestelle" class="h-10 border rounded px-2 text-sm"  {{ (count($abladestellen) == 1) ? 'disabled' : '' }} >
-            <option value="">Bitte wählen</option>
-            @foreach($abladestellen as $stelle)
-                <option value="{{ $stelle['id'] }}">{{ $stelle['name'] }}</option>
-            @endforeach
-        </select>
-        <select wire:model.blur="mLagerort" class="h-10 border rounded px-2 text-sm">
-            <option value="">Bitte wählen</option>
-            @foreach($lagerorte as $lagerort)
-                <option value="{{ $lagerort['id'] }}">{{ $lagerort['bezeichnung'] }}</option>
-            @endforeach
-        </select>
-
-
-        <input type="text" wire:model="mLagerplatz" class="h-10 border rounded px-2 text-sm" />
-        <input type="number" wire:model="mMenge" class="h-10 border rounded px-2 text-sm w-20" min="0" />
-        <button type="submit" class="h-10 px-4 bg-sky-600 text-white rounded">Hinzufügen</button>
-    </div>
-
-
-</form>
-
-</div>
-
-
-
-
-
-    <form wire:submit.prevent="buchen" class="flex flex-col w-full">
-
-        <div class="flex flex-row gap-4 font-bold mt-6">
-            <div class="w-10 flex-none"></div>
-            <div class="w-20 flex-none">Artikel</div>
-            <div class="flex-1">Bezeichnung</div>
-            <div class="flex-1">Abladestelle</div>
-
-            <div class="flex-1">Lagerort</div>
-            <div class="flex-1">Lagerplatz</div>
-            <div class="w-20 flex-none text-right">Menge</div>
+    <div class="mt-6 px-4 py-6 bg-white border rounded shadow max-w-full overflow-hidden">
+        <div class="text-2xl font-bold mb-4">
+            Manuelle Erfassung:
         </div>
 
-        <div class="flex text-xs text-gray-500 justify-end">
-            Negative Mengen werden abgebucht.
-        </div>
+        <form wire:submit.prevent="manuelleErfassung"
+            class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
+            {{-- Artikel --}}
+            <div class="min-w-0">
+                <label class="block text-sm text-gray-600 mb-1">Artikel</label>
+                <input type="text"
+                    list="artikelListe"
+                    wire:model.blur="mArtikel"
+                    class="block w-full h-10 border rounded px-2 text-sm" />
+                <datalist id="artikelListe">
+                    @foreach($artikelliste as $artikel)
+                        <option value="{{ $artikel['artikelnr'] }}">{{ $artikel['bezeichnung']  }}</option>
+                    @endforeach
+                </datalist>
+            </div>
+
+            {{-- Bezeichnung --}}
+            <div class="min-w-0">
+                <label class="block text-sm text-gray-600 mb-1">Bezeichnung</label>
+                <input type="text"
+                    value="{{ $mBezeichnung }}"
+                    disabled
+                    class="block w-full h-10 border rounded px-2 bg-gray-100 text-sm text-gray-600" />
+            </div>
+
+            {{-- Abladestelle --}}
+            <div class="min-w-0">
+                <label class="block text-sm text-gray-600 mb-1">Abladestelle</label>
+                <select wire:model.blur="mAbladestelle"
+                        class="block w-full h-10 border rounded px-2 text-sm"
+                        {{ count($abladestellen) == 1 ? 'disabled' : '' }}>
+                    <option value=\"\">Bitte wählen</option>
+                    @foreach($abladestellen as $stelle)
+                        <option value="{{ $stelle['id'] }}">{{ $stelle['name'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Lagerort --}}
+            <div class="min-w-0">
+                <label class="block text-sm text-gray-600 mb-1">Lagerort</label>
+                <select wire:model.blur="mLagerort"
+                        class="block w-full h-10 border rounded px-2 text-sm">
+                    <option value="">Bitte wählen</option>
+                    @foreach($lagerorte as $lagerort)
+                        <option value="{{ $lagerort['id'] }}">{{ $lagerort['bezeichnung'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Lagerplatz --}}
+            <div class="min-w-0">
+                <label class="block text-sm text-gray-600 mb-1">Lagerplatz</label>
+                <input type="text" wire:model="mLagerplatz"
+                    class="block w-full h-10 border rounded px-2 text-sm" />
+            </div>
+
+            {{-- Menge --}}
+            <div class="min-w-0">
+                <label class="block text-sm text-gray-600 mb-1">Menge</label>
+                <input type="number" wire:model="mMenge"
+                    class="block w-full h-10 border rounded px-2 text-sm" min="0" />
+            </div>
+
+            {{-- Button --}}
+            <div class="min-w-0 sm:col-span-2 lg:col-span-1 flex items-end">
+                <button type="submit" class="w-full h-10 bg-sky-600 text-white rounded">
+                    Hinzufügen
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+
+    <div class="flex flex-col w-full my-8">
         @if ($inputData)
-            @foreach ($inputData as $index => $row)
-                <div class="flex flex-row gap-4 mt-2">
-                    <div class="w-10 flex-none">
-                        @if ($index == count($inputData) - 1)
-                            <button type="button" wire:click="addRow({{ $index }})"
-                                class="text-green-500 hover:text-green-700 font-bold">+</button>
-                        @endif
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+                @foreach ($inputData as $index => $row)
+                    <div class="block p-2 bg-white rounded-lg shadow-md shadow-gray-300"  wire:key="{{ $index }}" style="border-width: 2px; border-color: #ccc">
+                        <div class="flex flex-row ">
+                            <div class="grow flex-col">
+                                <div class="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg mb-1">
+                                    <div class="flex flex-col">
+                                        <div class="flex flex-row space-x-2">
+                                            <div>{{ $row['artikel'] }}</div>
+
+                                        </div>
+                                        <div class="flex flex-row space-x-2">
+                                            <div class="text-sm">{{ $row['bezeichnung'] }}</div>
+                                        </div>
+
+                                        <div class="flex flex-row space-x-2">
+                                            <div><span class="text-gray-500 text-xs">Abladestelle:</span> {{ $row['abladestelle'] }}</div>
+                                        </div>
+                                        <div class="flex flex-row space-x-2">
+                                            <div><span class="text-gray-500 text-xs">Lagerort:</span> {{ $row['lagerort'] }}</div>
+                                        </div>
+
+                                        <div class="flex flex-row justify-between">
+                                            <div><span class="text-gray-500 text-xs">Lagerplatz:</span> {{ $row['lagerplatz'] }}</div>
+                                            <div><span class="text-gray-500 text-xs">Menge:</span> {{ $row['menge'] }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                @endforeach
+            </div>
 
 
-                    <div class="w-20 flex-none">
-                        <input wire:model="inputData.{{ $index }}.artikel" type="text"
-                            class="w-full border rounded px-2 py-1">
-                    </div>
-                    <div class="flex-1">
-                        <input wire:model="inputData.{{ $index }}.bezeichnung" type="text"
-                            class="w-full border rounded px-2 py-1">
-                    </div>
-                    <div class="flex-1">
-                        <input wire:model="inputData.{{ $index }}.abladestelle" type="text"
-                            class="w-full border rounded px-2 py-1">
-                    </div>
-                    <div class="flex-1">
-                        <input wire:model="inputData.{{ $index }}.lagerort" type="text"
-                            class="w-full border rounded px-2 py-1">
-                    </div>
-                    <div class="flex-1">
-                        <input wire:model="inputData.{{ $index }}.lagerplatz" type="text"
-                            class="w-full border rounded px-2 py-1">
-                    </div>
-                    <div class="w-20 flex-none">
-                        <input wire:model="inputData.{{ $index }}.menge" type="number"
-                            class="w-full border rounded px-2 py-1 text-right">
-                    </div>
-                </div>
-            @endforeach
+
+            <div class="flex justify-end">
+                <button wire:click="buchen" class="mt-4 px-4 py-2 bg-sky-600 text-white rounded">
+                    Buchen
+                </button>
+            </div>
+
+            @if (session()->has('message'))
+                <div class="mt-2 text-green-600">{{ session('message') }}</div>
+            @endif
         @endif
-        <div class="flex justify-end">
-            <button type="submit" class="mt-4 px-4 py-2 bg-sky-600 text-white rounded">
-                Buchen
-            </button>
-        </div>
 
-        @if (session()->has('message'))
-            <div class="mt-2 text-green-600">{{ session('message') }}</div>
-        @endif
-    </form>
+    </div>
+
+
+
+
+
 </div>
 
 @push('scripts')

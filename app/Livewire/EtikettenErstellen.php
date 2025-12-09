@@ -18,6 +18,8 @@ class EtikettenErstellen extends Component
     public $mLagerort_id = 0;
     public $mLagerplatz = '';
 
+    public $qrGroesse = 150;
+
 
     public $lagerorteList = [];
 
@@ -25,6 +27,8 @@ class EtikettenErstellen extends Component
 
     private $bestandRepository;
     public $etiketten;
+
+
 
 
     public $text;
@@ -41,15 +45,41 @@ class EtikettenErstellen extends Component
         $this->loadEtikettFromTable();
     }
 
+    public function loadEtikettFromTable(){
+        $this->etiketten = Etikett::whereIn('abladestelle_id', $this->bestandRepository->abladestellenArray())->get();
+    }
+
+
     private function loadAbladestellenList(){
         $this->bestandRepository = new BestandsverwaltungRepository();
         $this->abladestellenList  = $this->bestandRepository->abladestellenVonUser();
     }
 
-    public function createDataFromText()
-    {
+    public function createDataFromTable() {
+
+
         $bestandRepository = new BestandsverwaltungRepository();
-        $this->data = []; // reset
+
+
+        foreach ($this->etiketten as $etikett) {
+            $this->data[] = [
+                'artikelnr' => $etikett->artikelnr,
+                'bezeichnung' => $etikett->artikel->bezeichnung,
+                'abladestelle_id' => $etikett->abladestelle_id,
+                'lagerort_id' => $etikett->lagerort_id,
+                'lagerorte' =>  $bestandRepository->lagerorteArrayFromAbladestelle_id($etikett->abladestelle_id),
+                'lagerplatz' => $etikett->lagerplatz
+            ];
+        }
+
+
+
+       $this->loadAbladestellenList();
+    }
+
+    public function createDataFromText() {
+        $bestandRepository = new BestandsverwaltungRepository();
+
 
         // Text in Zeilen aufteilen
         $zeilen = preg_split('/\r\n|\r|\n/', trim($this->text));
@@ -81,23 +111,17 @@ class EtikettenErstellen extends Component
 
     }
 
-    public function loadEtikettFromTable(){
-        $eti = Etikett::whereIn('abladestelle_id', $this->bestandRepository->abladestellenArray())->get();
+    public function clearData(){
+        $this->data = [];
+    }
 
-        $this->text = '';
-        foreach($eti as $etikett){
+    public function delDataIx($index){
+        unset($this->data[$index]);
+    }
 
-            $this->data[] = [
-                'artikelnr' => $etikett->artikelnr,
-                'bezeichnung' => $etikett->artikel->bezeichnung,
-                'abladestelle_id' => $etikett->abladestelle_id,
-                'lagerort_id' => $etikett->lagerort_id,
-                'lagerorte' =>  $this->bestandRepository->lagerorteArrayFromAbladestelle_id($etikett->abladestelle_id),
-                'lagerplatz' => $etikett->lagerplatz,
-                'we' => $etikett->id,
 
-            ];
-
+    public function weZuText(){
+        foreach($this->etiketten as $etikett){
 
             $this->text .= sprintf(
                 "%s,%d,%d,%s%s",
@@ -177,13 +201,19 @@ class EtikettenErstellen extends Component
     }
 
 
-public function aktualisiereQRCodes()
-{
-    // Trigger für das Re-Rendern – optional: neue Daten erzeugen
-    $this->data = collect($this->data)->map(function ($item) {
-        // Optional kannst du hier die Daten verfeinern
-        return $item;
-    })->toArray();
-}
+    public function aktualisiereQRCodes()
+    {
+        // Trigger für das Re-Rendern – optional: neue Daten erzeugen
+        $this->data = collect($this->data)->map(function ($item) {
+            // Optional kannst du hier die Daten verfeinern
+            return $item;
+        })->toArray();
+    }
+
+    public function delEtikett($id){
+        Etikett::where('id', $id)->delete();
+        $this->loadAbladestellenList();
+        $this->loadEtikettFromTable();
+    }
 
 }
