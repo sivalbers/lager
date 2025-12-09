@@ -91,7 +91,7 @@ public function handleScan(string $code = null): void {
 
     if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
 
-        if (count($this->inputData) === 0 ){
+        if (empty($this->inputData) or count($this->inputData) === 0 ){
             $this->inputData[] = [
                 'artikel' => $decoded['artikel'] ?? '',
                 'bezeichnung' => Artikel::where('artikelnr', $decoded['artikel'] ?? '')->value('bezeichnung') ?? '',
