@@ -1,4 +1,4 @@
-<div class=" w-11/12 md:w-10/12 mx-auto w-full">
+<div class="mx-auto max-w-screen-lg px-2 sm:px-4">
 
 
 
@@ -12,13 +12,14 @@
             <div class="min-w-0 flex flex-row items-center space-x-5">
                 <label class="block text-sm text-gray-600 mb-1">Menge</label>
                 <input
-    type="number"
-    inputmode="numeric"
-    pattern="[0-9]*"
-    wire:model="mMenge"
-    class="block w-20 h-10 border rounded px-2 text-sm"
-    min="0"
-/>
+                        type="number"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+
+                        wire:model="mMenge"
+                        class="block w-20 h-10 border rounded px-2 text-sm"
+                        min="0"
+                    />
                 <div id="reader" style="width: 100px; height: 80px; border:1px solid #ccc;"></div>
             </div>
         </div>
@@ -29,7 +30,9 @@
 @if ($inputData)
     <div class="flex flex-col w-full my-8">
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+            <!-- div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6" -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 w-full overflow-x-hidden">
+
                 @foreach ($inputData as $index => $row)
                     <div class="block p-2 bg-white rounded-lg shadow-md shadow-gray-300"  wire:key="{{ $index }}" style="border-width: 2px; border-color: #ccc">
                         <div class="flex flex-row ">
