@@ -17,7 +17,7 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body class="font-sans antialiased">
+<body data-theme="pastel" class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
         <div class="print:hidden">
             <livewire:layout.navigation />

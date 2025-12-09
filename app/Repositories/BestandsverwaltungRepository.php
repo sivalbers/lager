@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Abladestelle;
 use App\Models\Artikel;
 use App\Models\Artikelbestand;
+use App\Models\Lagerort;
 
 
 class BestandsverwaltungRepository
@@ -41,13 +42,11 @@ class BestandsverwaltungRepository
     }
 
     public function artikelArrayAusBestandInAbladestelle($abladestelle_id){
-
         return Artikelbestand::where('abladestelle_id', $abladestelle_id)->distinct()->pluck('artikelnr')->toArray();
     }
 
 
-    public function artikelBestandInAbladestellen( $abladestellen_id_array)
-    {
+    public function artikelBestandInAbladestellen( $abladestellen_id_array){
         $artikel = Artikelbestand::whereIn('abladestelle_id', $abladestellen_id_array)
             ->get();
         return $artikel;
@@ -81,5 +80,10 @@ public function artikelArrayAusBestand_artikel_abladestellen_lagerorte($artikeln
 
     return $result;
 }
+
+
+    public function lagerorteArrayFromAbladestelle_id($abladestelle_id){
+        return Lagerort::where('abladestelle_id', $abladestelle_id)->pluck('id', 'bezeichnung')->toArray();
+    }
 
 }

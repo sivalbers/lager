@@ -9,7 +9,6 @@ new class extends Component {
         ['label' => 'Lagerbestand', 'route' => 'bestand', 'berechtigung' => null, 'image' => 'heroicon-s-cube', 'submenu' => []],
         ['label' => 'Warenzugang NEU', 'route' => 'warenzugang', 'berechtigung' => 'warenzugang buchen', 'image' => 'img_warenzugang', 'submenu' => []],
 
-        ['label' => 'Warenzugang ALT', 'route' => 'lieferschein', 'berechtigung' => 'warenzugang buchen', 'image' => 'img_warenzugang', 'submenu' => []],
         ['label' => 'Etiketten erstellen', 'route' => 'etikettenerstellen', 'berechtigung' => 'warenzugang buchen', 'image' => 'heroicon-o-qr-code', 'submenu' => []],
         ['label' => 'Einkaufsliste', 'route' => 'einkaufsliste', 'berechtigung' => 'einkaufsliste anzeigen', 'image' => 'heroicon-s-shopping-bag', 'submenu' => []],
         [

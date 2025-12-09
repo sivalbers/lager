@@ -20,8 +20,8 @@
     </div>
 
     @foreach ($artikel as $art)
-        <div class="flex flex-col pb-6 " wire:key="artikel-{{ $art->artikelnr }}">
-            <div class="flex flex-row bg-slate-300 hover:bg-slate-200 px-1">
+        <div class="flex flex-col pb-2 " wire:key="artikel-{{ $art->artikelnr }}">
+            <div class="flex flex-row hover:bg-slate-200 px-1">
                 <div class="w-2/12">
                     @if (auth()->user()->hasBerechtigung('artikel ändern'))
                         <a href="#" wire:click="editArtikel(false, '{{ $art->artikelnr }}')"
@@ -32,12 +32,8 @@
                 </div>
                 <div class="w-5/12">{{ $art->bezeichnung }}</div>
                 <div class="w-2/12">{{ $art->einheit }}</div>
-                <div class="w-3/12">{{ $art->materialgruppe }}</div>
-            </div>
-
-            <div class="flex flex-row w-full bg-slate-200 px-1">
-                <div class="w-full flex justify-between text-xs text-gray-500">
-                    <div>Einrichtungen:</div>
+                <div class="w-3/12 flex flex-row justify-between" >
+                    <div>{{ $art->materialgruppe }}</div>
                     @if (auth()->user()->hasBerechtigung('artikel anlegen'))
                         <div>
                             <button title="Neue Einrichtung anlegen" class="h-5 w-5 text-sky-600"
@@ -46,10 +42,18 @@
                             </button>
                         </div>
                     @endif
+
                 </div>
             </div>
 
             @if (count($art->einrichtungen) > 0)
+                <div class="flex flex-row w-full  px-1">
+                    <div class="w-full flex justify-between text-xs text-gray-500">
+                        <div class="pl-4 border-t w-full">Einrichtungen:</div>
+                    </div>
+                </div>
+
+
                 <div class="flex justify-between">
                     <div class="flex flex-row w-full font-bold text-sky-600 px-1 ">
                         <div class="w-1/12 "></div>

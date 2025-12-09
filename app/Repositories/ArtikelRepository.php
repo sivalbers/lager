@@ -156,6 +156,17 @@ class ArtikelRepository
         return $this->extractArtikel($this->holeArtikelausfaveo($artikelnr));
     }
 
+
+    public function getArtikelOrLoadFromFaveo($artikelnr){
+        $artikel = $this->getArtikel($artikelnr);
+        if (empty($artikel)){
+            $this->holeArtikel($artikelnr);
+            return $this->getArtikel($artikelnr);
+        }else{
+            return $artikel;
+        }
+    }
+
 }
 
 

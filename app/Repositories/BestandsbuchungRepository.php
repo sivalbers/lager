@@ -4,8 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Protokoll;
 use App\Models\Artikelbestand;
+use App\Models\Importprotokoll;
+use App\Models\Etikett;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
+
 
 
 class BestandsbuchungRepository
@@ -50,7 +55,7 @@ class BestandsbuchungRepository
         return $bestand->id;
     }
 
-    public function BucheBestand($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge, $modus){
+    public function BucheBestand($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge, $modus, $lieferscheinnr = null, $etikett = null){
 
         if ($modus === 'entnahme') {
             $menge = $menge * -1;
@@ -62,10 +67,49 @@ class BestandsbuchungRepository
         elseif ($modus === 'korrektur'){
             $buchungsgrund_id = 3;
         }
-
-        if ( $this->_bucheBestand($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge) > 0){
-            $this->createProtokoll($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge, $buchungsgrund_id);
+        elseif ($modus === 'warenzugang'){
+            $buchungsgrund_id = 4;
         }
 
+
+
+        try {
+            DB::beginTransaction();
+
+            if ($this->_bucheBestand($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge) > 0) {
+                $this->createProtokoll($nr, $abladestelle_id, $lagerort_id, $lagerplatz, $menge, $buchungsgrund_id);
+
+                if (!empty($etikett)) {
+                    $eti = new Etikett();
+                    $eti->artikelnr = $nr;
+                    $eti->abladestelle_id = $abladestelle_id;
+                    $eti->lagerort_id = $lagerort_id; // Fehler aus vorheriger Version korrigiert
+                    $eti->lagerplatz = $lagerplatz;
+                    $eti->save();
+                }
+
+                if (!empty($lieferscheinnr)) {
+                    $imp = new ImportProtokoll();
+                    $imp->debitornr = Auth::user()->debitor_nr;
+                    $imp->lieferscheinnr = $lieferscheinnr;
+                    $imp->artikelnr = $nr;
+                    $imp->save();
+                }
+            }
+
+            DB::commit(); // alles erfolgreich, also Transaktion festschreiben
+        } catch (\Throwable $e) {
+            DB::rollBack(); // Fehler aufgetreten → alles rückgängig machen
+
+            // Fehler loggen (optional)
+            Log::error('Fehler bei Buchungsvorgang: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'user_id' => Auth::id(),
+                'artikel' => $nr,
+            ]);
+
+            // Optional: eigene Fehlerbehandlung oder Weiterleitung
+            throw $e; // oder return redirect()->back()->with('error', 'Ein Fehler ist aufgetreten.');
+        }
     }
 }
