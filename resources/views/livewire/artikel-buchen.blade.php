@@ -11,7 +11,7 @@
         <div>            {{-- Menge --}}
             <div class="min-w-0 flex flex-row items-center space-x-5">
                 <label class="block text-sm text-gray-600 mb-1">Menge</label>
-                <input
+                <input id="eingabe-menge"
                         type="number"
                         inputmode="numeric"
                         pattern="[0-9]*"
@@ -229,6 +229,7 @@
                 });
 
                 setTimeout(() => {
+                    console.log("Focus setzen");
                     const mengeInput = document.getElementById("eingabe-menge");
 
                     if (mengeInput) {
