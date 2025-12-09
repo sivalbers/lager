@@ -80,7 +80,6 @@ class EtikettenErstellen extends Component
     public function createDataFromText() {
         $bestandRepository = new BestandsverwaltungRepository();
 
-
         // Text in Zeilen aufteilen
         $zeilen = preg_split('/\r\n|\r|\n/', trim($this->text));
 

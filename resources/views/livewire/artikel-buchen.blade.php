@@ -29,8 +29,12 @@
                             <div class="grow flex-col">
                                 <div class="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg mb-1">
                                     <div class="flex flex-col">
-                                        <div class="flex flex-row space-x-2">
+                                        <div class="flex flex-row justify-between space-x-2">
                                             <div><span class="text-gray-500 text-xs">Artikel:</span> {{ $row['artikel'] }}</div>
+                                            <div>
+                                                
+                                                <x-mary-button wire:click="delInputData({{ $index }})" title="Artikel löschen" icon="o-trash" />
+                                            </div>
 
                                         </div>
                                         <div class="flex flex-row space-x-2">

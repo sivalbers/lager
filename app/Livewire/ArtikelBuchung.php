@@ -20,7 +20,7 @@ class ArtikelBuchung extends Component
     public BestandsbuchungRepository $artikelRepository;
     protected ?BestandsverwaltungRepository $bestandsverwaltungRepository = null;
 
-    public $inputData = [];
+    public array $inputData = [];
     public $abladestellen_ids = [];
 
     public int $debitornr = -1;
@@ -54,8 +54,6 @@ class ArtikelBuchung extends Component
             $this->ueberschrift = 'Sonstige Buchung';
         }
 
-        $this->inputData = null;
-
         $this->debitornr = auth()->user()->debitor_nr;
         $this->cameraId = auth()->user()->camera_device_id;
 
@@ -79,31 +77,24 @@ class ArtikelBuchung extends Component
     }
 
 
-#[On('qrcode-scanned')]
-public function handleScan(string $code = null): void {
-    \Log::info('Anfang handleScan', ['code' => $code]);
-
-    if (!$code) {
-        return;
-    }
-
-    $decoded = json_decode($code, true);
-
-    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-
-        if (empty($this->inputData) or count($this->inputData) === 0 ){
-            $this->inputData[] = [
-                'artikel' => $decoded['artikelnr'] ?? '',
-                'bezeichnung' => Artikel::where('artikelnr', $decoded['artikelnr'] ?? '')->value('bezeichnung') ?? '',
-                'abladestelle_id' => $decoded['abladestelle'] ?? '',
-                'abladestelle' => Abladestelle::where('id', $decoded['abladestelle'] ?? 0)->value('name') ?? '',
-                'lagerort' => Lagerort::Where('id', $decoded['lagerort'] ?? 0)->value('bezeichnung') ?? '',
-                'lagerort_id' => $decoded['lagerort'] ?? '', 'lagerplatz' => $decoded['lagerplatz'] ?? '',
-                'menge' => $this->mMenge ?? -1,
-            ];
+    #[On('qrcode-scanned')]
+    public function handleScan(string $code = null): void
+    {
+        if (!$code) {
+            return;
         }
-        else {
-        array_unshift($this->inputData, [
+
+        $decoded = json_decode($code, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+            return;
+        }
+
+        // Sicherstellen, dass inputData ein Array ist
+        if (!is_array($this->inputData)) {
+            $this->inputData = [];
+        }
+
+        $entry = [
             'artikel'         => $decoded['artikelnr'] ?? '',
             'bezeichnung'     => Artikel::where('artikelnr', $decoded['artikelnr'] ?? '')->value('bezeichnung') ?? '',
             'abladestelle_id' => $decoded['abladestelle'] ?? '',
@@ -112,16 +103,15 @@ public function handleScan(string $code = null): void {
             'lagerort_id'     => $decoded['lagerort'] ?? '',
             'lagerplatz'      => $decoded['lagerplatz'] ?? '',
             'menge'           => $this->mMenge ?? -1,
-        ]);
-    }
+        ];
+
+        // Immer OBEN einfügen
+        array_unshift($this->inputData, $entry);
+
+        $this->dispatch('scan-processed');
     }
 
-    \Log::info('Scan verarbeitet', $this->inputData);
-    $this->dispatch('scan-processed');
-    \Log::info('Ende handleScan');
-}
-
-public function addRow($index = null)
+    public function addRow($index = null)
     {
         if ($index === null) {
             $this->inputData[] = [
@@ -160,19 +150,26 @@ public function addRow($index = null)
 
         $ab = Abladestelle::where ('id', (int)$this->mAbladestelle)->first();
         $la = Lagerort::where ('id', (int)$this->mLagerort)->first();
-        Log::info(['Abladestelle' => $this->mAbladestelle]);
-            $this->inputData[] = [
-                'artikel'  => $this->mArtikel,
-                'bezeichnung'  => $this->mBezeichnung,
-                'abladestelle'  => $ab->name,
-                'abladestelle_id'  => (int)$this->mAbladestelle,
-                'lagerort' => $la->bezeichnung,
-                'lagerort_id' => (int)$this->mLagerort,
-                'lagerplatz' => $this->mLagerplatz,
-                'menge'    => $this->mMenge,
-            ];
-            Log::info($this->inputData[count($this->inputData)-1]);
-            return;
+
+
+        if (!is_array($this->inputData)) {
+            $this->inputData = [];
+        }
+
+        $entry = [
+            'artikel'  => $this->mArtikel,
+            'bezeichnung'  => $this->mBezeichnung,
+            'abladestelle'  => $ab->name,
+            'abladestelle_id'  => (int)$this->mAbladestelle,
+            'lagerort' => $la->bezeichnung,
+            'lagerort_id' => (int)$this->mLagerort,
+            'lagerplatz' => $this->mLagerplatz,
+            'menge'    => $this->mMenge,
+        ];
+
+        // Immer OBEN einfügen
+        array_unshift($this->inputData, $entry);
+
     }
 
 
@@ -237,6 +234,10 @@ public function addRow($index = null)
         Log::info(['loadLagerorte' => $this->lagerorte]);
     }
 
+
+    public function delInputData($index){
+        unset($this->inputData[$index]);
+    }
 
 
 }
