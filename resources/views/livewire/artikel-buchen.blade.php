@@ -17,7 +17,7 @@
                         pattern="[0-9]*"
 
                         wire:model="mMenge"
-                        class="block w-20 h-10 border rounded px-2 text-sm"
+                        class="block w-20 h-10 border rounded px-2 text-base"
                         min="0"
                     />
                 <div id="reader" style="width: 100px; height: 80px; border:1px solid #ccc;"></div>
