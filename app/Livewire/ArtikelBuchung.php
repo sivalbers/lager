@@ -139,6 +139,12 @@ public function addRow($index = null)
 
     public function addManuelleEingabe()
     {
+        $this->validate( [
+                        'mArtikel' => 'required',
+                        'mAbladestelle' => 'required',
+                        'mLagerort' => 'required',
+                        'mMenge' => 'required|min:1' ] );
+
         $ab = Abladestelle::where ('id', (int)$this->mAbladestelle)->first();
         $la = Lagerort::where ('id', (int)$this->mLagerort)->first();
         Log::info(['Abladestelle' => $this->mAbladestelle]);

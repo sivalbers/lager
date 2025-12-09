@@ -13,7 +13,7 @@
         };
         $wire.set('screenWidth', getBp());
     ">
-    <div class="font-bold mt-4">Wird das Menü nicht angezeigt, bitte die Seite mit <F5> aktualisieren!</div>
+    
     <div class="flex flex-row items-center justify-between w-full ">
         <div>
             <h1 class="text-2xl font-bold mt-4 mb-6">Artikel Lagerbestand</h1>

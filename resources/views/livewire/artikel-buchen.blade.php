@@ -7,7 +7,16 @@
 
     </div>
 
-    <div id="reader" style="width: 200px; height: 200px; border:1px solid #ccc;"></div>
+    <div class="flex flex-col">
+        <div>            {{-- Menge --}}
+            <div class="min-w-0 flex flex-row items-center space-x-5">
+                <label class="block text-sm text-gray-600 mb-1">Menge</label>
+                <input type="number" wire:model="mMenge" class="block w-20 h-10 border rounded px-2 text-sm" min="0" />
+                <div id="reader" style="width: 200px; height: 200px; border:1px solid #ccc;"></div>
+            </div>
+        </div>
+
+    </div>
 
 
 
@@ -74,12 +83,7 @@
                     class="block w-full h-10 border rounded px-2 text-sm" />
             </div>
 
-            {{-- Menge --}}
-            <div class="min-w-0">
-                <label class="block text-sm text-gray-600 mb-1">Menge</label>
-                <input type="number" wire:model="mMenge"
-                    class="block w-full h-10 border rounded px-2 text-sm" min="0" />
-            </div>
+
 
             {{-- Button --}}
             <div class="min-w-0 sm:col-span-2 lg:col-span-1 flex items-end">
@@ -102,7 +106,7 @@
                                 <div class="text-sm sm:text-sm md:text-base lg:text-base xl:text-lg 2xl:text-lg mb-1">
                                     <div class="flex flex-col">
                                         <div class="flex flex-row space-x-2">
-                                            <div>{{ $row['artikel'] }}</div>
+                                            <div><span class="text-gray-500 text-xs">Artikel:</span> {{ $row['artikel'] }}</div>
 
                                         </div>
                                         <div class="flex flex-row space-x-2">
@@ -206,6 +210,12 @@
                 html5QrCode.stop().then(() => {
                     setTimeout(startScanner, 1500);
                 });
+
+        if (mengeInput) {
+            mengeInput.focus();
+            mengeInput.select(); // optional: Inhalt markieren
+        }
+
             }
 
             document.addEventListener("livewire:navigated", startScanner);
