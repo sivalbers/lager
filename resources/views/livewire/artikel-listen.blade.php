@@ -1,5 +1,5 @@
 <div x-data="{ showArtikel: @entangle('showArtikel'),
-                showEinrichtung: @entangle('showEinrichtung') }" class="w-5/6 m-auto">
+                showEinrichtung: @entangle('showEinrichtung') }" class="w-11/12 m-auto">
 
     <h1 class="text-2xl font-bold mt-4">Artikelverwaltung</h1>
 
@@ -11,8 +11,8 @@
     @endif
 
     <div class="flex flex-col w-full border-b border-gray-600 mt-2">
-        <div class="flex flex-row font-bold text-sky-600 border-b border-sky-600 px-1">
-            <div class="w-2/12">Artikel-Nr</div>
+        <div class="flex flex-row md:font-bold text-sky-600 border-b border-sky-600 px-1 text-xs md:text-base">
+            <div class="w-2/12">Artikelnr.</div>
             <div class="w-5/12">Bezeichnung</div>
             <div class="w-2/12">Einheit</div>
             <div class="w-3/12">Materialgruppe</div>
@@ -47,20 +47,34 @@
             </div>
 
             @if (count($art->einrichtungen) > 0)
+            <!--
                 <div class="flex flex-row w-full  px-1">
                     <div class="w-full flex justify-between text-xs text-gray-500">
                         <div class="pl-4 border-t w-full">Einrichtungen:</div>
                     </div>
                 </div>
+            -->
 
 
                 <div class="flex justify-between">
-                    <div class="flex flex-row w-full font-bold text-sky-600 px-1 ">
+                    <div class="flex flex-row w-full md:font-bold text-sky-600 px-1 text-xs md:text-base">
                         <div class="w-1/12 "></div>
-                        <div class="w-2/12 border-b border-gray-600">Abladestelle</div>
-                        <div class="w-2/12 border-b border-gray-600">Lagerort</div>
-                        <div class="w-2/12 border-b border-gray-600">Mindestbestand</div>
-                        <div class="w-2/12 border-b border-gray-600">Bestellmenge</div>
+                        <div class="w-3/12 border-b border-gray-600">
+                            <span class="hidden md:flex">Abladestelle</span>
+                            <span class="flex md:hidden">Abl.</span>
+                        </div>
+                        <div class="w-4/12 border-b border-gray-600">
+                            <span class="hidden md:flex">Lagerort</span>
+                            <span class="flex md:hidden">L-Ort.</span>
+                        </div>
+                        <div class="w-2/12 border-b border-gray-600">
+                            <span class="hidden md:flex">Mindestbest.</span>
+                            <span class="flex md:hidden">Min.</span>
+                        </div>
+                        <div class="w-2/12 border-b border-gray-600">
+                            <span class="hidden md:flex">Bestellm.</span>
+                            <span class="flex md:hidden">Best.</span>
+                        </div>
                     </div>
                     <div class=" border-gray-600 w-10"></div>
                 </div>
@@ -68,10 +82,10 @@
 
 
             @foreach ($art->einrichtungen as $einr)
-                <div class="flex justify-between hover:bg-slate-200">
+                <div class="flex justify-between hover:bg-slate-200 ">
                     <div class="flex flex-row w-full px-1 text-sm" wire:key="einrichtung-{{ $einr->id }}">
                         <div class="w-1/12"></div>
-                        <div class="w-2/12">
+                        <div class="w-3/12">
                             @if (auth()->user()->hasBerechtigung('artikel ändern'))
                                 <a href="#" wire:click="editEinrichtung(false, {{ $einr->id }})"
                                     class="hover:underline text-sky-600">
@@ -81,7 +95,7 @@
                                 {{ $einr->abladestelle->name ?? '-' }}
                             @endif
                         </div>
-                        <div class="w-2/12">{{ $einr->lagerort?->bezeichnung ?? '-' }}</div>
+                        <div class="w-4/12">{{ $einr->lagerort?->bezeichnung ?? '-' }}</div>
                         <div class="w-2/12">{{ $einr->mindestbestand }}</div>
                         <div class="w-2/12">{{ $einr->bestellmenge }}</div>
                     </div>
@@ -100,10 +114,11 @@
 
 
     {{-- Modal: Artikel --}}
-    <div x-data="{ nr: '{{ $artikelnr }}' }" x-show="showArtikel" key="{{ now() }}" x-cloak class="fixed inset-0 z-10 bg-black/40 flex justify-center items-center">
+    <div x-data="{ nr: '{{ $artikelnr }}' }" x-show="showArtikel" key="{{ now() }}" x-cloak
+        class="fixed inset-0 z-10 bg-black/40 flex justify-center items-center">
 
-        <div class="bg-white p-6 rounded-md shadow-gray-500 shadow-md w-6/12">
-            <h2 class="text-xl font-bold mb-4">Artikel {{ $isEditArtikel ? 'ändern' : 'anlegen' }} => {{ $artikelnr }} </h2>
+        <div class="bg-white p-6 rounded-md shadow-gray-500 shadow-md w-full sm:w-6/12 sm:bg-yellow-300">
+            <h2 class="text-xl font-bold mb-4">Artikel {{ $isEditArtikel ? 'ändern' : 'anlegen' }} </h2>
 
             <div class="flex flex-col gap-2">
                 <div class="flex flex-row items-end">

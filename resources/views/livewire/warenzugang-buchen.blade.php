@@ -1,18 +1,73 @@
-<div class="p-6">
+<div class="p-6"  x-data="{ tab: 'lieferschein' }">
     <h2 class="text-2xl font-bold mb-4">Warenzugang</h2>
     <x-mary-toast />
-    <div class="flex flex-col ">
-        <div class="flex flex-row items-center space-x-4">
-            <label class="font-medium">Lieferschein-Nr: LS000</label>
-            <input type="text" wire:model="lieferscheinNr" class="border px-2 py-1 rounded w-32" placeholder="z.B. 70824">
 
+
+    <div class="mb-6 print:hidden">
+        <nav class="flex space-x-4 border-b border-gray-500" aria-label="Tabs">
+            <button @click="tab = 'lieferschein'"
+                :class="tab === 'lieferschein' ? 'border-sky-500 text-sky-600' :
+                    'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                class="whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm bg-gray-600">Warenzugang über Lieferschein</button>
+            <button @click="tab = 'artikelliste'"
+                :class="tab === 'artikelliste' ? 'border-sky-500 text-sky-600' :
+                    'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                class="whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm">Textfeld</button>
+
+        </nav>
+    </div>
+
+
+
+    <div x-show="tab === 'lieferschein'" class="space-y-2 my-6 print:hidden">
+        <div class="flex flex-col ">
             <div class="flex flex-row items-center space-x-4">
-                <button wire:click="readLieferschein" class="bg-sky-600 text-white px-4 py-1 rounded hover:bg-blue-700">
-                    Lieferschein holen
-                </button>
+                <label class="font-medium">Lieferschein-Nr: LS000</label>
+                <input type="text" wire:model="lieferscheinNr" class="border px-2 py-1 rounded w-32" placeholder="z.B. 70824">
+
+                <div class="flex flex-row items-center space-x-4">
+                    <button wire:click="readLieferschein" class="bg-sky-600 text-white px-4 py-1 rounded hover:bg-blue-700">
+                        Lieferschein holen
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <div x-show="tab === 'artikelliste'" class="space-y-2 my-6 print:hidden">
+        <div class="flex flex-col">
+
+                <div>
+                <div class="font-medium">Artikelliste übernehmen</div>
+                <div class="text-xs">Format:  Artikelnr;Abladestelle;Lagerort;Lagerplatz;Menge</div>
+                <div class="text-xs">Beispiel:  95004916;BM Leer;Allgemein - Weser Str. 3;ABC;12</div>
+
+                </div>
+                <textarea
+                    name="artikelliste"
+                    wire:model="artikelliste"
+                    rows="15"
+                    class="border px-2 py-1 rounded w-full sm:w-6/12 resize-y"
+                ></textarea>
+
+
+
+                <div class="flex flex-row justify-between sm:w-6/12 space-x-4 mt-2">
+                    <button wire:click="checkArtikelliste" class="bg-sky-600 text-white px-4 py-1 rounded hover:bg-blue-700">
+                        Liste prüfen
+                    </button>
+
+                    <button wire:click="readArtikelliste" class="bg-sky-600 text-white px-4 py-1 rounded hover:bg-blue-700">
+                        Liste verarbeiten
+                    </button>
+                </div>
+
+        </div>
+    </div>
+
+
+
+
 
     @if ($message)
         <div class="text-red-500 mb-4">{{ $message }}</div>

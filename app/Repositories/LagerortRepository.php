@@ -19,4 +19,15 @@ class LagerortRepository
         }
 
     }
+
+public static function existiertLagerortBezUndAbladestelle(string $lagerort, string $abladestelle): bool
+{
+    return Lagerort::query()
+        ->join('abladestellen', 'abladestellen.id', '=', 'lagerorte.abladestelle_id')
+        ->whereRaw('LOWER(lagerorte.bezeichnung) = ?', [mb_strtolower(trim($lagerort))])
+        ->whereRaw('LOWER(abladestellen.name) = ?', [mb_strtolower(trim($abladestelle))])
+        ->exists();
+}
+
+
 }

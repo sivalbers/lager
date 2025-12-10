@@ -35,7 +35,7 @@ new class extends Component {
     public function logout(Logout $logout): void
     {
         $logout();
-        $this->redirect('/', navigate: true);
+        $this->redirect('/login', navigate: true);
     }
 };
 ?>
@@ -133,10 +133,29 @@ new class extends Component {
     </div>
 
     {{-- MENÜ --}}
-    <div class="flex flex-row items-center space-x-8 sm:-my-px sm:ps-10 bg-white border-y border-gray-200">
+    <div class="flex flex-row items-center px-4 space-x-8 sm:-my-px sm:ps-10 bg-white border-y border-gray-200">
 
         {{-- MENÜPUNKTE --}}
 
+        @php
+            $anzahl = 0 ;
+            foreach ($menuitems as $item){
+                if (count($item['submenu']) > 0) {
+                    foreach ($item['submenu'] as $subitem){
+                        if (hasRight($user, $subitem['berechtigung'])){
+                            $anzahl = $anzahl + 1;
+                        }
+                    }
+                }
+                else {
+                    if (hasRight($user, $item['berechtigung'])){
+                        $anzahl = $anzahl + 1;
+                    }
+                }
+            }
+        @endphp
+
+        @if ($anzahl > 5 )
         @foreach ($menuitems as $item)
             @if (count($item['submenu']) > 0)
 
@@ -196,6 +215,38 @@ new class extends Component {
 
             @endif
         @endforeach
+        @else
+            @foreach ($menuitems as $item)
+                @if (count($item['submenu']) > 0)
+                    @foreach ($item['submenu'] as $subitem)
+                        @if (hasRight($user, $subitem['berechtigung']))
+                            <a href="{{ route($subitem['route']) }}" wire:navigate>
+                                <div class="flex flex-row items-center gap-1">
+                                    @if ($subitem['image'])
+                                        <x-dynamic-component :component="$subitem['image']" class="w-5 h-5" />
+                                    @endif
+
+                                    <span class="hidden md:flex">{{ $subitem['label'] }}</span>
+                                </div>
+                            </a>
+                        @endif
+                    @endforeach
+                @else
+                    @if (hasRight($user, $item['berechtigung']))
+                        <a href="{{ route($item['route']) }}" wire:navigate>
+                            <div class="flex flex-row items-center gap-1">
+                                @if ($item['image'])
+                                    <x-dynamic-component :component="$item['image']" class="w-5 h-5" />
+                                @endif
+
+                                <span class="hidden md:flex">{{ $item['label'] }}</span>
+                            </div>
+                        </a>
+                    @endif
+
+                @endif
+            @endforeach
+        @endif
 
 
     </div>

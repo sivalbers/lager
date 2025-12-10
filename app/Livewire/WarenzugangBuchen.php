@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\ArtikelRepository;
 use App\Repositories\BestandsverwaltungRepository;
 use App\Repositories\BestandsbuchungRepository;
+use App\Repositories\WarenzugangRepository;
 use Mary\Traits\Toast;
 
 use App\Models\Lagerort;
@@ -16,6 +17,8 @@ class WarenzugangBuchen extends Component
 {
 
     use Toast;
+
+    public $artikelliste;
 
     public $jsonResult = "";
     public $clipboardValue = "";
@@ -189,10 +192,6 @@ class WarenzugangBuchen extends Component
         }
     }
 
-
-
-
-
     public function ladePositionenAusJson($json)
     {
         $daten = json_decode($json, true)['value'];
@@ -303,5 +302,16 @@ class WarenzugangBuchen extends Component
     {
         return view('livewire.warenzugang-buchen')->layout('layouts.app');
     }
+
+    public function checkArtikelliste(){
+        $liste = WarenzugangRepository::parseArtikelText($this->artikelliste);
+        $this->artikelliste = "Geprüft ...";
+    }
+
+
+    public function readArtikelliste(){
+        $this->artikelliste = "Verarbeitet ...";
+    }
+
 
 }

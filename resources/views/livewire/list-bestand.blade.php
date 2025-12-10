@@ -13,7 +13,7 @@
         };
         $wire.set('screenWidth', getBp());
     ">
-    
+
     <div class="flex flex-row items-center justify-between w-full ">
         <div>
             <h1 class="text-2xl font-bold mt-4 mb-6">Artikel Lagerbestand</h1>
@@ -59,10 +59,10 @@
 
         <div class="cursor-pointer font-bold bg-[#cdd503] border-b-2 border-black">
             <div class="flex w-full">
-                    <div class="w-[30%] pl-2">Artikelnummer</div>
+                    <div class="w-[30%] pl-2">Artikelnr.</div>
                     <div class="w-[50%]">Bezeichnung</div>
                     <div class="w-[10%] text-right pr-2">Bestand</div>
-                    <div class="w-[10%] ">Einheit</div>
+                    <div class="w-[10%]"><span class="hidden md:flex">Einheit</span></div>
             </div>
         </div>
 
