@@ -21,11 +21,17 @@
                         min="0"
                     />
                 <div id="reader" style="width: 100px; height: 80px; border:1px solid #ccc;"></div>
+                @if ($modus === 'rueckgabe')
+                    <x-img_artikel_rueckgabe class="w-20"/>
+                @elseif ($modus === 'entnahme')
+                    <x-img_artikel_entnahme class="w-20"/>
+                @else
+                    <x-img_artikel_korrektur class="w-20"/>
+                @endif
             </div>
         </div>
 
     </div>
-
 
 @if ($inputData)
     <div class="flex flex-col w-full my-8">
@@ -88,6 +94,7 @@
 
 
 
+    @if (Auth::user()->hasBerechtigung("artikel manuell buchen"))
     <div class="mt-6 px-4 py-6 bg-white border rounded shadow max-w-full overflow-hidden">
         <div class="text-2xl font-bold mb-4">
             Manuelle Erfassung:
@@ -161,12 +168,7 @@
             </div>
         </form>
     </div>
-
-
-
-
-
-
+    @endif
 
 </div>
 
