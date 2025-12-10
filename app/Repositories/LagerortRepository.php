@@ -20,6 +20,19 @@ class LagerortRepository
 
     }
 
+
+public static function existiertLagerortBezeichnung(string $lagerort): bool
+{
+    return Lagerort::whereRaw('LOWER(lagerorte.bezeichnung) = ?', [mb_strtolower(trim($lagerort))])->exists();
+}
+
+public static function getLagerortIdByBezeichnung(string $lagerort): int
+{
+    return Lagerort::whereRaw('LOWER(lagerorte.bezeichnung) = ?', [mb_strtolower(trim($lagerort))])->pluck('id')->first();
+}
+
+
+
 public static function existiertLagerortBezUndAbladestelle(string $lagerort, string $abladestelle): bool
 {
     return Lagerort::query()
@@ -28,6 +41,11 @@ public static function existiertLagerortBezUndAbladestelle(string $lagerort, str
         ->whereRaw('LOWER(abladestellen.name) = ?', [mb_strtolower(trim($abladestelle))])
         ->exists();
 }
+
+
+    public static function lagerorteArrayFromAbladestelle_id($abladestelle_id){
+        return Lagerort::where('abladestelle_id', $abladestelle_id)->pluck('id', 'bezeichnung')->toArray();
+    }
 
 
 }

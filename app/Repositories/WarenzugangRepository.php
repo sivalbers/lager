@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Psp;
+use App\Repositories\LagerortRepository;
+use App\Repositories\AbladestelleRepository;
 
 
 class WarenzugangRepository
@@ -10,7 +12,7 @@ class WarenzugangRepository
 
 
 
-    public static function parseArtikelText(string $artikeltext): array
+    public static function parseArtikelListe(string $artikeltext): array
 {
     $ergebnis = [];
     $zeilen = preg_split('/\r\n|\r|\n/', trim($artikeltext));
@@ -30,7 +32,7 @@ class WarenzugangRepository
                 'raw' => $zeile,
                 'index' => $index + 1,
                 'valid' => false,
-                'error' => 'Ungültiges Format – erwartet 5 Werte.'
+                'error' => 'Ungültiges Format - erwartet 5 Werte.'
             ];
             continue;
         }
@@ -48,6 +50,37 @@ class WarenzugangRepository
             continue;
         }
 
+        if ( !LagerortRepository::existiertLagerortBezeichnung($lagerort)){
+            $ergebnis[] = [
+                'raw' => $zeile,
+                'index' => $index + 1,
+                'valid' => false,
+                'error' => sprintf("'%s' Lagerort existiert nicht!", $lagerort),
+            ];
+            continue;
+        }
+
+        if ( !AbladestelleRepository::existiertAbladestelleName($abladestelle)){
+            $ergebnis[] = [
+                'raw' => $zeile,
+                'index' => $index + 1,
+                'valid' => false,
+                'error' => sprintf("'%s' Abladestelle existiert nicht!", $abladestelle),
+            ];
+            continue;
+        }
+
+        if ( !LagerortRepository::existiertLagerortBezUndAbladestelle($lagerort, $abladestelle)){
+            $ergebnis[] = [
+                'raw' => $zeile,
+                'index' => $index + 1,
+                'valid' => false,
+                'error' => 'Abladestelle oder Lagerort oder die Kombination aus beiden ist falsch!'
+            ];
+            continue;
+        }
+
+
         if (!is_numeric($menge) || (int)$menge <= 0) {
             $ergebnis[] = [
                 'raw' => $zeile,
@@ -62,7 +95,7 @@ class WarenzugangRepository
         $ergebnis[] = [
             'index'         => $index + 1,
             'valid'         => true,
-            'artikelnummer' => $artikelnummer,
+            'artikelnr'     => $artikelnummer,
             'abladestelle'  => $abladestelle,
             'lagerort'      => $lagerort,
             'lagerplatz'    => $lagerplatz,

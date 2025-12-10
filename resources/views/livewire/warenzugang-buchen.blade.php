@@ -43,12 +43,22 @@
                 <div class="text-xs">Beispiel:  95004916;BM Leer;Allgemein - Weser Str. 3;ABC;12</div>
 
                 </div>
+                <div class="flex flex-row">
                 <textarea
                     name="artikelliste"
                     wire:model="artikelliste"
                     rows="15"
                     class="border px-2 py-1 rounded w-full sm:w-6/12 resize-y"
                 ></textarea>
+                <textarea
+                    disabled
+                    name="ergebnisliste"
+                    wire:model="ergebnisliste"
+                    rows="15"
+                    class="border px-2 py-1 rounded w-full sm:w-6/12 resize-y bg-gray-100"
+                ></textarea>
+                </div>
+
 
 
 
@@ -115,9 +125,9 @@
                                     wire:model="positionen.{{ $index }}.lagerort"
                                     class="w-full text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-500">
                                     <option value="">---</option>
-                                    @foreach($pos['lagerorte'] as $lagerort)
-                                        <option value="{{ $lagerort['id'] }}">
-                                            {{ $lagerort['bezeichnung'] }}
+                                    @foreach($pos['lagerorte'] as $bezeichnung => $id)
+                                        <option value="{{ $id }}" @selected($id == $pos['lagerort'])>
+                                            {{ $bezeichnung }}
                                         </option>
                                     @endforeach
                                 </select>

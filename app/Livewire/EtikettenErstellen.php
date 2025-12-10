@@ -5,6 +5,7 @@ namespace App\Livewire;
 use League\CommonMark\Environment\Environment;
 use Livewire\Component;
 use App\Repositories\BestandsverwaltungRepository;
+use App\Repositories\LagerortRepository;
 use App\Models\Etikett;
 use App\Models\Artikel;
 use App\Models\Lagerort;
@@ -57,17 +58,13 @@ class EtikettenErstellen extends Component
 
     public function createDataFromTable() {
 
-
-        $bestandRepository = new BestandsverwaltungRepository();
-
-
         foreach ($this->etiketten as $etikett) {
             $this->data[] = [
                 'artikelnr' => $etikett->artikelnr,
                 'bezeichnung' => $etikett->artikel->bezeichnung,
                 'abladestelle_id' => $etikett->abladestelle_id,
                 'lagerort_id' => $etikett->lagerort_id,
-                'lagerorte' =>  $bestandRepository->lagerorteArrayFromAbladestelle_id($etikett->abladestelle_id),
+                'lagerorte' =>  LagerortRepository::lagerorteArrayFromAbladestelle_id($etikett->abladestelle_id),
                 'lagerplatz' => $etikett->lagerplatz
             ];
         }
@@ -78,7 +75,7 @@ class EtikettenErstellen extends Component
     }
 
     public function createDataFromText() {
-        $bestandRepository = new BestandsverwaltungRepository();
+
 
         // Text in Zeilen aufteilen
         $zeilen = preg_split('/\r\n|\r|\n/', trim($this->text));
@@ -97,7 +94,7 @@ class EtikettenErstellen extends Component
                     'bezeichnung' => Artikel::where('artikelnr', $werte[0])->pluck('bezeichnung')->first(),
                     'abladestelle_id' => (int)$werte[1],
                     'lagerort_id' => (int)$werte[2],
-                    'lagerorte' =>  $bestandRepository->lagerorteArrayFromAbladestelle_id($werte[1]),
+                    'lagerorte' =>  LagerortRepository::lagerorteArrayFromAbladestelle_id($werte[1]),
                     'lagerplatz' => $werte[3]
                 ];
             }
@@ -147,9 +144,8 @@ class EtikettenErstellen extends Component
     public function updatedMAbladestelleId()
     {
         \Log::info([ 'updatedMAbladestelleId' => $this->mBezeichnung ] );
-        $bestandRepository = new BestandsverwaltungRepository();
 
-        $this->lagerorteList = $bestandRepository->lagerorteArrayFromAbladestelle_id($this->mAbladestelle_id);
+        $this->lagerorteList = LagerortRepository::lagerorteArrayFromAbladestelle_id($this->mAbladestelle_id);
 
         if (!$this->lagerorteList){
             $this->lagerorteList = [];
@@ -157,13 +153,13 @@ class EtikettenErstellen extends Component
     }
 
     public function manuelleErfassung(){
-        $bestandRepository = new BestandsverwaltungRepository();
+
         $this->data[] = [
                 'artikelnr' => $this->mArtikelNr,
                 'bezeichnung' => $this->mBezeichnung,
                 'abladestelle_id' => $this->mAbladestelle_id,
                 'lagerort_id' => $this->mLagerort_id,
-                'lagerorte' =>  $bestandRepository->lagerorteArrayFromAbladestelle_id($this->mAbladestelle_id),
+                'lagerorte' =>  LagerortRepository::lagerorteArrayFromAbladestelle_id($this->mAbladestelle_id),
                 'lagerplatz' => $this->mLagerplatz
             ];
 
@@ -186,9 +182,8 @@ class EtikettenErstellen extends Component
         if ($eintrag && !empty($eintrag['abladestelle_id'])) {
             // Beispiel: Lagerorte für diese Abladestelle laden
 
-            $bestandRepository = new BestandsverwaltungRepository();
 
-            $lagerorte = $bestandRepository->lagerorteArrayFromAbladestelle_id($eintrag['abladestelle_id']);
+            $lagerorte = LagerortRepository::lagerorteArrayFromAbladestelle_id($eintrag['abladestelle_id']);
             // $lagerorte = Lagerort::where('abladestelle_id', $eintrag['abladestelle_id'])->pluck('id', 'bezeichnung')->toArray();
 
             // Ins data-Array zurückschreiben

@@ -12,6 +12,9 @@ use App\Repositories\WarenzugangRepository;
 use Mary\Traits\Toast;
 
 use App\Models\Lagerort;
+use App\Models\Artikel;
+use App\Repositories\AbladestelleRepository;
+use App\Repositories\LagerortRepository;
 
 class WarenzugangBuchen extends Component
 {
@@ -19,6 +22,7 @@ class WarenzugangBuchen extends Component
     use Toast;
 
     public $artikelliste;
+    public $ergebnisliste;
 
     public $jsonResult = "";
     public $clipboardValue = "";
@@ -274,10 +278,10 @@ class WarenzugangBuchen extends Component
         // $key hat z. B. den Wert "1.abladestelle"
         if (str_ends_with($key, 'abladestelle')) {
             [$index, ] = explode('.', $key);
-            $abladestelle = $this->positionen[$index]['abladestelle'];
+            $abladestelle_id = $this->positionen[$index]['abladestelle'];
 
-            if ($abladestelle) {
-                $lagerorte = $this->loadLagerorte($abladestelle);
+            if ($abladestelle_id) {
+                $lagerorte = LagerortRepository::lagerorteArrayFromAbladestelle_id($abladestelle_id);
                 $this->positionen[$index]['lagerorte'] = $lagerorte;
                 if (count($lagerorte) === 1) {
                     $this->positionen[$index]['lagerort'] = $lagerorte[0]['id'];
@@ -304,8 +308,64 @@ class WarenzugangBuchen extends Component
     }
 
     public function checkArtikelliste(){
-        $liste = WarenzugangRepository::parseArtikelText($this->artikelliste);
-        $this->artikelliste = "Geprüft ...";
+
+        $liste = WarenzugangRepository::parseArtikelListe($this->artikelliste);
+        $formatted = [];
+        $hasError = false;
+
+        foreach ($liste as $entry) {
+            if ($entry['valid']) {
+                $formatted[] = sprintf(
+                    "✓ [%s] %s | %s | %s | Menge: %s",
+                    $entry['index'],
+                    $entry['artikelnr'],
+                    $entry['abladestelle'],
+                    $entry['lagerort'] . ' / ' . $entry['lagerplatz'],
+                    $entry['menge']
+                );
+            } else {
+                $hasError = true;
+                $formatted[] = sprintf(
+                    "⚠ [%s] %s → %s",
+                    $entry['index'],
+                    $entry['raw'],
+                    $entry['error']
+                );
+            }
+        }
+
+        $this->ergebnisliste = implode("\n", $formatted);
+        $this->positionen = [];
+
+
+        if ($hasError === false){
+            foreach ($liste as $list){
+                $lagerort_id = LagerortRepository::getLagerortIdByBezeichnung($list['lagerort']);
+                $abladestelle_id = AbladestelleRepository::getAbladestelleIdByName($list['abladestelle']);
+
+                $this->positionen[] = [
+                    'artikelnr' => $list['artikelnr'],
+                    'bezeichnung' => Artikel::where('artikelnr', $list['artikelnr'])->pluck('bezeichnung')->first(),
+                    'einheit' =>  Artikel::where('artikelnr', $list['artikelnr'])->pluck('einheit')->first(),
+                    // 'abladestelle' => $list['abladestelle'],
+                    'abladestelle' => $abladestelle_id,
+                    //'abladestelle_id' => AbladestelleRepository::getAbladestelleIdByName($list['abladestelle']),
+                    'lagerort' => $lagerort_id,
+                    //'lagerort' => $list['lagerort'],
+                    //'lagerort_id' =>  $lagerort_id,
+                    'lagerorte' => LagerortRepository::lagerorteArrayFromAbladestelle_id($abladestelle_id),
+                    'lagerplatz' => $list['lagerplatz'],
+
+                    'menge' => $list['menge'],
+                    'etikett' => false,
+                    'lieferscheinnr' => ''
+                ];
+            }
+
+            $this->importArtikelFormFaveo();
+            //dd($this->positionen);
+        }
+
     }
 
 

@@ -82,8 +82,6 @@ public function artikelArrayAusBestand_artikel_abladestellen_lagerorte($artikeln
 }
 
 
-    public function lagerorteArrayFromAbladestelle_id($abladestelle_id){
-        return Lagerort::where('abladestelle_id', $abladestelle_id)->pluck('id', 'bezeichnung')->toArray();
-    }
+
 
 }

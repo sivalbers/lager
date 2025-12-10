@@ -14,5 +14,10 @@ class AbladestelleRepository
             ->exists();
     }
 
+    public static function getAbladestelleIdByName(string $name): int
+    {
+        return Abladestelle::whereRaw('LOWER(name) = ?', [mb_strtolower(trim($name))])->pluck('id')->first();
+    }
+
 
 }
