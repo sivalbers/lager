@@ -55,8 +55,8 @@
                 <select wire:model.blur="mLagerort_id" class="h-10 border rounded px-2 text-sm">
                     <option value="">Bitte wählen</option>
                     @foreach ($lagerorteList as $bezeichnung => $id)
-                        <option value="{{ $id }}" {{ $mLagerort_id === $id ? 'selected' : '' }}>
-                            {{ $bezeichnung }}
+                        <option value="{{ $id }}" >
+                            {{ $bezeichnung }} {{ $id }}
                         </option>
                     @endforeach
                 </select>
