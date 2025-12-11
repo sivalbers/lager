@@ -93,6 +93,21 @@ require __DIR__.'/auth.php';
 
 Route::get('/mary-test', MaryTabsTest::class);
 
+Route::get('/etikett', function () {
+    return view('etikett', [
+        'a'                => '245820',
+        'ab'               => 'Sicherungseinsatz NH 63 A, Gr. 2',
+        'abladestelle_id'  => 36,
+        'abladestelle'     => 'BM Schwanewede',
+        'lagerort_id'      => 7,
+        'lagerort'         => 'Hauptlager',
+        'lagerplatz'       => 'R5E3P1',
+    ]);
+})
+->middleware(['auth'])
+->name('etikett');
+
+
 
 
 

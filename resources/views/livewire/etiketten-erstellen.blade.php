@@ -226,7 +226,7 @@
         </div>
 
 
-        <div x-data="{ spalten: 5 }" class="mt-6 w-full">
+        <div x-data="{ spalten: 1 }" class="mt-6 w-full">
 
             <div class="flex flex-col w-full print:hidden">
                 <div class="flex flex-row justify-between items-center w-full">
@@ -276,12 +276,21 @@
                                 $lagerort = array_search($item['lagerort_id'], $pos['lagerorte']) ?? 'Unbekannt';
 
                             @endphp
-                            <div>{!! QrCode::size($qrGroesse)->generate(json_encode($data)) !!}</div>
-                            <div class="text-left">
-                                {{ $item['artikelnr'] }} | {{ $item['bezeichnung'] }} <br>
-                                {{ $item['abladestelle_id'] }} | {{ $abladestelle }} <br>
-                                {{ $item['lagerort_id'] }} | {{ $lagerort }} <br>
-                                {{ $item['lagerplatz'] }}
+                            <div class="flex flex-row items-center space-x-4">
+                                <div>{!! QrCode::size($qrGroesse)->generate(json_encode($data)) !!}</div>
+                                <div class="text-left">
+                                    <!--
+                                    {{ $item['artikelnr'] }} | {{ $item['bezeichnung'] }} <br>
+                                    {{ $item['abladestelle_id'] }} | {{ $abladestelle }} <br>
+                                    {{ $item['lagerort_id'] }} | {{ $lagerort }} <br>
+                                    {{ $item['lagerplatz'] }}
+                                    -->
+                                    {{ $item['artikelnr'] }} | <span class="font-bold text-xl">{{ $item['bezeichnung'] }}</span><br>
+                                    {{ $abladestelle }} <br>
+                                    {{ $lagerort }} <br>
+                                    <span class="font-bold text-xl">{{ $item['lagerplatz'] }}</span>
+
+                                </div>
                             </div>
                         </div>
                     </div>
