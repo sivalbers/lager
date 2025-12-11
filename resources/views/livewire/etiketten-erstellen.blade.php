@@ -203,7 +203,7 @@
                                         class="w-full text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-500">
                                         <option value="">---</option>
                                         @foreach ($pos['lagerorte'] as $bezeichnung => $id)
-                                            <option value="{{ $id }}">
+                                            <option value="{{ $id }}" {{ $data[$index]['lagerort_id'] === $id ? 'selected' : '' }}>
                                                 {{ $bezeichnung }}
                                             </option>
                                         @endforeach
