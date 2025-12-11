@@ -278,17 +278,16 @@
                             @endphp
                             <div class="flex flex-row items-center space-x-4">
                                 <div>{!! QrCode::size($qrGroesse)->generate(json_encode($data)) !!}</div>
-                                <div class="text-left">
+                                <div class="text-left text-xl">
                                     <!--
                                     {{ $item['artikelnr'] }} | {{ $item['bezeichnung'] }} <br>
                                     {{ $item['abladestelle_id'] }} | {{ $abladestelle }} <br>
                                     {{ $item['lagerort_id'] }} | {{ $lagerort }} <br>
                                     {{ $item['lagerplatz'] }}
                                     -->
-                                    {{ $item['artikelnr'] }} | <span class="font-bold text-xl">{{ $item['bezeichnung'] }}</span><br>
-                                    {{ $abladestelle }} <br>
-                                    {{ $lagerort }} <br>
-                                    <span class="font-bold text-xl">{{ $item['lagerplatz'] }}</span>
+                                    <span class="font-bold text-3xl">{{ $item['bezeichnung'] }}</span><br>
+                                    {{ $item['artikelnr'] }} | {{ $abladestelle }} | {{ $lagerort }} <br>
+                                    <span class="font-bold text-3xl">{{ $item['lagerplatz'] }}</span>
 
                                 </div>
                             </div>
