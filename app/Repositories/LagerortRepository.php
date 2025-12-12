@@ -26,9 +26,9 @@ public static function existiertLagerortBezeichnung(string $lagerort): bool
     return Lagerort::whereRaw('LOWER(lagerorte.bezeichnung) = ?', [mb_strtolower(trim($lagerort))])->exists();
 }
 
-public static function getLagerortIdByBezeichnung(string $lagerort): int
+public static function getLagerortIdByBezeichnungFromAbladestelle(int $abladestelle_id, string $lagerort): int
 {
-    return Lagerort::whereRaw('LOWER(lagerorte.bezeichnung) = ?', [mb_strtolower(trim($lagerort))])->pluck('id')->first();
+    return Lagerort::where('abladestelle_id', $abladestelle_id)->whereRaw('LOWER(lagerorte.bezeichnung) = ?', [mb_strtolower(trim($lagerort))])->pluck('id')->first();
 }
 
 

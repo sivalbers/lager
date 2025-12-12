@@ -18,8 +18,9 @@ use App\Http\Controllers\FileUploadController;
 
 use App\Livewire\MaryTabsTest;
 
-
-Route::redirect('/', '/bestand');
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::get('bestand', ListBestand::class)
     ->middleware(['auth'])
@@ -39,7 +40,6 @@ Route::get('artikel/korrektur', ArtikelBuchung::class)
      ->middleware(['auth', 'berechtigung:artikel buchen'])
      ->defaults('modus', 'korrektur')
      ->name('artikel.korrektur');
-
 
 Route::get('etikettenerstellen', EtikettenErstellen::class)
     ->middleware(['auth', 'berechtigung:warenzugang buchen'])
@@ -77,11 +77,11 @@ Route::get('einkaufsliste', EinkaufslisteVerwalten::class)
     ->middleware(['auth', 'berechtigung:einkaufsliste anzeigen'])
     ->name('einkaufsliste');
 
-
-
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+
 
 
 
