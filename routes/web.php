@@ -19,9 +19,15 @@ use App\Http\Controllers\FileUploadController;
 use App\Livewire\MaryTabsTest;
 
 Route::get('/', function () {
+    return 'Test funktioniert!';
+});
+/*
+
+Route::get('/', function () {
     return view('welcome');
 });
 
+*/
 Route::get('bestand', ListBestand::class)
     ->middleware(['auth'])
     ->name('bestand');
