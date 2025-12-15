@@ -103,7 +103,7 @@ class ArtikelBuchung extends Component
             'lagerort_id'     => $decoded['lagerort'] ?? '',
             'lagerplatz'      => $decoded['lagerplatz'] ?? '',
             'menge'           => $this->mMenge ?? -1,
-            'aktbestand'      => BestandsbuchungRepository::getArtikelBestand( $decoded['artikelnr'], $decoded['abladestelle'], $decoded['lagerort'], $decoded['lagerplatz'] ),
+            'aktbestand'      => BestandsverwaltungRepository::getArtikelBestand( $decoded['artikelnr'], $decoded['abladestelle'], $decoded['lagerort'], $decoded['lagerplatz'] ),
         ];
 
         // Immer OBEN einfügen
