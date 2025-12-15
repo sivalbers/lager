@@ -37,7 +37,7 @@
     <div class="flex flex-col w-full my-8">
 
             <!-- div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6" -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 w-full overflow-x-hidden">
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full overflow-x-hidden">
 
                 @foreach ($inputData as $index => $row)
                     <div class="block p-2 bg-white rounded-lg shadow-md shadow-gray-300"  wire:key="{{ $index }}" style="border-width: 2px; border-color: #ccc">
@@ -54,19 +54,20 @@
 
                                         </div>
                                         <div class="flex flex-row space-x-2">
-                                            <div class="text-sm">{{ $row['bezeichnung'] }}</div>
+                                            <div class="text-sm font-bold">{{ $row['bezeichnung'] }}</div>
                                         </div>
 
                                         <div class="flex flex-row space-x-2">
                                             <div><span class="text-gray-500 text-xs">Abladestelle:</span> {{ $row['abladestelle'] }}</div>
                                         </div>
-                                        <div class="flex flex-row space-x-2">
+                                        <div class="flex flex-row space-x-2 justify-between">
                                             <div><span class="text-gray-500 text-xs">Lagerort:</span> {{ $row['lagerort'] }}</div>
+                                            <div><span class="text-gray-500 text-xs">Bestand:</span> {{ number_format($row['aktbestand'], 0, ',', '.') }}</div>
                                         </div>
 
                                         <div class="flex flex-row justify-between">
-                                            <div><span class="text-gray-500 text-xs">Lagerplatz:</span> {{ $row['lagerplatz'] }}</div>
-                                            <div><span class="text-gray-500 text-xs">Menge:</span> {{ $row['menge'] }}</div>
+                                            <div><span class="text-gray-500 text-xs">Lagerplatz:</span> <span class="font-bold">{{ $row['lagerplatz'] }}</span></div>
+                                            <div><span class="text-gray-500 text-xs">Menge:</span> <span class="font-bold">{{ $row['menge'] }}</span></div>
                                         </div>
                                     </div>
                                 </div>

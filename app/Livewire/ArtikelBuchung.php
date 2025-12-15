@@ -48,7 +48,7 @@ class ArtikelBuchung extends Component
         } elseif ($modus === 'entnahme'){
             $this->ueberschrift = 'Artikelabgang buchen';
         } elseif ($modus === 'korrektur'){
-            $this->ueberschrift = 'Artikelkorrektur buchen ** Funktion ist noch in Arbeit - bitte nicht verwenden **';
+            $this->ueberschrift = 'Artikelkorrektur buchen';
         }
         else {
             $this->ueberschrift = 'Sonstige Buchung';
@@ -103,6 +103,7 @@ class ArtikelBuchung extends Component
             'lagerort_id'     => $decoded['lagerort'] ?? '',
             'lagerplatz'      => $decoded['lagerplatz'] ?? '',
             'menge'           => $this->mMenge ?? -1,
+            'aktbestand'      => BestandsbuchungRepository::getArtikelBestand( $decoded['artikelnr'], $decoded['abladestelle'], $decoded['lagerort'], $decoded['lagerplatz'] ),
         ];
 
         // Immer OBEN einfügen
@@ -121,6 +122,7 @@ class ArtikelBuchung extends Component
                 'lagerort' => '',
                 'lagerplatz' => '',
                 'menge'    => 0,
+                'aktbestand' => 0,
             ];
             return;
         }
@@ -134,6 +136,7 @@ class ArtikelBuchung extends Component
                 'lagerort_id' => 0,
                 'lagerplatz' => '',
                 'menge'    => 0,
+                'aktbestand' => 0,
             ];
             array_splice($this->inputData, $index + 1, 0, [$newRow]);
         }
@@ -165,6 +168,7 @@ class ArtikelBuchung extends Component
             'lagerort_id' => (int)$this->mLagerort,
             'lagerplatz' => $this->mLagerplatz,
             'menge'    => $this->mMenge,
+            'aktbestand'      => BestandsverwaltungRepository::getArtikelBestand($this->mArtikel, (int)$this->mAbladestelle, (int)$this->mLagerort, $this->mLagerplatz ),
         ];
 
         // Immer OBEN einfügen
@@ -184,12 +188,22 @@ class ArtikelBuchung extends Component
     {
         $bestandsRepository = new BestandsbuchungRepository();
         foreach ($this->inputData as $row) {
+
+            $menge = $row['menge'];
+
+            if ($this->modus === 'korrektur'){
+                // entnahme ist negativ
+                // 12 bestand neu 15 buchung = +3
+                // 15 bestand neu 15 buchung = 0
+                // 18 bestand neu 15 buchung = -3
+                $menge = $row['menge'] - $row['aktbestand'];
+            }
             $bestandsRepository->BucheBestand(
                 $row['artikel'],
                 $row['abladestelle_id'],
                 $row['lagerort_id'],
                 $row['lagerplatz'],
-                $row['menge'],
+                $menge,
                 $this->modus);
         }
 
@@ -211,8 +225,6 @@ class ArtikelBuchung extends Component
     }
 
     public function updatedMlagerort(){
-
-
         session()->flash('message', 'Lagerort geändert');
     }
 
@@ -233,6 +245,8 @@ class ArtikelBuchung extends Component
         $this->lagerorte = Lagerort::select( 'id', 'bezeichnung' )->where( 'abladestelle_id', $this->mAbladestelle)->orderBy('bezeichnung')->get()->toArray();
         Log::info(['loadLagerorte' => $this->lagerorte]);
     }
+
+
 
 
     public function delInputData($index){

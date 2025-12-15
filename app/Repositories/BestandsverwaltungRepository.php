@@ -52,6 +52,19 @@ class BestandsverwaltungRepository
         return $artikel;
     }
 
+    public static function getArtikelBestand($artikelnr, $abladestelle_id, $lagerort_id, $lagerplatz){
+        $result = ArtikelBestand::where('artikelnr', $artikelnr)
+            ->where('abladestelle_id', $abladestelle_id)
+            ->where('lagerort_id', $lagerort_id)
+            ->where('lagerplatz', $lagerplatz)->first();
+        if(!empty($result)){
+            return $result->bestand;
+        }
+        else{
+            return 0;
+        }
+    }
+
 
 public function artikelArrayAusBestand_artikel_abladestellen_lagerorte($artikelnr = '', $abladestellen_id_array = [], $lagerorte_id_array = [])
 {

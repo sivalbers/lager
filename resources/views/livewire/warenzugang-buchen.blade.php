@@ -126,11 +126,27 @@
                                     wire:model="positionen.{{ $index }}.lagerort"
                                     class="w-full text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-500">
                                     <option value="">---</option>
-                                    @foreach($pos['lagerorte'] as $bezeichnung => $id)
+                                    @php
+                                        echo "<pre>";
+                                            var_dump($pos['lagerort']);
+                                        echo "</pre>";
+                                    @endphp
+
+                                    @php
+                                    /*foreach($pos['lagerorte'] as $bezeichnung => $id)
                                         <option value="{{ $id }}" @selected($id == $pos['lagerort'])>
                                             {{ $bezeichnung }}
                                         </option>
                                     @endforeach
+                                    */
+                                    @endphp
+                                    @foreach($pos['lagerorte'] as $lort)
+                                        <option value="{{ $lort['id'] }}" @selected($pos['lagerort'] === $lort['id'])>
+                                            {{ $lort['bezeichnung'] }}
+                                        </option>
+                                    @endforeach
+
+
                                 </select>
                             </td>
                             <td class="border px-2 py-1">

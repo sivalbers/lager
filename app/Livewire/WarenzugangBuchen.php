@@ -212,6 +212,7 @@ class WarenzugangBuchen extends Component
             if ( count($lagerorte) == 1){
                 $lagerort = $lagerorte[0]['id'];
             }
+//            dd($lagerorte);
         }
 
 
@@ -341,8 +342,9 @@ class WarenzugangBuchen extends Component
 
         if ($hasError === false){
             foreach ($liste as $list){
-                $lagerort_id = LagerortRepository::getLagerortIdByBezeichnung($list['lagerort']);
+
                 $abladestelle_id = AbladestelleRepository::getAbladestelleIdByName($list['abladestelle']);
+                $lagerort_id = LagerortRepository::getLagerortIdByBezeichnungFromAbladestelle($abladestelle_id, $list['lagerort']);
 
                 $this->positionen[] = [
                     'artikelnr' => $list['artikelnr'],
@@ -354,7 +356,7 @@ class WarenzugangBuchen extends Component
                     'lagerort' => $lagerort_id,
                     //'lagerort' => $list['lagerort'],
                     //'lagerort_id' =>  $lagerort_id,
-                    'lagerorte' => LagerortRepository::lagerorteArrayFromAbladestelle_id($abladestelle_id),
+                    'lagerorte' => $this->loadLagerorte($abladestelle_id),
                     'lagerplatz' => $list['lagerplatz'],
 
                     'menge' => $list['menge'],
@@ -362,7 +364,7 @@ class WarenzugangBuchen extends Component
                     'lieferscheinnr' => ''
                 ];
             }
-
+            //dd($this->positionen[0]['lagerorte']);
             $this->importArtikelFormFaveo();
             //dd($this->positionen);
         }

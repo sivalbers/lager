@@ -28,6 +28,7 @@ public static function existiertLagerortBezeichnung(string $lagerort): bool
 
 public static function getLagerortIdByBezeichnungFromAbladestelle(int $abladestelle_id, string $lagerort): int
 {
+    \Log::info([ 'abladestelle' => $abladestelle_id, 'Lagerort' => $lagerort]);
     return Lagerort::where('abladestelle_id', $abladestelle_id)->whereRaw('LOWER(lagerorte.bezeichnung) = ?', [mb_strtolower(trim($lagerort))])->pluck('id')->first();
 }
 
