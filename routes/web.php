@@ -18,10 +18,17 @@ use App\Http\Controllers\FileUploadController;
 
 use App\Livewire\MaryTabsTest;
 
+
+Route::get('/', function () {
+    return redirect()->route('bestand');
+})->middleware('auth');
+
+// Route::redirect('/', '/login');
+
+/*
 Route::get('/', function () {
     return 'Test funktioniert!';
 });
-/*
 
 Route::get('/', function () {
     return view('welcome');

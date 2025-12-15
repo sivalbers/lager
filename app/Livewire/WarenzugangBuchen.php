@@ -133,7 +133,8 @@ class WarenzugangBuchen extends Component
         */
 
         $url = sprintf(
-            "https://sieverding-sandbox.faveo365.com:9248/NSTSUBSCRIPTIONSODATA/ODatav4/Company('Sieverding%%20Besitzunternehmen')/ShopLieferscheinArtikel?tenant=x7069851800471529774&\$filter=DocumentNo%%20eq%%20'%s'%%20and%%20DebitorNr%%20eq%%20'%s'",
+            // "https://sieverding-sandbox.faveo365.com:9248/NSTSUBSCRIPTIONSODATA/ODatav4/Company('Sieverding%%20Besitzunternehmen')/ShopLieferscheinArtikel?tenant=x7069851800471529774&\$filter=DocumentNo%%20eq%%20'%s'%%20and%%20DebitorNr%%20eq%%20'%s'",
+            "https://sieverding.faveo365.com:9248/NSTSUBSCRIPTIONSODATA/ODatav4/Company('Sieverding%%20Besitzunternehmen')/ShopLieferscheinArtikel?tenant=t7069851800471529774&\$filter=DocumentNo%%20eq%%20'%s'%%20and%%20DebitorNr%%20eq%%20'%s'",
             $encodedValue,
             $debitorNr
         );

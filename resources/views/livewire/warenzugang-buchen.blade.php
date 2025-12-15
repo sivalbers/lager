@@ -4,15 +4,16 @@
 
 
     <div class="mb-6 print:hidden">
-        <nav class="flex space-x-4 border-b border-gray-500" aria-label="Tabs">
+        <nav class="flex space-x-4 border-b-2 border-sky-600" aria-label="Tabs">
             <button @click="tab = 'lieferschein'"
-                :class="tab === 'lieferschein' ? 'border-sky-500 text-sky-600' :
-                    'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                class="whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm bg-gray-600">Warenzugang über Lieferschein</button>
+                :class="tab === 'lieferschein' ? 'text-sky-600  bg-white rounded-t-md border-l border-t border-r border-sky-600 p-2 px-4' :
+                    'text-sky-600  bg-gray-300 rounded-t-md border-l border-t border-r border-sky-600 p-2 px-4 hover:text-white'"
+                class="whitespace-nowrap pb-2 px-1 font-medium text-sm bg-gray-600">Warenzugang über Lieferschein</button>
+
             <button @click="tab = 'artikelliste'"
-                :class="tab === 'artikelliste' ? 'border-sky-500 text-sky-600' :
-                    'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                class="whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm">Textfeld</button>
+                :class="tab === 'artikelliste' ? 'border-sky-500 text-sky-600  bg-white rounded-t-md border-l border-t border-r border-sky-600 p-2 px-4' :
+                    'text-sky-600  bg-gray-300 rounded-t-md border-l border-t border-r border-sky-600 p-2 px-4 hover:text-white'"
+                class="whitespace-nowrap pb-2 px-1 font-medium text-sm">Textfeld</button>
 
         </nav>
     </div>
