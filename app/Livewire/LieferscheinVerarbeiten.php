@@ -79,7 +79,7 @@ class LieferscheinVerarbeiten extends Component
             "https://sieverding.faveo365.com:9248/NSTSUBSCRIPTIONSODATA/ODatav4/Company('Sieverding%%20Besitzunternehmen')/ShopLieferscheinArtikel?tenant=t7069851800471529774&\$filter=DocumentNo%%20eq%%20'%s'",
             $encodedValue
         );
-        dd($url);
+        
 
         $response = Http::timeout(20)
             ->withBasicAuth('testuser', 'Sieverding22!') // Benutzername & Kennwort
