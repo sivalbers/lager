@@ -83,7 +83,7 @@
                             @endif
                         </div>
                         <div class="w-[50%]">{{ $artikel['bezeichnung'] }}</div>
-                        <div class="w-[10%] text-right">{{ $artikel['summe'] }}</div>
+                        <div class="w-[10%] text-right">{{ number_format($artikel['summe'], 0, ',', '.') }}   </div>
                         <div class="w-[10%] pl-2">{{ $artikel['einheit'] }}</div>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                                     @endif
                                 </div>
 
-                                <div class="w-[10%] text-right">{{ $abladestelle['summe'] }}</div>
+                                <div class="w-[10%] text-right">{{ number_format($abladestelle['summe'], 0, ',', '.') }}</div>
                                 <div class="w-[10%] pl-2">{{ $artikel['einheit'] }}</div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                                                     @endif
                                             </div>
 
-                                            <div class="w-[10%] text-right">{{ $lagerort['summe'] }}</div>
+                                            <div class="w-[10%] text-right">{{ number_format($lagerort['summe'], 0, ',', '.') }}</div>
                                             <div class="w-[10%] pl-2">{{ $artikel['einheit'] }}</div>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@
                                         <div class="bg-[#f6f8d3] px-4 py-2 w-full">
                                             <div class="flex w-full pl-12">
                                                 <div class="w-[80%]"><span class="text-sm pr-2">Lagerplatz: </span>{{ $platz['lagerplatz'] }}</div>
-                                                <div class="w-[10%] text-right">{{ $platz['bestand'] }}</div>
+                                                <div class="w-[10%] text-right">{{ number_format($platz['bestand'], 0, ',', '.') }}</div>
                                                 <div class="w-[10%] pl-2">{{ $artikel['einheit'] }}</div>
                                             </div>
                                         </div>
